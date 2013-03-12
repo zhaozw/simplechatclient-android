@@ -2,7 +2,12 @@
 package com.simplechatclient.android;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -12,6 +17,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import android.util.Log;
 
@@ -182,8 +191,42 @@ public class OnetAuth {
         return "20120711-1544b";
     }
 
+    // <?xml version="1.0"
+    // encoding="ISO-8859-2"?><root><uoKey>LY9j2sXwio0G_yo3PdpukDL8iZJGHXKs</uoKey><zuoUsername>~Succubi_test</zuoUsername><error
+    // err_code="TRUE" err_text="wartoœæ prawdziwa" ></error></root>
+    // <?xml version="1.0" encoding="ISO-8859-2"?><root><error err_code="-2"
+    // err_text="U.ytkownik nie zalogowany" ></error></root>
     private void parseUoResponse(String data) {
-        // TODO
+        try {
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = builder.parse(new InputSource(new StringReader(data)));
+            document.getDocumentElement().normalize();
+
+            Node error = document.getElementsByTagName("error").item(0);
+            String err_code = error.getAttributes().getNamedItem("err_code").getNodeValue();
+            String err_text = error.getAttributes().getNamedItem("err_text").getNodeValue();
+
+            if (err_code.equalsIgnoreCase("true")) {
+                String UOKey = document.getElementsByTagName("uoKey").item(0).getTextContent();
+                String nick = document.getElementsByTagName("zuoUsername").item(0).getTextContent();
+
+                // TODO
+                Log.e(TAG, nick);
+                Log.e(TAG, UOKey);
+            } else {
+                Log.e(TAG, String.format("Authentication error [%s]", err_text));
+                return;
+            }
+        } catch (ParserConfigurationException e) {
+            Log.e(TAG, "Parse XML configuration exception");
+            e.printStackTrace();
+        } catch (SAXException e) {
+            Log.e(TAG, "Wrong XML file structure");
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e(TAG, "Cannot parse XML");
+            e.printStackTrace();
+        }
     }
 
     private String HttpDownload(String url, String content) {
