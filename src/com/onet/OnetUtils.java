@@ -37,29 +37,40 @@ public class OnetUtils {
 
         if (paramString.length() < 16)
             return null;
+
         for (int i = 0; i < 16; i++) {
-            int j = paramString.charAt(i);
-            arrayOfInt1[i] = (byte)(j <= 90 ? j - 65 + 10 : j <= 57 ? j - 48 : j - 97 + 36);
+            int c = paramString.charAt(i);
+            arrayOfInt1[i] = (c > 57 ? c > 90 ? (c - 97) + 36 : (c - 65) + 10 : c - 48);
         }
+
         for (int i = 0; i < 16; i++)
             arrayOfInt1[i] = this.append[(arrayOfInt1[i] + i)];
+
         System.arraycopy(arrayOfInt1, 0, arrayOfInt2, 0, 16);
+
         for (int i = 0; i < 16; i++)
             arrayOfInt1[i] = ((arrayOfInt1[i] + arrayOfInt2[this.length[i]]) % 62);
+
         for (int i = 0; i < 16; i++)
             arrayOfInt1[i] = this.arraycopy[(arrayOfInt1[i] + i)];
+
         System.arraycopy(arrayOfInt1, 0, arrayOfInt2, 0, 16);
+
         for (int i = 0; i < 16; i++)
             arrayOfInt1[i] = ((arrayOfInt1[i] + arrayOfInt2[this.toString[i]]) % 62);
+
         for (int i = 0; i < 16; i++)
             arrayOfInt1[i] = this.charAt[(arrayOfInt1[i] + i)];
+
         for (int i = 0; i < 16; i++) {
             int j = arrayOfInt1[i];
-            arrayOfInt1[i] = (j < 36 ? 65 + j - 10 : j < 10 ? 48 + j : 97 + j - 36);
+            arrayOfInt1[i] = j >= 10 ? j >= 36 ? (97 + j) - 36 : (65 + j) - 10 : 48 + j;
         }
+
         StringBuffer localStringBuffer = new StringBuffer();
         for (int j = 0; j < 16; j++)
             localStringBuffer.append((char)arrayOfInt1[j]);
+
         return localStringBuffer.toString();
     }
 }
