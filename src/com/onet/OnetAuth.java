@@ -1,5 +1,5 @@
 
-package com.simplechatclient.android;
+package com.onet;
 
 import java.io.IOException;
 import java.io.StringReader;

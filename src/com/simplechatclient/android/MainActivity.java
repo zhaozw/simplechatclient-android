@@ -3,10 +3,13 @@ package com.simplechatclient.android;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.onet.OnetUtils;
 
 public class MainActivity extends Activity {
     EditText editText;
@@ -26,8 +29,18 @@ public class MainActivity extends Activity {
 
         textView.append(message);
 
-        OnetAuth a = new OnetAuth();
-        a.authorize("scc_test", "abc123");
+        // OnetAuth a = new OnetAuth();
+        // a.authorize("scc_test", "");
+
+        OnetUtils u = new OnetUtils();
+        String test = u.transform("6cCWOjkb3Zm2HpXr");
+
+        Log.e("SCC", "Klucz auth: " + test);
+
+        if (test.equals("GCCG4B8IAxvGCuxw"))
+            Log.e("SCC", "Klucz auth poprawny!");
+        else
+            Log.e("SCC", "Klucz auth bledny!");
     }
 
     @Override
