@@ -1,3 +1,21 @@
+/*
+ * Simple Chat Client
+ *
+ *   Copyright (C) 2013 Piotr ≈Åuczko <piotr.luczko@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package com.onet;
 
@@ -22,6 +40,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 public class OnetAuth {
@@ -55,8 +74,6 @@ public class OnetAuth {
         registeredNick = true;
         override = true;
 
-        authorizing = true;
-
         createHttpClient();
 
         downloadChat();
@@ -66,25 +83,29 @@ public class OnetAuth {
 
     private void createHttpClient() {
         httpclient = new DefaultHttpClient();
+        
+        authorizing = true;
     }
 
     private void destroyHttpClient() {
         httpclient = null;
+
+        authorizing = false;
     }
 
     private void downloadChat() {
         String url = "http://czat.onet.pl/chat.html";
         String content = "ch=&n=&p=&category=0";
+        String next = "deploy";
 
-        HttpDownload(url, content);
-
-        downloadDeploy();
+        new HttpDownload().execute(new String[]{url, content, next});
     }
 
     private void downloadDeploy() {
         String url = "http://czat.onet.pl/_s/deployOnetCzat.js";
 
         String web = HttpDownload(url, null);
+        
         version = getVersion(web);
         version = String.format("1.1(%s - R)", version);
 
@@ -191,11 +212,8 @@ public class OnetAuth {
         return "20120711-1544b";
     }
 
-    // <?xml version="1.0"
-    // encoding="ISO-8859-2"?><root><uoKey>LY9j2sXwio0G_yo3PdpukDL8iZJGHXKs</uoKey><zuoUsername>~Succubi_test</zuoUsername><error
-    // err_code="TRUE" err_text="wartoúÊ prawdziwa" ></error></root>
-    // <?xml version="1.0" encoding="ISO-8859-2"?><root><error err_code="-2"
-    // err_text="U.ytkownik nie zalogowany" ></error></root>
+    // <?xml version="1.0" encoding="ISO-8859-2"?><root><uoKey>LY9j2sXwio0G_yo3PdpukDL8iZJGHXKs</uoKey><zuoUsername>~Succubi_test</zuoUsername><error err_code="TRUE" err_text="warto≈õƒá prawdziwa" ></error></root>
+    // <?xml version="1.0" encoding="ISO-8859-2"?><root><error err_code="-2" err_text="U.ytkownik nie zalogowany" ></error></root>
     private void parseUoResponse(String data) {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -229,40 +247,62 @@ public class OnetAuth {
         }
     }
 
-    private String HttpDownload(String url, String content) {
-        try {
+    private class HttpDownload extends AsyncTask<String, Void, String> {
+    	private String next;
+    	
+		@Override
+	    protected String doInBackground(String... params) {
+        	String url = params[0];
+        	String content = params[1];
+        	next = params[2];
 
             HttpResponse httpResponse;
 
-            if (content == null) {
-                HttpGet httpGet = new HttpGet(url);
-                httpResponse = httpclient.execute(httpGet);
-            } else {
-                HttpPost httpPost = new HttpPost(url);
-                httpPost.setEntity(new StringEntity(content));
-                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-                httpResponse = httpclient.execute(httpPost);
-            }
-
-            int status = httpResponse.getStatusLine().getStatusCode();
-            if (status == 200) {
-                HttpEntity httpEntity = httpResponse.getEntity();
-                return EntityUtils.toString(httpEntity);
-            } else {
-                return null;
-            }
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG, "Unable to retrieve web page: " + url);
-            e.getStackTrace();
-            return null;
-        } catch (IllegalArgumentException e) {
-            Log.e(TAG, "Unable to retrieve web page: " + url);
-            e.getStackTrace();
-            return null;
-        } catch (IOException e) {
-            Log.e(TAG, "Unable to retrieve web page: " + url);
-            e.getStackTrace();
-            return null;
-        }
+            try {
+	            if (content == null) {
+	                HttpGet httpGet = new HttpGet(url);
+	                httpResponse = httpclient.execute(httpGet);
+	            } else {
+	                HttpPost httpPost = new HttpPost(url);
+	                httpPost.setEntity(new StringEntity(content));
+	                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+	                httpResponse = httpclient.execute(httpPost);
+	            }
+	
+	            int status = httpResponse.getStatusLine().getStatusCode();
+	            if (status == 200) {
+	                HttpEntity httpEntity = httpResponse.getEntity();
+	                return EntityUtils.toString(httpEntity);
+	            } else {
+	                return null;
+	            }
+	        } catch (UnsupportedEncodingException e) {
+	            Log.e(TAG, "Unable to retrieve web page: " + url);
+	            e.getStackTrace();
+	            return null;
+	        } catch (IllegalArgumentException e) {
+	            Log.e(TAG, "Unable to retrieve web page: " + url);
+	            e.getStackTrace();
+	            return null;
+	        } catch (IOException e) {
+	            Log.e(TAG, "Unable to retrieve web page: " + url);
+	            e.getStackTrace();
+	            return null;
+	        }
+		}
+		
+		@Override
+	    protected void onPostExecute(String result) {
+	        super.onPostExecute(result);
+	        
+	        
+	    }
+		
+		@Override
+	    protected void onCancelled() {
+	        super.onCancelled();
+	        
+	        authorizing = false;
+	    }
     }
 }
