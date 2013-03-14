@@ -29,6 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -45,26 +46,20 @@ import android.util.Log;
 
 public class OnetAuth {
     private static final String AJAX_API = "http://czat.onet.pl/include/ajaxapi.xml.php3";
-
-    private static final String TAG = "SCC";
+    private static final String TAG = "ONETAUTH";
 
     private boolean authorizing = false;
-
     private boolean registeredNick;
-
     private boolean override = false;
-
     private String nick;
-
     private String password;
-
     private String version;
 
     HttpClient httpclient;
 
     public void authorize(String n, String p) {
         if (authorizing) {
-            Log.e(TAG, "Already authorizing");
+            Log.w(TAG, "Already authorizing");
             return;
         }
 
@@ -74,128 +69,101 @@ public class OnetAuth {
         registeredNick = true;
         override = true;
 
-        createHttpClient();
+        authorizing = true;
+        httpclient = new DefaultHttpClient();
 
         downloadChat();
-
-        destroyHttpClient();
-    }
-
-    private void createHttpClient() {
-        httpclient = new DefaultHttpClient();
-        
-        authorizing = true;
-    }
-
-    private void destroyHttpClient() {
-        httpclient = null;
-
-        authorizing = false;
     }
 
     private void downloadChat() {
         String url = "http://czat.onet.pl/chat.html";
         String content = "ch=&n=&p=&category=0";
-        String next = "deploy";
+        String category = "chat";
 
-        new HttpDownload().execute(new String[]{url, content, next});
+        new HttpDownload().execute(url, content, category);
     }
 
     private void downloadDeploy() {
         String url = "http://czat.onet.pl/_s/deployOnetCzat.js";
+        String content = null;
+        String category = "deploy";
 
-        String web = HttpDownload(url, null);
-        
-        version = getVersion(web);
-        version = String.format("1.1(%s - R)", version);
-
-        downloadKropka();
+        new HttpDownload().execute(url, content, category);
     }
 
+    private void parseDeploy(String data)
+    {
+        version = parseVersion(data);
+        version = String.format("1.1(%s - R)", version);    	
+    }
+    
     private void downloadKropka() {
         String url = "http://kropka.onet.pl/_s/kropka/1?DV=czat%2Fchat&SC=1&IP=&DG=id%3Dno-gemius&RI=&C1=&CL=std161&CS=1280x800x24&CW=1280x243&DU=http://czat.onet.pl/chat.html&DR=http://czat.onet.pl/";
-        HttpDownload(url, null);
-
-        downloadKropkaFull();
+        String content = null;
+        String category = "kropka";
+        
+        new HttpDownload().execute(url, content, category);
     }
 
     private void downloadKropkaFull() {
         String url = "http://kropka.onet.pl/_s/kropka/1?DV=czat/applet/FULL";
-        HttpDownload(url, null);
-
-        downloadSk();
+        String content = null;
+        String category = "kropka_full";
+        
+        new HttpDownload().execute(url, content, category);
     }
 
     private void downloadSk() {
         String url = "http://czat.onet.pl/sk.gif";
-        HttpDownload(url, null);
-
-        if (registeredNick)
-            downloadSecureKropka();
-        else {
-            // showCaptchaDialog();
-            String code = "";
-            downloadCheckCode(code);
-        }
+        String content = null;
+        String category = "sk";
+        
+        new HttpDownload().execute(url, content, category);
     }
 
     private void downloadCheckCode(String code) {
         String url = AJAX_API;
-        String content = String.format(
-                "api_function=checkCode&params=a:1:{s:4:\"code\";s:%d:\"%s\";}", code.length(),
-                code);
+        String content = String.format("api_function=checkCode&params=a:1:{s:4:\"code\";s:%d:\"%s\";}", code.length(), code);
+        String category = "check_code";
 
-        HttpDownload(url, content);
-
-        downloadUo();
+        new HttpDownload().execute(url, content, category);
     }
 
     private void downloadSecureKropka() {
         String url = "http://kropka.onet.pl/_s/kropka/1?DV=secure&SC=1&CL=std161&CS=1280x800x24&CW=1280x243&DU=http://secure.onet.pl/&DR=";
-        HttpDownload(url, null);
-
-        downloadSecureLogin();
+        String content = null;
+        String category = "secure_kropka";
+        
+        new HttpDownload().execute(url, content, category);
     }
 
     private void downloadSecureLogin() {
         String url = "https://secure.onet.pl/mlogin.html";
-        String content = String.format("r=&url=&login=%s&haslo=%s&app_id=20&ssl=1&ok=1", nick,
-                password);
+        String content = String.format("r=&url=&login=%s&haslo=%s&app_id=20&ssl=1&ok=1", nick, password);
+        String category = "secure_login";
 
-        HttpDownload(url, content);
-
-        if (override)
-            downloadOverride();
-        else
-            downloadUo();
+        new HttpDownload().execute(url, content, category);
     }
 
     private void downloadOverride() {
         String url = AJAX_API;
-        String content = String.format(
-                "api_function=userOverride&params=a:1:{s:4:\"nick\";s:%d:\"%s\";}", nick.length(),
-                nick);
+        String content = String.format("api_function=userOverride&params=a:1:{s:4:\"nick\";s:%d:\"%s\";}", nick.length(), nick);
+        String category = "override";
 
-        HttpDownload(url, content);
-
-        downloadUo();
+        new HttpDownload().execute(url, content, category);
     }
 
     private void downloadUo() {
-        String url = AJAX_API;
-
         int isRegistered = (registeredNick == true ? 0 : 1);
-        String content = String
-                .format("api_function=getUoKey&params=a:3:{s:4:\"nick\";s:%d:\"%s\";s:8:\"tempNick\";i:%d;s:7:\"version\";s:%d:\"%s\";}",
-                        nick.length(), nick, isRegistered, version.length(), version);
 
-        String data = HttpDownload(url, content);
+        String url = AJAX_API;
+        String content = String.format("api_function=getUoKey&params=a:3:{s:4:\"nick\";s:%d:\"%s\";s:8:\"tempNick\";i:%d;s:7:\"version\";s:%d:\"%s\";}", nick.length(), nick, isRegistered, version.length(), version);
+        String category = "uo";
 
-        parseUoResponse(data);
-        authorizing = false;
+        new HttpDownload().execute(url, content, category);
     }
 
-    private String getVersion(String data) {
+    private String parseVersion(String data) {
         if (data != null) {
             if (data.indexOf("OnetCzatLoader") != -1) {
                 String strFind1 = "signed-OnetCzatLoader-";
@@ -214,7 +182,7 @@ public class OnetAuth {
 
     // <?xml version="1.0" encoding="ISO-8859-2"?><root><uoKey>LY9j2sXwio0G_yo3PdpukDL8iZJGHXKs</uoKey><zuoUsername>~Succubi_test</zuoUsername><error err_code="TRUE" err_text="wartość prawdziwa" ></error></root>
     // <?xml version="1.0" encoding="ISO-8859-2"?><root><error err_code="-2" err_text="U.ytkownik nie zalogowany" ></error></root>
-    private void parseUoResponse(String data) {
+    private void parseUo(String data) {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.parse(new InputSource(new StringReader(data)));
@@ -229,32 +197,32 @@ public class OnetAuth {
                 String nick = document.getElementsByTagName("zuoUsername").item(0).getTextContent();
 
                 // TODO
-                Log.e(TAG, nick);
-                Log.e(TAG, UOKey);
+                Log.i(TAG, "UO nick:"+nick);
+                Log.i(TAG, "UO key:"+UOKey);
             } else {
                 Log.e(TAG, String.format("Authentication error [%s]", err_text));
                 return;
             }
         } catch (ParserConfigurationException e) {
-            Log.e(TAG, "Parse XML configuration exception");
+            Log.e(TAG, "Parse XML configuration exception:"+ e.getMessage());
             e.printStackTrace();
         } catch (SAXException e) {
-            Log.e(TAG, "Wrong XML file structure");
+            Log.e(TAG, "Wrong XML file structure:"+ e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
-            Log.e(TAG, "Cannot parse XML");
+            Log.e(TAG, "Cannot parse XML:"+ e.getMessage());
             e.printStackTrace();
         }
     }
 
     private class HttpDownload extends AsyncTask<String, Void, String> {
-    	private String next;
+    	private String category;
     	
 		@Override
 	    protected String doInBackground(String... params) {
         	String url = params[0];
         	String content = params[1];
-        	next = params[2];
+        	category = params[2];
 
             HttpResponse httpResponse;
 
@@ -276,16 +244,20 @@ public class OnetAuth {
 	            } else {
 	                return null;
 	            }
+            } catch (ClientProtocolException e) {
+	            Log.e(TAG, "Unable to retrieve web page (ClientProtocolException:"+e.getMessage()+"): " + url);
+	            e.getStackTrace();
+	            return null;            	
 	        } catch (UnsupportedEncodingException e) {
-	            Log.e(TAG, "Unable to retrieve web page: " + url);
+	            Log.e(TAG, "Unable to retrieve web page (UnsupportedEncodingException:"+e.getMessage()+"): " + url);
 	            e.getStackTrace();
 	            return null;
 	        } catch (IllegalArgumentException e) {
-	            Log.e(TAG, "Unable to retrieve web page: " + url);
+	            Log.e(TAG, "Unable to retrieve web page (IllegalArgumentException:"+e.getMessage()+"): " + url);
 	            e.getStackTrace();
 	            return null;
 	        } catch (IOException e) {
-	            Log.e(TAG, "Unable to retrieve web page: " + url);
+	            Log.e(TAG, "Unable to retrieve web page (IOException:"+e.getMessage()+"): " + url);
 	            e.getStackTrace();
 	            return null;
 	        }
@@ -294,8 +266,46 @@ public class OnetAuth {
 		@Override
 	    protected void onPostExecute(String result) {
 	        super.onPostExecute(result);
-	        
-	        
+
+	        if (category.equals("chat"))
+	        	downloadDeploy();
+	        else if (category.equals("deploy")) {
+            	parseDeploy(result);
+            	downloadKropka();
+	        }
+	        else if (category.equals("kropka"))
+	        	downloadKropkaFull();
+	        else if (category.equals("kropka_full"))
+	        	downloadSk();
+	        else if (category.equals("sk")) {
+	            if (registeredNick)
+	                downloadSecureKropka();
+	            else {
+	                // showCaptchaDialog();
+	                String code = null;
+	                downloadCheckCode(code);
+	            }
+	        }
+	        else if (category.equals("secure_kropka"))
+	        	downloadSecureLogin();
+	        else if (category.equals("secure_login")) {
+	            if (override)
+	                downloadOverride();
+	            else
+	                downloadUo();	        	
+	        }
+	        else if (category.equals("override"))
+	        	downloadUo();
+	        else if (category.equals("check_code"))
+	        	downloadUo();
+	        else if (category.equals("uo")) {
+	            parseUo(result);
+	            authorizing = false;
+	        }
+	        else {
+	        	Log.e(TAG, "Undefined category: "+category);
+	        	authorizing = false;
+	        }
 	    }
 		
 		@Override

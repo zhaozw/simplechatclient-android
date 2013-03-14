@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.onet.OnetAuth;
 import com.onet.OnetUtils;
 
 public class MainActivity extends Activity {
@@ -47,8 +48,8 @@ public class MainActivity extends Activity {
 
         textView.append(message);
 
-        // OnetAuth a = new OnetAuth();
-        // a.authorize("scc_test", "");
+        OnetAuth a = new OnetAuth();
+        a.authorize("scc_test", "");
 
         OnetUtils u = new OnetUtils();
         String test = u.transform("6cCWOjkb3Zm2HpXr");
@@ -56,9 +57,9 @@ public class MainActivity extends Activity {
         Log.e("SCC", "Klucz auth: " + test);
 
         if (test.equals("GCCG4B8IAxvGCuxw"))
-            Log.e("SCC", "Klucz auth poprawny!");
+            Log.i("SCC", "Klucz auth poprawny!");
         else
-            Log.e("SCC", "Klucz auth bledny!");
+            Log.i("SCC", "Klucz auth bledny!");
     }
 
     @Override
