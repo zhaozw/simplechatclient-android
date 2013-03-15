@@ -270,8 +270,8 @@ public class OnetAuth {
 	        if (category.equals("chat"))
 	        	downloadDeploy();
 	        else if (category.equals("deploy")) {
-            	parseDeploy(result);
-            	downloadKropka();
+	            parseDeploy(result);
+	           	downloadKropka();
 	        }
 	        else if (category.equals("kropka"))
 	        	downloadKropkaFull();
