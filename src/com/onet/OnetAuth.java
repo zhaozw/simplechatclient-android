@@ -44,6 +44,9 @@ import org.xml.sax.SAXException;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.core.Network;
+import com.core.Settings;
+
 public class OnetAuth {
     private static final String AJAX_API = "http://czat.onet.pl/include/ajaxapi.xml.php3";
     private static final String TAG = "ONETAUTH";
@@ -55,8 +58,14 @@ public class OnetAuth {
     private String password;
     private String version;
 
-    HttpClient httpclient;
+    private HttpClient httpclient;
+    private Network network;
 
+    public OnetAuth(Network n)
+    {
+    	network = n;
+    }
+    
     public void authorize(String n, String p) {
         if (authorizing) {
             Log.w(TAG, "Already authorizing");
@@ -196,9 +205,17 @@ public class OnetAuth {
                 String UOKey = document.getElementsByTagName("uoKey").item(0).getTextContent();
                 String nick = document.getElementsByTagName("zuoUsername").item(0).getTextContent();
 
-                // TODO
+                // TODO remove
                 Log.i(TAG, "UO nick:"+nick);
                 Log.i(TAG, "UO key:"+UOKey);
+
+                if (network.isConnected())
+                {
+                	Settings.getInstance().set("nick", nick);
+                	Settings.getInstance().set("uo_key", UOKey);
+                	
+                	network.send(String.format("AUTHKEY"));
+                }
             } else {
                 Log.e(TAG, String.format("Authentication error [%s]", err_text));
                 return;

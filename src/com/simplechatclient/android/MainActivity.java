@@ -21,45 +21,50 @@ package com.simplechatclient.android;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.core.Network;
 import com.onet.OnetAuth;
-import com.onet.OnetUtils;
 
 public class MainActivity extends Activity {
-    EditText editText;
-
-    TextView textView;
+    private EditText editText;
+    private TextView textView;
+    private Network network;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        editText = (EditText)findViewById(R.id.editTextInput);
+        textView = (TextView)findViewById(R.id.textView1);
+
+        network = new Network(textView);
+        
+        connect();
+    }
+
+    private void connect()
+    {
+        network.connect();
+
+        OnetAuth a = new OnetAuth(network);
+        a.authorize("scc_test", "");
+    }
+
+    private void disconnect()
+    {
+    	network.disconnect();
     }
 
     public void sendMessage(View view) {
-        editText = (EditText)findViewById(R.id.editTextInput);
-        textView = (TextView)findViewById(R.id.textView1);
         String message = editText.getText().toString();
 
         textView.append(message);
-
-        OnetAuth a = new OnetAuth();
-        a.authorize("scc_test", "");
-
-        OnetUtils u = new OnetUtils();
-        String test = u.transform("6cCWOjkb3Zm2HpXr");
-
-        Log.e("SCC", "Klucz auth: " + test);
-
-        if (test.equals("GCCG4B8IAxvGCuxw"))
-            Log.i("SCC", "Klucz auth poprawny!");
-        else
-            Log.i("SCC", "Klucz auth bledny!");
+        network.send(message);
     }
 
     @Override
@@ -68,5 +73,4 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-
 }
