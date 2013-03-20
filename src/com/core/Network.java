@@ -41,7 +41,7 @@ public class Network {
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
-	
+    
     private String server = "czat-app.onet.pl";
     private int port = 5015;
 
@@ -49,7 +49,7 @@ public class Network {
     private NetworkHandler networkHandler;
 
     private static Network instance = new Network();
-    public static synchronized Network getInstance() { return instance; }
+    public static synchronized Network getInstance() {return instance; }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
@@ -57,24 +57,24 @@ public class Network {
     }
 
     private Network()
-	{
-		super();
-				
-		networkThread = new NetworkThread();
-		networkHandler = new NetworkHandler();
-		in = null;
-		out = null;
-	}
-	
-	public void send(String data)
-	{
-		Log.i(TAG, data);
-		//textView.append(String.format("<- %s\r\n", data));
-		
+    {
+        super();
+                
+        networkThread = new NetworkThread();
+        networkHandler = new NetworkHandler();
+        in = null;
+        out = null;
+    }
+    
+    public void send(String data)
+    {
+        Log.i(TAG, data);
+        //textView.append(String.format("<- %s\r\n", data));
+        
         try {
             if ((socket != null) && (socket.isConnected())) {
-        		out.write(String.format("%s\r\n", data));
-        		out.flush();
+                out.write(String.format("%s\r\n", data));
+                out.flush();
             } else {
                 Log.w(TAG, "Send: Cannot send message: socket is closed");
             }
@@ -82,87 +82,87 @@ public class Network {
             Log.e(TAG, "Send: Cannot send message: "+e.getMessage());
             e.printStackTrace();
         }
-	}
-	
-	public void connect()
-	{
-		networkThread.start();
-	}
-	
-	public void disconnect()
-	{
-		networkThread.stop();
-	}
-	
-	public void reconnect()
-	{
-		networkThread.stop();
-		networkThread.start();
-	}
-	
-	public boolean isConnected()
-	{
-		return socket.isConnected();
-	}	
+    }
+    
+    public void connect()
+    {
+        networkThread.start();
+    }
+    
+    public void disconnect()
+    {
+        networkThread.stop();
+    }
+    
+    public void reconnect()
+    {
+        networkThread.stop();
+        networkThread.start();
+    }
+    
+    public boolean isConnected()
+    {
+        return socket.isConnected();
+    }   
 
-	static class NetworkHandler extends Handler {
-		
+    static class NetworkHandler extends Handler {
+        
         @Override
         public void handleMessage(Message msg) {
-        	Bundle bundle = msg.getData();
-        	String data = bundle.getString("network_message");
+            Bundle bundle = msg.getData();
+            String data = bundle.getString("network_message");
 
-        	Log.i(TAG, data);
-        	//textView.append(String.format("-> %s\r\n", data));
+            Log.i(TAG, data);
+            //textView.append(String.format("-> %s\r\n", data));
 
-        	OnetKernel.getInstance().parse(data);
+            OnetKernel.getInstance().parse(data);
         }
-	};
+    };
 
-	class NetworkThread extends Thread {
-	    public void run() {
-	    	try
-	    	{
-		    	try
-		    	{
-		    		InetAddress serverAddr = InetAddress.getByName(server);
-					socket = new Socket(serverAddr, port);
-				
-			        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			        out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+    class NetworkThread extends Thread {
+        public void run() {
+            try
+            {
+                try
+                {
+                    InetAddress serverAddr = InetAddress.getByName(server);
+                    socket = new Socket(serverAddr, port);
+                
+                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-			        String line = null;
-					while ((line = in.readLine()) != null)
-					{
-						if (line.length() != 0)
-						{
-							Message msg =  new Message();
-							Bundle bundle = new Bundle();
-	
-							bundle.putString("network_message", line);
-							msg.setData(bundle);
-	
-							networkHandler.sendMessage(msg);
-						}
-					}
-		    	} catch (UnknownHostException e) {
-		    		Log.e(TAG, "Unknown host exception:" + e.getMessage());
-		    		e.printStackTrace();
-		    	} catch (IOException e) {
-		    		Log.e(TAG, "IOException:" + e.getMessage());
-		    		e.printStackTrace();
-		        } finally {
-		        	if (!socket.isClosed())
-		        		socket.close();
-		        }
-		    } catch (Exception e) {
-		    	Log.e(TAG, "Exception:" + e.getMessage());
-		    	e.printStackTrace();
-		    }
-	    	
-	    	Log.i(TAG, "Network thread closed");
-	    }
-	}
+                    String line = null;
+                    while ((line = in.readLine()) != null)
+                    {
+                        if (line.length() != 0)
+                        {
+                            Message msg =  new Message();
+                            Bundle bundle = new Bundle();
+    
+                            bundle.putString("network_message", line);
+                            msg.setData(bundle);
+    
+                            networkHandler.sendMessage(msg);
+                        }
+                    }
+                } catch (UnknownHostException e) {
+                    Log.e(TAG, "Unknown host exception:" + e.getMessage());
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    Log.e(TAG, "IOException:" + e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    if (!socket.isClosed())
+                        socket.close();
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Exception:" + e.getMessage());
+                e.printStackTrace();
+            }
+            
+            Log.i(TAG, "Network thread closed");
+        }
+    }
 }
 
 

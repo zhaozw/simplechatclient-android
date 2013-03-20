@@ -62,7 +62,7 @@ public class OnetAuth {
     
     public OnetAuth()
     {
-        httpclient = new DefaultHttpClient();    	
+        httpclient = new DefaultHttpClient();
     }
 
     public void authorize(String n, String p) {
@@ -101,7 +101,7 @@ public class OnetAuth {
     private void parseDeploy(String data)
     {
         version = parseVersion(data);
-        version = String.format("1.1(%s - R)", version);    	
+        version = String.format("1.1(%s - R)", version);        
     }
     
     private void downloadKropka() {
@@ -205,10 +205,10 @@ public class OnetAuth {
 
                 if (Network.getInstance().isConnected())
                 {
-                	Settings.getInstance().set("nick", nick);
-                	Settings.getInstance().set("uo_key", UOKey);
-                	
-                	Network.getInstance().send(String.format("AUTHKEY"));
+                    Settings.getInstance().set("nick", nick);
+                    Settings.getInstance().set("uo_key", UOKey);
+                    
+                    Network.getInstance().send(String.format("AUTHKEY"));
                 }
             } else {
                 Log.e(TAG, String.format("Authentication error [%s]", err_text));
@@ -227,110 +227,110 @@ public class OnetAuth {
     }
 
     private class HttpDownload extends AsyncTask<String, Void, String> {
-    	private String category;
-    	
-		@Override
-	    protected String doInBackground(String... params) {
-        	String url = params[0];
-        	String content = params[1];
-        	category = params[2];
+        private String category;
+        
+        @Override
+        protected String doInBackground(String... params) {
+            String url = params[0];
+            String content = params[1];
+            category = params[2];
 
             HttpResponse httpResponse;
 
             try {
-	            if (content == null) {
-	                HttpGet httpGet = new HttpGet(url);
-	                httpResponse = httpclient.execute(httpGet);
-	            } else {
-	                HttpPost httpPost = new HttpPost(url);
-	                httpPost.setEntity(new StringEntity(content));
-	                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-	                httpResponse = httpclient.execute(httpPost);
-	            }
-	
-	            int status = httpResponse.getStatusLine().getStatusCode();
-	            if (status == 200) {
-	                HttpEntity httpEntity = httpResponse.getEntity();
-	                return EntityUtils.toString(httpEntity);
-	            } else {
-	                return null;
-	            }
+                if (content == null) {
+                    HttpGet httpGet = new HttpGet(url);
+                    httpResponse = httpclient.execute(httpGet);
+                } else {
+                    HttpPost httpPost = new HttpPost(url);
+                    httpPost.setEntity(new StringEntity(content));
+                    httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+                    httpResponse = httpclient.execute(httpPost);
+                }
+    
+                int status = httpResponse.getStatusLine().getStatusCode();
+                if (status == 200) {
+                    HttpEntity httpEntity = httpResponse.getEntity();
+                    return EntityUtils.toString(httpEntity);
+                } else {
+                    return null;
+                }
             } catch (ClientProtocolException e) {
-	            Log.e(TAG, "Unable to retrieve web page (ClientProtocolException:"+e.getMessage()+"): " + url);
-	            e.getStackTrace();
-	            return null;            	
-	        } catch (UnsupportedEncodingException e) {
-	            Log.e(TAG, "Unable to retrieve web page (UnsupportedEncodingException:"+e.getMessage()+"): " + url);
-	            e.getStackTrace();
-	            return null;
-	        } catch (IllegalArgumentException e) {
-	            Log.e(TAG, "Unable to retrieve web page (IllegalArgumentException:"+e.getMessage()+"): " + url);
-	            e.getStackTrace();
-	            return null;
-	        } catch (IOException e) {
-	            Log.e(TAG, "Unable to retrieve web page (IOException:"+e.getMessage()+"): " + url);
-	            e.getStackTrace();
-	            return null;
-	        }
-		}
-		
-		@Override
-	    protected void onPostExecute(String result) {
-	        super.onPostExecute(result);
+                Log.e(TAG, "Unable to retrieve web page (ClientProtocolException:"+e.getMessage()+"): " + url);
+                e.getStackTrace();
+                return null;
+            } catch (UnsupportedEncodingException e) {
+                Log.e(TAG, "Unable to retrieve web page (UnsupportedEncodingException:"+e.getMessage()+"): " + url);
+                e.getStackTrace();
+                return null;
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Unable to retrieve web page (IllegalArgumentException:"+e.getMessage()+"): " + url);
+                e.getStackTrace();
+                return null;
+            } catch (IOException e) {
+                Log.e(TAG, "Unable to retrieve web page (IOException:"+e.getMessage()+"): " + url);
+                e.getStackTrace();
+                return null;
+            }
+        }
+        
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
 
-	        if (result == null)
-	        {
-	        	Log.e(TAG, "Unable to parse web page");
-	        	authorizing = false;
-	        	return;
-	        }
+            if (result == null)
+            {
+                Log.e(TAG, "Unable to parse web page");
+                authorizing = false;
+                return;
+            }
 
-	        if (category.equals("chat"))
-	        	downloadDeploy();
-	        else if (category.equals("deploy")) {
-	            parseDeploy(result);
-	           	downloadKropka();
-	        }
-	        else if (category.equals("kropka"))
-	        	downloadKropkaFull();
-	        else if (category.equals("kropka_full"))
-	        	downloadSk();
-	        else if (category.equals("sk")) {
-	            if (registeredNick)
-	                downloadSecureKropka();
-	            else {
-	                // showCaptchaDialog();
-	                String code = null;
-	                downloadCheckCode(code);
-	            }
-	        }
-	        else if (category.equals("secure_kropka"))
-	        	downloadSecureLogin();
-	        else if (category.equals("secure_login")) {
-	            if (override)
-	                downloadOverride();
-	            else
-	                downloadUo();	        	
-	        }
-	        else if (category.equals("override"))
-	        	downloadUo();
-	        else if (category.equals("check_code"))
-	        	downloadUo();
-	        else if (category.equals("uo")) {
-	            parseUo(result);
-	            authorizing = false;
-	        }
-	        else {
-	        	Log.e(TAG, "Undefined category: "+category);
-	        	authorizing = false;
-	        }
-	    }
-		
-		@Override
-	    protected void onCancelled() {
-	        super.onCancelled();
-	        
-	        authorizing = false;
-	    }
+            if (category.equals("chat"))
+                downloadDeploy();
+            else if (category.equals("deploy")) {
+                parseDeploy(result);
+                downloadKropka();
+            }
+            else if (category.equals("kropka"))
+                downloadKropkaFull();
+            else if (category.equals("kropka_full"))
+                downloadSk();
+            else if (category.equals("sk")) {
+                if (registeredNick)
+                    downloadSecureKropka();
+                else {
+                    // showCaptchaDialog();
+                    String code = null;
+                    downloadCheckCode(code);
+                }
+            }
+            else if (category.equals("secure_kropka"))
+                downloadSecureLogin();
+            else if (category.equals("secure_login")) {
+                if (override)
+                    downloadOverride();
+                else
+                    downloadUo();
+            }
+            else if (category.equals("override"))
+                downloadUo();
+            else if (category.equals("check_code"))
+                downloadUo();
+            else if (category.equals("uo")) {
+                parseUo(result);
+                authorizing = false;
+            }
+            else {
+                Log.e(TAG, "Undefined category: "+category);
+                authorizing = false;
+            }
+        }
+        
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            
+            authorizing = false;
+        }
     }
 }

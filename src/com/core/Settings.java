@@ -27,7 +27,7 @@ public class Settings {
     private Map<String, String> map;
 
     private Settings() {
-    	map = new HashMap<String, String>();
+        map = new HashMap<String, String>();
     }
 
     public static synchronized Settings getInstance() {
@@ -35,12 +35,12 @@ public class Settings {
     }
 
     public void set(String k, String v) {
-    	map.put(k, v);
+        map.put(k, v);
     }
     
     public String get(String k)
     {
-    	return map.get(k);
+        return map.get(k);
     }
 
     @Override

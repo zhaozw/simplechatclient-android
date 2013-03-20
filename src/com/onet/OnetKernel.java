@@ -23,7 +23,7 @@ import com.core.Network;
 import com.core.Settings;
 
 public class OnetKernel {
-	private String[] data;
+    private String[] data;
 
     private static OnetKernel instance = new OnetKernel();
     public static synchronized OnetKernel getInstance() { return instance; }
@@ -33,60 +33,60 @@ public class OnetKernel {
         throw new CloneNotSupportedException("Clone is not allowed.");
     }
     
-	public void parse(String message)
-	{
-		data = message.split(" ");
-		
-		if (data.length <= 1)
-			return;
+    public void parse(String message)
+    {
+        data = message.split(" ");
+        
+        if (data.length <= 1)
+            return;
 
-		String cmd0 = data[0];
-		String cmd1 = data[1];
-		
-		if (cmd0.equalsIgnoreCase("ping"))
-			raw_ping();
-		else if (cmd0.equalsIgnoreCase("error"))
-			raw_error();
-		
-		if (cmd1.equalsIgnoreCase("001"))
-			raw_001();
-		else if (cmd1.equalsIgnoreCase("801"))
-			raw_801();
-	}
-	
-	// PING :cf1f1.onet
-	private void raw_ping()
-	{
-		String server = data[1];
-		
-		Network.getInstance().send(String.format("PONG %s", server));		
-	}
-	
-	// ERROR :Closing link (unknown@95.48.183.154) [Registration timeout]
-	private void raw_error()
-	{
-	}
-	
-	// :cf1f4.onet 001 scc_test :Welcome to the OnetCzat IRC Network scc_test!51976824@83.28.35.219
-	private void raw_001()
-	{
-	}
+        String cmd0 = data[0];
+        String cmd1 = data[1];
+        
+        if (cmd0.equalsIgnoreCase("ping"))
+            raw_ping();
+        else if (cmd0.equalsIgnoreCase("error"))
+            raw_error();
+        
+        if (cmd1.equalsIgnoreCase("001"))
+            raw_001();
+        else if (cmd1.equalsIgnoreCase("801"))
+            raw_801();
+    }
+    
+    // PING :cf1f1.onet
+    private void raw_ping()
+    {
+        String server = data[1];
+        
+        Network.getInstance().send(String.format("PONG %s", server));
+    }
+    
+    // ERROR :Closing link (unknown@95.48.183.154) [Registration timeout]
+    private void raw_error()
+    {
+    }
+    
+    // :cf1f4.onet 001 scc_test :Welcome to the OnetCzat IRC Network scc_test!51976824@83.28.35.219
+    private void raw_001()
+    {
+    }
 
-	// :cf1f3.onet 801 scc_test :q5VMy1wl6hKL5ZUt
-	// :cf1f2.onet 801 384-unknown :mIGlbZP0R056xedZ
-	private void raw_801()
-	{
-		String key = data[3].substring(1);
+    // :cf1f3.onet 801 scc_test :q5VMy1wl6hKL5ZUt
+    // :cf1f2.onet 801 384-unknown :mIGlbZP0R056xedZ
+    private void raw_801()
+    {
+        String key = data[3].substring(1);
 
-		String auth = OnetUtils.transform(key);
-		String nick = Settings.getInstance().get("nick");
-		String UOKey = Settings.getInstance().get("uo_key");
-		
-	    if (Network.getInstance().isConnected())
+        String auth = OnetUtils.transform(key);
+        String nick = Settings.getInstance().get("nick");
+        String UOKey = Settings.getInstance().get("uo_key");
+        
+        if (Network.getInstance().isConnected())
         {
-	    	Network.getInstance().send(String.format("NICK %s", nick));
-	    	Network.getInstance().send(String.format("AUTHKEY %s", auth));
-	    	Network.getInstance().send(String.format("USER * %s czat-app.onet.pl :%s", UOKey, nick));
+            Network.getInstance().send(String.format("NICK %s", nick));
+            Network.getInstance().send(String.format("AUTHKEY %s", auth));
+            Network.getInstance().send(String.format("USER * %s czat-app.onet.pl :%s", UOKey, nick));
         }
-	}
+    }
 }
