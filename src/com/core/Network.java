@@ -32,7 +32,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.onet.OnetKernel;
 
@@ -48,19 +47,21 @@ public class Network {
 
     private NetworkThread networkThread;
     private NetworkHandler networkHandler;
-    
-    private TextView textView;
-    private OnetKernel kernel;
-    
-    public Network(TextView t)
+
+    private static Network instance = new Network();
+    public static synchronized Network getInstance() { return instance; }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException("Clone is not allowed.");
+    }
+
+    private Network()
 	{
 		super();
-		
-		textView = t;
-		
+				
 		networkThread = new NetworkThread();
-		kernel = new OnetKernel(this);
-		networkHandler = new NetworkHandler(kernel, textView);
+		networkHandler = new NetworkHandler();
 		in = null;
 		out = null;
 	}
@@ -68,7 +69,7 @@ public class Network {
 	public void send(String data)
 	{
 		Log.i(TAG, data);
-		textView.append(String.format("<- %s\r\n", data));
+		//textView.append(String.format("<- %s\r\n", data));
 		
         try {
             if ((socket != null) && (socket.isConnected())) {
@@ -105,24 +106,16 @@ public class Network {
 	}	
 
 	static class NetworkHandler extends Handler {
-		private OnetKernel kernel;
-		private TextView textView;
 		
-		public NetworkHandler(OnetKernel k, TextView t)
-		{
-			kernel = k;
-			textView = t;
-		}
-
         @Override
         public void handleMessage(Message msg) {
         	Bundle bundle = msg.getData();
         	String data = bundle.getString("network_message");
 
         	Log.i(TAG, data);
-        	textView.append(String.format("-> %s\r\n", data));
+        	//textView.append(String.format("-> %s\r\n", data));
 
-    		kernel.parse(data);
+        	OnetKernel.getInstance().parse(data);
         }
 	};
 
@@ -137,7 +130,7 @@ public class Network {
 				
 			        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			        out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-	
+
 			        String line = null;
 					while ((line = in.readLine()) != null)
 					{

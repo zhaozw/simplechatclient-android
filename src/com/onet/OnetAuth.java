@@ -59,13 +59,12 @@ public class OnetAuth {
     private String version;
 
     private HttpClient httpclient;
-    private Network network;
-
-    public OnetAuth(Network n)
-    {
-    	network = n;
-    }
     
+    public OnetAuth()
+    {
+        httpclient = new DefaultHttpClient();    	
+    }
+
     public void authorize(String n, String p) {
         if (authorizing) {
             Log.w(TAG, "Already authorizing");
@@ -79,7 +78,6 @@ public class OnetAuth {
         override = true;
 
         authorizing = true;
-        httpclient = new DefaultHttpClient();
 
         downloadChat();
     }
@@ -205,16 +203,12 @@ public class OnetAuth {
                 String UOKey = document.getElementsByTagName("uoKey").item(0).getTextContent();
                 String nick = document.getElementsByTagName("zuoUsername").item(0).getTextContent();
 
-                // TODO remove
-                Log.i(TAG, "UO nick:"+nick);
-                Log.i(TAG, "UO key:"+UOKey);
-
-                if (network.isConnected())
+                if (Network.getInstance().isConnected())
                 {
                 	Settings.getInstance().set("nick", nick);
                 	Settings.getInstance().set("uo_key", UOKey);
                 	
-                	network.send(String.format("AUTHKEY"));
+                	Network.getInstance().send(String.format("AUTHKEY"));
                 }
             } else {
                 Log.e(TAG, String.format("Authentication error [%s]", err_text));
@@ -283,6 +277,13 @@ public class OnetAuth {
 		@Override
 	    protected void onPostExecute(String result) {
 	        super.onPostExecute(result);
+
+	        if (result == null)
+	        {
+	        	Log.e(TAG, "Unable to parse web page");
+	        	authorizing = false;
+	        	return;
+	        }
 
 	        if (category.equals("chat"))
 	        	downloadDeploy();

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- package com.core;
+package com.core;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -32,7 +32,6 @@ import com.onet.OnetAuth;
 public class MainActivity extends Activity {
     private EditText editText;
     private TextView textView;
-    private Network network;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,30 +40,28 @@ public class MainActivity extends Activity {
 
         editText = (EditText)findViewById(R.id.editTextInput);
         textView = (TextView)findViewById(R.id.textView1);
-
-        network = new Network(textView);
         
         connect();
     }
 
     private void connect()
     {
-        network.connect();
+        Network.getInstance().connect();
 
-        OnetAuth a = new OnetAuth(network);
+        OnetAuth a = new OnetAuth();
         a.authorize("scc_test", "");
     }
 
     private void disconnect()
     {
-    	network.disconnect();
+    	Network.getInstance().disconnect();
     }
 
     public void sendMessage(View view) {
         String message = editText.getText().toString();
 
         textView.append(message);
-        network.send(message);
+        Network.getInstance().send(message);
     }
 
     @Override
