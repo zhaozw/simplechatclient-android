@@ -24,14 +24,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.core.Network;
 import com.onet.OnetAuth;
 
 public class MainActivity extends Activity {
     private EditText editText;
-    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +37,9 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         editText = (EditText)findViewById(R.id.editTextInput);
-        textView = (TextView)findViewById(R.id.textView1);
-        
+        //http://developer.android.com/training/implementing-navigation/lateral.html#horizontal-paging
+        //http://developer.android.com/reference/android/support/v4/view/ViewPager.html
+
         connect();
     }
 
@@ -51,16 +50,16 @@ public class MainActivity extends Activity {
         OnetAuth a = new OnetAuth();
         a.authorize("scc_test", "");
     }
-
+/*
     private void disconnect()
     {
     	Network.getInstance().disconnect();
     }
-
+*/
     public void sendMessage(View view) {
         String message = editText.getText().toString();
 
-        textView.append(message);
+        //textView.append(message);
         Network.getInstance().send(message);
     }
 

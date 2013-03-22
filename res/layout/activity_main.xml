@@ -5,49 +5,42 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollViewContent"
-        android:layout_width="match_parent"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.17" >
-
-        <LinearLayout
+        android:layout_marginBottom="60dp" >
+    
+        <android.support.v4.view.PagerTitleStrip
+            android:id="@+id/pager_title_strip"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="10sp" />
-
-        </LinearLayout>
-    </HorizontalScrollView>
+            android:layout_height="wrap_content"
+            android:background="#33b5e5"
+            android:textColor="#fff" />
+    
+    </android.support.v4.view.ViewPager>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.00" >
+        android:layout_height="0dip"
+        android:layout_weight="0.00"
+        android:gravity="bottom"
+        android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/editTextInput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10" >
-
-            <requestFocus />
-        </EditText>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:ems="10"
+            android:inputType="text" />
 
         <Button
             android:id="@+id/buttonSend"
-            android:layout_width="wrap_content"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Send"
-            android:onClick="sendMessage" />
-
+            android:onClick="sendMessage"
+            android:text="@string/send" />
     </LinearLayout>
 
 </LinearLayout>

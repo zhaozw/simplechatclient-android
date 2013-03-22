@@ -69,7 +69,7 @@ public class Network {
     public void send(String data)
     {
         Log.i(TAG, data);
-        //textView.append(String.format("<- %s\r\n", data));
+        Messages.getInstance().showMessage("Status", String.format("%s\r\n", data));
         
         try {
             if ((socket != null) && (socket.isConnected())) {
@@ -113,7 +113,7 @@ public class Network {
             String data = bundle.getString("network_message");
 
             Log.i(TAG, data);
-            //textView.append(String.format("-> %s\r\n", data));
+            Messages.getInstance().showMessage("Status", String.format("-> %s\r\n", data));
 
             OnetKernel.getInstance().parse(data);
         }
