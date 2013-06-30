@@ -104,18 +104,26 @@ public class OnetAuth {
         version = String.format("1.1(%s - R)", version);        
     }
     
-    private void downloadKropka() {
-        String url = "http://kropka.onet.pl/_s/kropka/1?DV=czat%2Fchat&SC=1&IP=&DG=id%3Dno-gemius&RI=&C1=&CL=std161&CS=1280x800x24&CW=1280x243&DU=http://czat.onet.pl/chat.html&DR=http://czat.onet.pl/";
+    private void downloadKropka1() {
+        String url = "http://kropka.onet.pl/_s/kropka/1?DV=czat/applet";
         String content = null;
-        String category = "kropka";
+        String category = "kropka_1";
         
         new HttpDownload().execute(url, content, category);
     }
 
-    private void downloadKropkaFull() {
+    private void downloadKropka1Full() {
         String url = "http://kropka.onet.pl/_s/kropka/1?DV=czat/applet/FULL";
         String content = null;
-        String category = "kropka_full";
+        String category = "kropka_1_full";
+        
+        new HttpDownload().execute(url, content, category);
+    }
+
+    private void downloadKropka5Full() {
+        String url = "http://kropka.onet.pl/_s/kropka/5?DV=czat/applet/FULL";
+        String content = null;
+        String category = "kropka_5_full";
         
         new HttpDownload().execute(url, content, category);
     }
@@ -133,14 +141,6 @@ public class OnetAuth {
         String content = String.format("api_function=checkCode&params=a:1:{s:4:\"code\";s:%d:\"%s\";}", code.length(), code);
         String category = "check_code";
 
-        new HttpDownload().execute(url, content, category);
-    }
-
-    private void downloadSecureKropka() {
-        String url = "http://kropka.onet.pl/_s/kropka/1?DV=secure&SC=1&CL=std161&CS=1280x800x24&CW=1280x243&DU=http://secure.onet.pl/&DR=";
-        String content = null;
-        String category = "secure_kropka";
-        
         new HttpDownload().execute(url, content, category);
     }
 
@@ -289,23 +289,23 @@ public class OnetAuth {
                 downloadDeploy();
             else if (category.equals("deploy")) {
                 parseDeploy(result);
-                downloadKropka();
+                downloadKropka1();
             }
-            else if (category.equals("kropka"))
-                downloadKropkaFull();
-            else if (category.equals("kropka_full"))
+            else if (category.equals("kropka_1"))
+                downloadKropka1Full();
+            else if (category.equals("kropka_1_full"))
+                downloadKropka5Full();
+            else if (category.equals("kropka_5_full"))
                 downloadSk();
             else if (category.equals("sk")) {
                 if (registeredNick)
-                    downloadSecureKropka();
+                    downloadSecureLogin();
                 else {
                     // showCaptchaDialog();
                     String code = null;
                     downloadCheckCode(code);
                 }
             }
-            else if (category.equals("secure_kropka"))
-                downloadSecureLogin();
             else if (category.equals("secure_login")) {
                 if (override)
                     downloadOverride();

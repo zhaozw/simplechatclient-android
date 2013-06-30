@@ -29,14 +29,14 @@ import com.core.Network;
 import com.onet.OnetAuth;
 
 public class MainActivity extends Activity {
-    private EditText editText;
+    //private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editText = (EditText)findViewById(R.id.editTextInput);
+        //editText = (EditText)findViewById(R.id.editTextInput);
         //http://developer.android.com/training/implementing-navigation/lateral.html#horizontal-paging
         //http://developer.android.com/reference/android/support/v4/view/ViewPager.html
 
@@ -56,12 +56,14 @@ public class MainActivity extends Activity {
     	Network.getInstance().disconnect();
     }
 */
+    /*
     public void sendMessage(View view) {
         String message = editText.getText().toString();
 
         //textView.append(message);
         Network.getInstance().send(message);
     }
+    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
