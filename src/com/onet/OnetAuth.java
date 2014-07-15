@@ -1,7 +1,7 @@
 /*
  * Simple Chat Client
  *
- *   Copyright (C) 2013 Piotr Łuczko <piotr.luczko@gmail.com>
+ *   Copyright (C) 2014 Piotr Łuczko <piotr.luczko@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -278,12 +278,14 @@ public class OnetAuth {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            /*
             if (result == null)
             {
                 Log.e(TAG, "Unable to parse web page");
                 authorizing = false;
                 return;
             }
+            */
 
             if (category.equals("chat"))
                 downloadDeploy();

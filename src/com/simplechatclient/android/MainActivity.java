@@ -1,7 +1,7 @@
 /*
  * Simple Chat Client
  *
- *   Copyright (C) 2013 Piotr Łuczko <piotr.luczko@gmail.com>
+ *   Copyright (C) 2014 Piotr Łuczko <piotr.luczko@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,11 @@
 package com.simplechatclient.android;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
-import android.widget.EditText;
+import android.view.Window;
 
 import com.core.Network;
 import com.onet.OnetAuth;
@@ -34,22 +35,51 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.welcome);
+        
         //editText = (EditText)findViewById(R.id.editTextInput);
         //http://developer.android.com/training/implementing-navigation/lateral.html#horizontal-paging
         //http://developer.android.com/reference/android/support/v4/view/ViewPager.html
 
-        connect();
+        // http://developer.android.com/training/implementing-navigation/nav-drawer.html
+        
+        /*
+        Button connectButton = (Button)findViewById(R.id.button_connect);
+        
+        OnClickListener oclBtnOk = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	//connect();
+              // 
+            	Intent intent = new Intent(this, ProfilesManager.class);
+                startActivity(intent);
+
+              
+            }
+          };
+          
+        connectButton.setOnClickListener(oclBtnOk);
+        */
+        
+        
     }
 
+    public void button_connect(View v)
+    {
+    	Intent intent = new Intent(this, ProfilesManager.class);
+        startActivity(intent);    	
+    }
+    
     private void connect()
     {
         Network.getInstance().connect();
 
         OnetAuth a = new OnetAuth();
         a.authorize("scc_test", "");
+        
+        Network.getInstance().send("JOIN #scc");
     }
+    
 /*
     private void disconnect()
     {
@@ -65,10 +95,12 @@ public class MainActivity extends Activity {
     }
     */
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
+    */
 }

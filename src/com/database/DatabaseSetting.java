@@ -17,22 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.core;
+package com.database;
 
-public class Messages {
-    private static Messages instance = new Messages();
-    public static synchronized Messages getInstance() {return instance; }
+public class DatabaseSetting {
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException("Clone is not allowed.");
-    }
-    
-    public void showMessage(String channel, String data)
-    {
-    }
-    
-    public void showMessageAll(String data)
-    {
-    }
+	private int id;
+	private String current_profile;
+	private String uniuqe_id;
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getCurrentProfile() {
+		return this.current_profile;
+	}
+	
+	public void setCurrentProfile(String current_profile) {
+		this.current_profile = current_profile;
+	}
+	
+	public String getUniqueId() {
+		return this.uniuqe_id;
+	}
+	
+	public void setUniqueId(String unique_id) {
+		this.uniuqe_id = unique_id;
+	}
 }

@@ -17,22 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.core;
+package com.database;
 
-public class Messages {
-    private static Messages instance = new Messages();
-    public static synchronized Messages getInstance() {return instance; }
+public class DatabaseProfile {
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException("Clone is not allowed.");
-    }
-    
-    public void showMessage(String channel, String data)
-    {
-    }
-    
-    public void showMessageAll(String data)
-    {
-    }
 }

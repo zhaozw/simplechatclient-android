@@ -1,7 +1,7 @@
 /*
  * Simple Chat Client
  *
- *   Copyright (C) 2013 Piotr Łuczko <piotr.luczko@gmail.com>
+ *   Copyright (C) 2014 Piotr Łuczko <piotr.luczko@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,18 +86,22 @@ public class Network {
     
     public void connect()
     {
-        networkThread.start();
+    	if (!networkThread.isAlive())
+    		networkThread.start();
     }
     
     public void disconnect()
     {
-        networkThread.stop();
+    	if (networkThread.isAlive())
+    		networkThread.stop();
     }
     
     public void reconnect()
     {
-        networkThread.stop();
-        networkThread.start();
+    	if (networkThread.isAlive())
+    		networkThread.stop();
+    	if (!networkThread.isAlive())
+    		networkThread.start();
     }
     
     public boolean isConnected()
