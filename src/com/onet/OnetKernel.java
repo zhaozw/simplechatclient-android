@@ -27,11 +27,6 @@ public class OnetKernel {
 
     private static OnetKernel instance = new OnetKernel();
     public static synchronized OnetKernel getInstance() { return instance; }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException("Clone is not allowed.");
-    }
     
     public void parse(String message)
     {
@@ -70,6 +65,8 @@ public class OnetKernel {
     // :cf1f4.onet 001 scc_test :Welcome to the OnetCzat IRC Network scc_test!51976824@83.28.35.219
     private void raw_001()
     {
+    	// autojoin 
+    	Network.getInstance().send(String.format("JOIN #scc"));
     }
 
     // :cf1f3.onet 801 scc_test :q5VMy1wl6hKL5ZUt

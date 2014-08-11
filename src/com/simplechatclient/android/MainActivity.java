@@ -21,79 +21,60 @@ package com.simplechatclient.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
+import android.widget.TextView;
 
+import com.core.Config;
 import com.core.Network;
-import com.onet.OnetAuth;
+import com.core.Settings;
+import com.database.DatabaseProfile;
+import com.database.DatabaseSetting;
 
 public class MainActivity extends Activity {
-    //private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        Config current_config = new Config(getApplicationContext());
+        
+        DatabaseSetting current_settings = current_config.getSetting();
+        DatabaseProfile current_profile = current_config.getProfile(current_settings.getCurrent_profile());
+        
+        Settings.getInstance().set("current_nick", current_settings.getCurrent_profile());
+        Settings.getInstance().set("unique_id", current_settings.getUnique_id());
+        
+        Settings.getInstance().set("nick", current_profile.getNick());
+        Settings.getInstance().set("password", current_profile.getPassword());
+        Settings.getInstance().set("font", current_profile.getFont());
+        Settings.getInstance().set("bold", current_profile.getBold());
+        Settings.getInstance().set("italic", current_profile.getItalic());
+        Settings.getInstance().set("color", current_profile.getColor());
+        
         setContentView(R.layout.welcome);
         
-        //editText = (EditText)findViewById(R.id.editTextInput);
-        //http://developer.android.com/training/implementing-navigation/lateral.html#horizontal-paging
-        //http://developer.android.com/reference/android/support/v4/view/ViewPager.html
-
-        // http://developer.android.com/training/implementing-navigation/nav-drawer.html
-        
-        /*
-        Button connectButton = (Button)findViewById(R.id.button_connect);
-        
-        OnClickListener oclBtnOk = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            	//connect();
-              // 
-            	Intent intent = new Intent(this, ProfilesManager.class);
-                startActivity(intent);
-
-              
-            }
-          };
-          
-        connectButton.setOnClickListener(oclBtnOk);
-        */
-        
-        
+        TextView nickText = (TextView)findViewById(R.id.textNickView);
+        nickText.setText(current_profile.getNick());
     }
 
-    public void button_connect(View v)
+    public void button_profiles(View v)
     {
     	Intent intent = new Intent(this, ProfilesManager.class);
         startActivity(intent);    	
     }
     
-    private void connect()
+    public void button_connect(View v)
     {
         Network.getInstance().connect();
 
-        OnetAuth a = new OnetAuth();
-        a.authorize("scc_test", "");
-        
-        Network.getInstance().send("JOIN #scc");
+        //Network.getInstance().send("JOIN #scc");
     }
     
-/*
-    private void disconnect()
+    public void button_disconnect()
     {
     	Network.getInstance().disconnect();
     }
-*/
-    /*
-    public void sendMessage(View view) {
-        String message = editText.getText().toString();
-
-        //textView.append(message);
-        Network.getInstance().send(message);
-    }
-    */
 
     /*
     @Override

@@ -2,16 +2,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@layout/main_background" >
+    android:background="@drawable/onet" >
+
+    <Button
+        android:id="@+id/button_profiles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="81dp"
+        android:onClick="button_profiles"
+        android:text="Profile" />
 
     <Button
         android:id="@+id/button_connect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="184dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/button_profiles"
         android:onClick="button_connect"
-        android:text="Połącz" />
+        android:text="Zaloguj" />
+
+    <TextView
+        android:id="@+id/textNickView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_profiles"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

@@ -19,6 +19,10 @@
 
 package com.database;
 
+import java.util.Random;
+import java.util.UUID;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -26,32 +30,32 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static final int DATABASE_VERSION = 1;
-	private static final String DATABASE_NAME = "config";
+	public static final String DATABASE_NAME = "config";
 
-	private static final String TABLE_SETTINGS = "settings";
-    private static final String TABLE_SETTINGS_ID = "id";
-    private static final String TABLE_SETTINGS_CURRENT_PROFILE = "current_profile";
-    private static final String TABLE_SETTINGS_UNIQUE_ID = "unique_id";
+	public static final String TABLE_SETTINGS = "settings";
+	public static final String TABLE_SETTINGS_ID = "id";
+	public static final String TABLE_SETTINGS_CURRENT_PROFILE = "current_profile";
+	public static final String TABLE_SETTINGS_UNIQUE_ID = "unique_id";
+	
+	public static final String TABLE_SETTINGS_ID_CURRENT = "current";
     
-    private static final String TABLE_PROFILES = "profiles";
-    private static final String TABLE_PROFILES_ID = "id";
-    private static final String TABLE_PROFILES_NICK = "nick";
-    private static final String TABLE_PROFILES_PASS = "pass";
-    private static final String TABLE_PROFILES_FONT = "font";
-    private static final String TABLE_PROFILES_BOLD = "bold";
-    private static final String TABLE_PROFILES_ITALIC = "italic";
-    private static final String TABLE_PROFILES_COLOR = "color";
+	public static final String TABLE_PROFILES = "profiles";
+	public static final String TABLE_PROFILES_NICK = "nick";
+	public static final String TABLE_PROFILES_PASSWORD = "password";
+	public static final String TABLE_PROFILES_FONT = "font";
+	public static final String TABLE_PROFILES_BOLD = "bold";
+	public static final String TABLE_PROFILES_ITALIC = "italic";
+	public static final String TABLE_PROFILES_COLOR = "color";
     
-    private static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ TABLE_SETTINGS +" ("
-    		+ TABLE_SETTINGS_ID +" INTEGER PRIMARY KEY, "
+	public static final String CREATE_TABLE_SETTINGS = "CREATE TABLE IF NOT EXISTS "+ TABLE_SETTINGS +" ("
+			+ TABLE_SETTINGS_ID +" VARCHAR(7), "
     		+ TABLE_SETTINGS_CURRENT_PROFILE +" VARCHAR(32), "
     		+ TABLE_SETTINGS_UNIQUE_ID +" VARCHAR(36)"
     		+ ")";
     
-    private static final String CREATE_TABLE_PROFILES = "CREATE TABLE "+ TABLE_PROFILES +" ("
-    		+ TABLE_PROFILES_ID +" INTEGER PRIMARY KEY, "
-    		+ TABLE_PROFILES_NICK +" VARCHAR(32), "
-    		+ TABLE_PROFILES_PASS +" TEXT, "
+	public static final String CREATE_TABLE_PROFILES = "CREATE TABLE IF NOT EXISTS "+ TABLE_PROFILES +" ("
+    		+ TABLE_PROFILES_NICK +" VARCHAR(32) PRIMARY KEY, "
+    		+ TABLE_PROFILES_PASSWORD +" TEXT, "
     		+ TABLE_PROFILES_FONT +" VARCHAR(250) DEFAULT \"verdana\", "
     		+ TABLE_PROFILES_BOLD +" VARCHAR(5) DEFAULT \"false\", "
     		+ TABLE_PROFILES_ITALIC +" VARCHAR(5) DEFAULT \"false\", "
@@ -68,8 +72,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // creating required tables
         db.execSQL(CREATE_TABLE_SETTINGS);
         db.execSQL(CREATE_TABLE_PROFILES);
+        
+        // init database
+        initDatabase(db);
     }
  
+    private void initDatabase(SQLiteDatabase db) {
+    	
+        Random mRandom = new Random();
+    	int rand = mRandom.nextInt(1000);
+    	
+    	String current_profile = "~nick_tymczasowy"+String.valueOf(rand);
+    	String uuid = UUID.randomUUID().toString();
+    	
+    	ContentValues initialValuesSettings = new ContentValues();
+    	initialValuesSettings.put(TABLE_SETTINGS_ID, TABLE_SETTINGS_ID_CURRENT);
+    	initialValuesSettings.put(TABLE_SETTINGS_CURRENT_PROFILE, current_profile);
+    	initialValuesSettings.put(TABLE_SETTINGS_UNIQUE_ID, uuid);
+    	db.insert(TABLE_SETTINGS, null, initialValuesSettings);
+    	
+    	ContentValues initialValuesProfile = new ContentValues();
+    	initialValuesProfile.put(TABLE_PROFILES_NICK, current_profile);
+    	initialValuesProfile.put(TABLE_PROFILES_PASSWORD, "");
+    	db.insert(TABLE_PROFILES, null, initialValuesProfile);
+    }
+    
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // on upgrade drop older tables

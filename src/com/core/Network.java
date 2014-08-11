@@ -33,6 +33,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.onet.OnetAuth;
 import com.onet.OnetKernel;
 
 public class Network {
@@ -50,11 +51,6 @@ public class Network {
 
     private static Network instance = new Network();
     public static synchronized Network getInstance() {return instance; }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException("Clone is not allowed.");
-    }
 
     private Network()
     {
@@ -135,6 +131,9 @@ public class Network {
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
+                    // auth
+                    OnetAuth.getInstance().authorize();
+                    
                     String line = null;
                     while ((line = in.readLine()) != null)
                     {

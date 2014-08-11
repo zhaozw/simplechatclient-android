@@ -22,11 +22,9 @@ package com.onet;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -40,10 +38,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import com.core.Network;
 import com.core.Settings;
 
@@ -57,24 +54,28 @@ public class OnetAuth {
     private String nick;
     private String password;
     private String version;
-
     private HttpClient httpclient;
+
+    private static OnetAuth instance = new OnetAuth();
+    public static synchronized OnetAuth getInstance() { return instance; }
     
     public OnetAuth()
     {
         httpclient = new DefaultHttpClient();
     }
 
-    public void authorize(String n, String p) {
+    public void authorize() {
         if (authorizing) {
             Log.w(TAG, "Already authorizing");
             return;
         }
+        
+        nick = Settings.getInstance().get("nick").toString();
+        password = Settings.getInstance().get("password").toString();
 
-        nick = n;
-        password = p;
-
-        registeredNick = true;
+        if (!nick.contains("~"))
+        	registeredNick = true;
+        
         override = true;
 
         authorizing = true;
@@ -136,7 +137,8 @@ public class OnetAuth {
         new HttpDownload().execute(url, content, category);
     }
 
-    private void downloadCheckCode(String code) {
+    @SuppressLint("DefaultLocale")
+	private void downloadCheckCode(String code) {
         String url = AJAX_API;
         String content = String.format("api_function=checkCode&params=a:1:{s:4:\"code\";s:%d:\"%s\";}", code.length(), code);
         String category = "check_code";
@@ -152,7 +154,8 @@ public class OnetAuth {
         new HttpDownload().execute(url, content, category);
     }
 
-    private void downloadOverride() {
+    @SuppressLint("DefaultLocale")
+	private void downloadOverride() {
         String url = AJAX_API;
         String content = String.format("api_function=userOverride&params=a:1:{s:4:\"nick\";s:%d:\"%s\";}", nick.length(), nick);
         String category = "override";
@@ -160,7 +163,8 @@ public class OnetAuth {
         new HttpDownload().execute(url, content, category);
     }
 
-    private void downloadUo() {
+    @SuppressLint("DefaultLocale")
+	private void downloadUo() {
         int isRegistered = (registeredNick == true ? 0 : 1);
 
         String url = AJAX_API;
@@ -252,26 +256,22 @@ public class OnetAuth {
                 if (status == 200) {
                     HttpEntity httpEntity = httpResponse.getEntity();
                     return EntityUtils.toString(httpEntity);
-                } else {
-                    return null;
                 }
             } catch (ClientProtocolException e) {
                 Log.e(TAG, "Unable to retrieve web page (ClientProtocolException:"+e.getMessage()+"): " + url);
                 e.getStackTrace();
-                return null;
             } catch (UnsupportedEncodingException e) {
                 Log.e(TAG, "Unable to retrieve web page (UnsupportedEncodingException:"+e.getMessage()+"): " + url);
                 e.getStackTrace();
-                return null;
             } catch (IllegalArgumentException e) {
                 Log.e(TAG, "Unable to retrieve web page (IllegalArgumentException:"+e.getMessage()+"): " + url);
                 e.getStackTrace();
-                return null;
             } catch (IOException e) {
                 Log.e(TAG, "Unable to retrieve web page (IOException:"+e.getMessage()+"): " + url);
                 e.getStackTrace();
-                return null;
             }
+            
+            return null;
         }
         
         @Override

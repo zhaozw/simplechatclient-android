@@ -20,32 +20,26 @@
 package com.database;
 
 public class DatabaseSetting {
-
-	private int id;
+	private String id;
 	private String current_profile;
-	private String uniuqe_id;
+	private String unique_id;
 	
-	public int getId() {
-		return this.id;
+	public String getId() {
+		return id;
 	}
-	
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
-	
-	public String getCurrentProfile() {
-		return this.current_profile;
+	public String getCurrent_profile() {
+		return current_profile;
 	}
-	
-	public void setCurrentProfile(String current_profile) {
+	public void setCurrent_profile(String current_profile) {
 		this.current_profile = current_profile;
 	}
-	
-	public String getUniqueId() {
-		return this.uniuqe_id;
+	public String getUnique_id() {
+		return unique_id;
 	}
-	
-	public void setUniqueId(String unique_id) {
-		this.uniuqe_id = unique_id;
+	public void setUnique_id(String unique_id) {
+		this.unique_id = unique_id;
 	}
 }
