@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Simple Chat Client</string>
+    <string name="title_login">Logowanie</string>
+    <string name="title_profiles">Profile</string>
+    <string name="action_settings">Settings</string>
+    <string name="login_button">Zaloguj</string>
+    
+</resources>
