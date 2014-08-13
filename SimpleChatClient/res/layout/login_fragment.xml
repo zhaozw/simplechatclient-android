@@ -9,25 +9,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.simplechatclient.android.LoginFragment" >
 
-    <TextView
-        android:id="@+id/textViewNick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="nick"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <Button
         android:id="@+id/button_login"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewNick"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
         android:minHeight="50dp"
         android:minWidth="120dp"
         android:onClick="button_login"
         android:text="@string/login_button" />
+
+    <Spinner
+        android:id="@+id/spinnerNick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="149dp" />
 
 </RelativeLayout>

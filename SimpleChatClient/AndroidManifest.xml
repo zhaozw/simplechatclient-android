@@ -30,8 +30,16 @@
             android:label="@string/title_login" >
         </activity>
         <activity
-            android:name=".ProfilesFragment"
+            android:name=".ProfileListFragment"
             android:label="@string/title_profiles" >
+        </activity>
+        <activity
+            android:name=".ProfileEditActivity"
+            android:label="@string/title_profile_edit" >
+        </activity>
+        <activity
+            android:name=".ProfileAddActivity"
+            android:label="@string/title_profile_add" >
         </activity>
     </application>
 

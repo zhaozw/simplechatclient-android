@@ -1,27 +1,7 @@
-/*
- * Simple Chat Client
- *
- *   Copyright (C) 2014 Piotr Łuczko <piotr.luczko@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package com.simplechatclient.android;
 
 import java.util.Locale;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,15 +10,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
 
-import com.core.Config;
-import com.core.Network;
-import com.core.Settings;
-import com.database.DatabaseProfile;
-import com.database.DatabaseSetting;
-
-public class MainActivity extends ActionBarActivity implements
+public class ProfileAddActivity extends ActionBarActivity implements
 		ActionBar.TabListener {
 
 	/**
@@ -58,23 +31,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_activity);
-
-		// settings
-		Config current_config = new Config(getApplicationContext());
-        
-        DatabaseSetting current_settings = current_config.getSetting();
-        DatabaseProfile current_profile = current_config.getProfile(current_settings.getCurrent_profile());
-        
-        Settings.getInstance().set("current_profile", current_settings.getCurrent_profile());
-        Settings.getInstance().set("unique_id", current_settings.getUnique_id());
-        
-        Settings.getInstance().set("nick", current_profile.getNick());
-        Settings.getInstance().set("password", current_profile.getPassword());
-        Settings.getInstance().set("font", current_profile.getFont());
-        Settings.getInstance().set("bold", current_profile.getBold());
-        Settings.getInstance().set("italic", current_profile.getItalic());
-        Settings.getInstance().set("color", current_profile.getColor());
+		setContentView(R.layout.profile_add_activity);
 
 		// Set up the action bar.
 		final ActionBar actionBar = getSupportActionBar();
@@ -147,10 +104,10 @@ public class MainActivity extends ActionBarActivity implements
 			// below).
 			switch (position) {
 			case 1:
-				return ProfileListFragment.newInstance();
+				return ProfileRegisterFragment.newInstance();
 			case 0:
 			default:
-				return LoginFragment.newInstance();
+				return ProfileAddFragment.newInstance();
 			}
 		}
 
@@ -164,27 +121,11 @@ public class MainActivity extends ActionBarActivity implements
 			Locale l = Locale.getDefault();
 			switch (position) {
 			case 0:
-				return getString(R.string.title_login).toUpperCase(l);
+				return getString(R.string.title_profile_add).toUpperCase(l);
 			case 1:
-				return getString(R.string.title_profiles).toUpperCase(l);
+				return getString(R.string.title_profile_register).toUpperCase(l);
 			}
 			return null;
 		}
 	}
-	
-	public void button_login()
-	{
-		Network.getInstance().connect();
-
-		// TODO
-		//Intent intent = new Intent(this, ChannelsActivity.class);
-        //startActivity(intent);  
-	}
-	
-	public void button_profile_add(View v)
-	{
-    	Intent addProfileIntent = new Intent(this, ProfileAddActivity.class);
-        startActivity(addProfileIntent);		
-	}
-	
 }

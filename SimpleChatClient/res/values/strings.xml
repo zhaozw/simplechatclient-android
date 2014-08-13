@@ -2,9 +2,19 @@
 <resources>
 
     <string name="app_name">Simple Chat Client</string>
+    <string name="action_settings">Ustawienia</string>
+    
     <string name="title_login">Logowanie</string>
     <string name="title_profiles">Profile</string>
-    <string name="action_settings">Settings</string>
     <string name="login_button">Zaloguj</string>
+    
+    <string name="profile_add">Dodaj</string>
+    <string name="title_profile_edit">Edycja profilu</string>
+    <string name="title_profile_add">Dodaj profil</string>
+    <string name="title_profile_register">Zarejestruj się</string>
+
+    <string name="nick_registered_toggle">Zarejestrowany</string>
+    <string name="remove_profile">Usuń</string>
+    <string name="save_profile">Zapisz</string>
     
 </resources>

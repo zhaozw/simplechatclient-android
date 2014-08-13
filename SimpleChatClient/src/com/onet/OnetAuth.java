@@ -191,7 +191,7 @@ public class OnetAuth {
         return "20120711-1544b";
     }
 
-    // <?xml version="1.0" encoding="ISO-8859-2"?><root><uoKey>LY9j2sXwio0G_yo3PdpukDL8iZJGHXKs</uoKey><zuoUsername>~Succubi_test</zuoUsername><error err_code="TRUE" err_text="wartość prawdziwa" ></error></root>
+    // <?xml version="1.0" encoding="ISO-8859-2"?><root><uoKey>LY9j2sXwio0G_yo3PdpukDL8iZJGHXKs</uoKey><zuoUsername>~Succubi_test</zuoUsername><error err_code="TRUE" err_text="wartoĹ›Ä‡ prawdziwa" ></error></root>
     // <?xml version="1.0" encoding="ISO-8859-2"?><root><error err_code="-2" err_text="U.ytkownik nie zalogowany" ></error></root>
     private void parseUo(String data) {
         try {
