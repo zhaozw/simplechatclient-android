@@ -31,14 +31,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.core.Config;
 import com.core.Network;
 import com.core.Settings;
 import com.database.DatabaseProfile;
+import com.database.DatabaseSetting;
 
-class LoginFragment extends Fragment {
+class LoginFragment extends Fragment implements View.OnClickListener {
 
 	private Context context;
 	private View view;
@@ -83,6 +85,28 @@ class LoginFragment extends Fragment {
 			spinner.setSelection(default_position); 
 		
 		spinner.setOnItemSelectedListener(spinnerListener);
+		
+		Button button_login = (Button)view.findViewById(R.id.button_login);
+		button_login.setOnClickListener(this);
+	}
+	
+	@Override
+	public void onClick(View v) {
+		switch (v.getId())
+		{
+			case R.id.button_login:
+				button_login();
+				break;
+		}
+	}
+
+	private void button_login()
+	{
+		Network.getInstance().connect();
+
+		// TODO
+		//Intent intent = new Intent(this, ChannelsActivity.class);
+        //startActivity(intent);  
 	}
 
 	private OnItemSelectedListener spinnerListener = new OnItemSelectedListener() {
@@ -93,11 +117,15 @@ class LoginFragment extends Fragment {
         	if (selected_nick != nick)
         	{
         		Config current_config = new Config(context);
-        		//current_config.
-        		// TODO
+        		DatabaseProfile profile = current_config.getProfile(selected_nick);
+        		DatabaseSetting setting = current_config.getSetting();
+        		int selected_nick_id =  profile.getId();
         		
         		Settings.getInstance().set("nick", selected_nick);
-        		Settings.getInstance().set("current_profile", selected_nick);
+        		Settings.getInstance().set("current_profile", Integer.toString(selected_nick_id));
+        		
+        		setting.setCurrent_profile(selected_nick_id);
+        		current_config.updateSettings(setting);
         	}
         }
 

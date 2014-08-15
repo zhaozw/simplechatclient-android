@@ -21,7 +21,7 @@ package com.database;
 
 public class DatabaseSetting {
 	private String id;
-	private String current_profile;
+	private int current_profile;
 	private String unique_id;
 	
 	public String getId() {
@@ -30,10 +30,10 @@ public class DatabaseSetting {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getCurrent_profile() {
+	public int getCurrent_profile() {
 		return current_profile;
 	}
-	public void setCurrent_profile(String current_profile) {
+	public void setCurrent_profile(int current_profile) {
 		this.current_profile = current_profile;
 	}
 	public String getUnique_id() {

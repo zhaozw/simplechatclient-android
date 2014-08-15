@@ -14,19 +14,19 @@
         android:id="@+id/listViewProfiles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button_profile_add"
+        android:layout_above="@+id/profile_add_button"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" >
 
     </ListView>
 
     <Button
-        android:id="@+id/button_profile_add"
+        android:id="@+id/profile_add_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/listViewProfiles"
         android:layout_alignParentBottom="true"
         android:onClick="button_profile_add"
-        android:text="@string/profile_add" />
+        android:text="@string/add_profile" />
 
 </RelativeLayout>

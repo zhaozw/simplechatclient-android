@@ -1,7 +1,7 @@
 /*
  * Simple Chat Client
  *
- *   Copyright (C) 2014 Piotr Łuczko <piotr.luczko@gmail.com>
+ *   Copyright (C) 2014 Piotr Ĺ�uczko <piotr.luczko@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,10 +30,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
+import android.util.Log;
 
 import com.core.Config;
-import com.core.Network;
 import com.core.Settings;
 import com.database.DatabaseProfile;
 import com.database.DatabaseSetting;
@@ -66,7 +65,7 @@ public class MainActivity extends ActionBarActivity implements
         DatabaseSetting current_settings = current_config.getSetting();
         DatabaseProfile current_profile = current_config.getProfile(current_settings.getCurrent_profile());
         
-        Settings.getInstance().set("current_profile", current_settings.getCurrent_profile());
+        Settings.getInstance().set("current_profile", Integer.toString(current_settings.getCurrent_profile()));
         Settings.getInstance().set("unique_id", current_settings.getUnique_id());
         
         Settings.getInstance().set("nick", current_profile.getNick());
@@ -110,6 +109,14 @@ public class MainActivity extends ActionBarActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
+		
+		
+		String selected_tab = getIntent().getStringExtra("tab");
+		if (selected_tab != null)
+		{
+			int int_selected_tab = Integer.valueOf(selected_tab);
+			mViewPager.setCurrentItem(int_selected_tab);
+		}
 	}
 
 	@Override
@@ -128,6 +135,19 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (mViewPager.getCurrentItem() == 1)
+		{
+			mViewPager.setCurrentItem(0);
+		}
+		else
+		{
+			this.finish();
+		}
+		//super.onBackPressed();
 	}
 
 	/**
@@ -171,20 +191,4 @@ public class MainActivity extends ActionBarActivity implements
 			return null;
 		}
 	}
-	
-	public void button_login()
-	{
-		Network.getInstance().connect();
-
-		// TODO
-		//Intent intent = new Intent(this, ChannelsActivity.class);
-        //startActivity(intent);  
-	}
-	
-	public void button_profile_add(View v)
-	{
-    	Intent addProfileIntent = new Intent(this, ProfileAddActivity.class);
-        startActivity(addProfileIntent);		
-	}
-	
 }

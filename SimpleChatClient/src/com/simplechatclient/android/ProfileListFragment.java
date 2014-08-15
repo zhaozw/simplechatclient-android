@@ -32,12 +32,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.core.Config;
 import com.database.DatabaseProfile;
 
-class ProfileListFragment extends Fragment {
+class ProfileListFragment extends Fragment implements View.OnClickListener {
 
 	private Context context;
 	private View view;
@@ -76,8 +77,27 @@ class ProfileListFragment extends Fragment {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, profiles_list);
 		listview.setAdapter(adapter);		
 		listview.setOnItemClickListener(onProfileClick);
+		
+		Button profile_add_button = (Button)view.findViewById(R.id.profile_add_button);
+		profile_add_button.setOnClickListener(this);
 	}
 
+	@Override
+	public void onClick(View v) {
+		switch (v.getId())
+		{
+			case R.id.profile_add_button:
+				profile_add_button();
+				break;
+		}
+	}
+
+	private void profile_add_button()
+	{
+    	Intent addProfileIntent = new Intent(context, ProfileAddActivity.class);
+        startActivity(addProfileIntent);		
+	}
+	
 	private OnItemClickListener onProfileClick = new OnItemClickListener(){
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         	String nick = profiles_list.get(position).toString();

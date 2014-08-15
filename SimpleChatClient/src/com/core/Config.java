@@ -48,11 +48,13 @@ public class Config {
 		DatabaseSetting setting = new DatabaseSetting();
 		
 		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+		Cursor cursor = null;
+		
 		try
 		{
 			String[] columns = {DatabaseHelper.TABLE_SETTINGS_CURRENT_PROFILE, DatabaseHelper.TABLE_SETTINGS_UNIQUE_ID};
 
-			Cursor cursor =
+			cursor =
 		            db.query(DatabaseHelper.TABLE_SETTINGS, // table
             		columns, // column names
             		DatabaseHelper.TABLE_SETTINGS_ID +" = ?", // selections
@@ -65,7 +67,7 @@ public class Config {
 			if (cursor != null)
 				cursor.moveToFirst();
 			
-			String current_profile = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_SETTINGS_CURRENT_PROFILE));
+			int current_profile = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_SETTINGS_CURRENT_PROFILE));
 			String unique_id = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_SETTINGS_UNIQUE_ID));
 			
 			setting.setCurrent_profile(current_profile);
@@ -78,51 +80,32 @@ public class Config {
 		}
 		finally
 		{
+			if (cursor != null)
+				cursor.close();
+			
 			if (db != null)
 				db.close();
 		}
 		
 		return setting;		
 	}
-	
-	public void updateSettings(String current_profile, String unique_id)
-	{
-		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
-		try
-		{
-			ContentValues setting = new ContentValues();
-			setting.put(DatabaseHelper.TABLE_SETTINGS_CURRENT_PROFILE, current_profile);
-			setting.put(DatabaseHelper.TABLE_SETTINGS_UNIQUE_ID, unique_id);		
-			
-			db.update(DatabaseHelper.TABLE_SETTINGS, setting, DatabaseHelper.TABLE_SETTINGS_ID+" = ?", new String[] { String.valueOf(DatabaseHelper.TABLE_SETTINGS_ID_CURRENT) });
 
-		}
-		catch (Exception e)
-		{
-			Log.e(TAG, e.getMessage());
-			e.printStackTrace();
-		}
-		finally
-		{
-			if (db != null)
-				db.close();
-		}
-	}
-	
-	public DatabaseProfile getProfile(String get_nick)
+	public DatabaseProfile getProfile(int nick_id)
 	{
 		DatabaseProfile profile = new DatabaseProfile();
 		
 		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+		Cursor cursor = null;
+		
 		try
 		{
-			String[] columns = {DatabaseHelper.TABLE_PROFILES_NICK, DatabaseHelper.TABLE_PROFILES_PASSWORD, DatabaseHelper.TABLE_PROFILES_FONT, DatabaseHelper.TABLE_PROFILES_BOLD, DatabaseHelper.TABLE_PROFILES_ITALIC, DatabaseHelper.TABLE_PROFILES_COLOR};
+			String[] columns = {DatabaseHelper.TABLE_PROFILES_ID, DatabaseHelper.TABLE_PROFILES_NICK, DatabaseHelper.TABLE_PROFILES_PASSWORD, DatabaseHelper.TABLE_PROFILES_FONT, DatabaseHelper.TABLE_PROFILES_BOLD, DatabaseHelper.TABLE_PROFILES_ITALIC, DatabaseHelper.TABLE_PROFILES_COLOR};
 
-			Cursor cursor =
+			cursor =
 		            db.query(DatabaseHelper.TABLE_PROFILES, // table
             		columns, // column names
-            		DatabaseHelper.TABLE_PROFILES_NICK+" = ?", // selections
-		            new String[] { String.valueOf(get_nick) }, // selections args
+            		DatabaseHelper.TABLE_PROFILES_ID+" = ?", // selections
+		            new String[] { String.valueOf(nick_id) }, // selections args
 		            null, // group by
 		            null, // having
 		            null, // order by
@@ -131,6 +114,7 @@ public class Config {
 			if (cursor != null)
 				cursor.moveToFirst();
 			
+			int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_ID));
 			String nick = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_NICK));
 			String password = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_PASSWORD));
 			String font = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_FONT));
@@ -138,6 +122,7 @@ public class Config {
 			String italic = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_ITALIC));
 			String color = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_COLOR));
 			
+			profile.setId(id);
 			profile.setNick(nick);
 			profile.setPassword(password);
 			profile.setFont(font);
@@ -152,11 +137,102 @@ public class Config {
 		}
 		finally
 		{
+			if (cursor != null)
+				cursor.close();
+			
 			if (db != null)
 				db.close();
 		}
 		
 		return profile;
+	}
+
+	public DatabaseProfile getProfile(String profile_nick)
+	{
+		DatabaseProfile profile = new DatabaseProfile();
+		
+		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+		Cursor cursor = null;
+		
+		try
+		{
+			String[] columns = {DatabaseHelper.TABLE_PROFILES_ID, DatabaseHelper.TABLE_PROFILES_NICK, DatabaseHelper.TABLE_PROFILES_PASSWORD, DatabaseHelper.TABLE_PROFILES_FONT, DatabaseHelper.TABLE_PROFILES_BOLD, DatabaseHelper.TABLE_PROFILES_ITALIC, DatabaseHelper.TABLE_PROFILES_COLOR};
+
+			cursor =
+		            db.query(DatabaseHelper.TABLE_PROFILES, // table
+            		columns, // column names
+            		DatabaseHelper.TABLE_PROFILES_NICK+" = ?", // selections
+		            new String[] { String.valueOf(profile_nick) }, // selections args
+		            null, // group by
+		            null, // having
+		            null, // order by
+		            null); // limit
+		
+			if (cursor != null)
+				cursor.moveToFirst();
+			
+			int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_ID));
+			String nick = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_NICK));
+			String password = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_PASSWORD));
+			String font = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_FONT));
+			String bold = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_BOLD));
+			String italic = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_ITALIC));
+			String color = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_COLOR));
+			
+			profile.setId(id);
+			profile.setNick(nick);
+			profile.setPassword(password);
+			profile.setFont(font);
+			profile.setBold(bold);
+			profile.setItalic(italic);
+			profile.setColor(color);
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, e.getMessage());
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (cursor != null)
+				cursor.close();
+			
+			if (db != null)
+				db.close();
+		}
+		
+		return profile;
+	}
+
+	public long getProfilesCount()
+	{
+		long count = 0;
+
+		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+		Cursor cursor = null;
+
+		try
+		{
+			String selectQuery = "SELECT COUNT(*) AS c FROM " + DatabaseHelper.TABLE_PROFILES;
+			cursor = db.rawQuery(selectQuery, null);
+
+			if (cursor != null)
+				cursor.moveToFirst();
+
+			count = cursor.getInt(cursor.getColumnIndexOrThrow("c"));
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, e.getMessage());
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (db != null)
+				db.close();
+		}
+		
+		return count;
 	}
 	
 	public List<DatabaseProfile> getProfiles()
@@ -164,14 +240,16 @@ public class Config {
 		List<DatabaseProfile> profiles = new ArrayList<DatabaseProfile>();
 
 		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+		Cursor cursor = null;
 
 		try
 		{
 			String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_PROFILES;
-			Cursor cursor = db.rawQuery(selectQuery, null);
+			cursor = db.rawQuery(selectQuery, null);
 			
 			if (cursor.moveToFirst()) {
 		        do {
+		        	int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_ID));
 					String nick = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_NICK));
 					String password = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_PASSWORD));
 					String font = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_FONT));
@@ -180,6 +258,7 @@ public class Config {
 					String color = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.TABLE_PROFILES_COLOR));
 					
 		        	DatabaseProfile profile = new DatabaseProfile();
+		        	profile.setId(id);
 					profile.setNick(nick);
 					profile.setPassword(password);
 					profile.setFont(font);
@@ -198,6 +277,9 @@ public class Config {
 		}
 		finally
 		{
+			if (cursor != null)
+				cursor.close();
+			
 			if (db != null)
 				db.close();
 		}
@@ -205,7 +287,49 @@ public class Config {
 		return profiles;
 	}
 	
-	public void addProfile(String nick, String password)
+	public void createRandomUser()
+	{
+		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+		try
+		{
+			myDatabaseHelper.createRandomUser(db);
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, e.getMessage());
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (db != null)
+				db.close();
+		}			
+	}
+	
+	public void updateSettings(DatabaseSetting setting)
+	{
+		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+		try
+		{
+			ContentValues update_setting = new ContentValues();
+			update_setting.put(DatabaseHelper.TABLE_SETTINGS_CURRENT_PROFILE, setting.getCurrent_profile());
+			update_setting.put(DatabaseHelper.TABLE_SETTINGS_UNIQUE_ID, setting.getUnique_id());
+			
+			db.update(DatabaseHelper.TABLE_SETTINGS, update_setting, DatabaseHelper.TABLE_SETTINGS_ID+" = ?", new String[] { String.valueOf(DatabaseHelper.TABLE_SETTINGS_ID_CURRENT) });
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, e.getMessage());
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (db != null)
+				db.close();
+		}
+	}
+
+	public long addProfile(String nick, String password)
 	{
 		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
 		
@@ -218,26 +342,27 @@ public class Config {
 		//new_profile.put(DatabaseHelper.TABLE_PROFILES_ITALIC, italic);
 		//new_profile.put(DatabaseHelper.TABLE_PROFILES_COLOR, color);
 
-		db.insert(DatabaseHelper.TABLE_PROFILES, null, new_profile);
+		long id = db.insert(DatabaseHelper.TABLE_PROFILES, null, new_profile);
 		
 		db.close();
+		
+		return id;
 	}
 	
-	public void updateProfile(String nick, String password, String font, String bold, String italic, String color)
+	public void updateProfile(DatabaseProfile profile)
 	{
 		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
 		try
 		{
-			ContentValues profile = new ContentValues();
-			profile.put(DatabaseHelper.TABLE_PROFILES_NICK, nick);
-			profile.put(DatabaseHelper.TABLE_PROFILES_PASSWORD, password);		
-			profile.put(DatabaseHelper.TABLE_PROFILES_FONT, font);		
-			profile.put(DatabaseHelper.TABLE_PROFILES_BOLD, bold);		
-			profile.put(DatabaseHelper.TABLE_PROFILES_ITALIC, italic);		
-			profile.put(DatabaseHelper.TABLE_PROFILES_COLOR, color);		
+			ContentValues update_profile = new ContentValues();
+			update_profile.put(DatabaseHelper.TABLE_PROFILES_NICK, profile.getNick());
+			update_profile.put(DatabaseHelper.TABLE_PROFILES_PASSWORD, profile.getPassword());		
+			update_profile.put(DatabaseHelper.TABLE_PROFILES_FONT, profile.getFont());		
+			update_profile.put(DatabaseHelper.TABLE_PROFILES_BOLD, profile.getBold());		
+			update_profile.put(DatabaseHelper.TABLE_PROFILES_ITALIC, profile.getItalic());		
+			update_profile.put(DatabaseHelper.TABLE_PROFILES_COLOR, profile.getColor());		
 			
-			db.update(DatabaseHelper.TABLE_PROFILES, profile, DatabaseHelper.TABLE_PROFILES_NICK+" = ?", new String[] { String.valueOf(nick) });
-
+			db.update(DatabaseHelper.TABLE_PROFILES, update_profile, DatabaseHelper.TABLE_PROFILES_ID+" = ?", new String[] { String.valueOf(profile.getId()) });
 		}
 		catch (Exception e)
 		{

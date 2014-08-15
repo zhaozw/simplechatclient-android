@@ -29,7 +29,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	public static final String DATABASE_NAME = "config";
 
 	public static final String TABLE_SETTINGS = "settings";
@@ -40,6 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_SETTINGS_ID_CURRENT = "current";
     
 	public static final String TABLE_PROFILES = "profiles";
+	public static final String TABLE_PROFILES_ID = "id";
 	public static final String TABLE_PROFILES_NICK = "nick";
 	public static final String TABLE_PROFILES_PASSWORD = "password";
 	public static final String TABLE_PROFILES_FONT = "font";
@@ -49,12 +50,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
 	public static final String CREATE_TABLE_SETTINGS = "CREATE TABLE IF NOT EXISTS "+ TABLE_SETTINGS +" ("
 			+ TABLE_SETTINGS_ID +" VARCHAR(7), "
-    		+ TABLE_SETTINGS_CURRENT_PROFILE +" VARCHAR(32), "
+    		+ TABLE_SETTINGS_CURRENT_PROFILE +" INTEGER, "
     		+ TABLE_SETTINGS_UNIQUE_ID +" VARCHAR(36)"
     		+ ")";
     
 	public static final String CREATE_TABLE_PROFILES = "CREATE TABLE IF NOT EXISTS "+ TABLE_PROFILES +" ("
-    		+ TABLE_PROFILES_NICK +" VARCHAR(32) PRIMARY KEY, "
+			+ TABLE_PROFILES_ID +" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+    		+ TABLE_PROFILES_NICK +" VARCHAR(32) UNIQUE, "
     		+ TABLE_PROFILES_PASSWORD +" TEXT, "
     		+ TABLE_PROFILES_FONT +" VARCHAR(250) DEFAULT \"verdana\", "
     		+ TABLE_PROFILES_BOLD +" VARCHAR(5) DEFAULT \"false\", "
@@ -74,27 +76,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_PROFILES);
         
         // init database
-        initDatabase(db);
+        createRandomUser(db);
     }
  
-    private void initDatabase(SQLiteDatabase db) {
+    public void createRandomUser(SQLiteDatabase db) {
     	
         Random mRandom = new Random();
     	int rand = mRandom.nextInt(1000);
     	
     	String current_profile = "~nick_tymczasowy"+String.valueOf(rand);
     	String uuid = UUID.randomUUID().toString();
-    	
-    	ContentValues initialValuesSettings = new ContentValues();
-    	initialValuesSettings.put(TABLE_SETTINGS_ID, TABLE_SETTINGS_ID_CURRENT);
-    	initialValuesSettings.put(TABLE_SETTINGS_CURRENT_PROFILE, current_profile);
-    	initialValuesSettings.put(TABLE_SETTINGS_UNIQUE_ID, uuid);
-    	db.insert(TABLE_SETTINGS, null, initialValuesSettings);
-    	
+
     	ContentValues initialValuesProfile = new ContentValues();
     	initialValuesProfile.put(TABLE_PROFILES_NICK, current_profile);
     	initialValuesProfile.put(TABLE_PROFILES_PASSWORD, "");
-    	db.insert(TABLE_PROFILES, null, initialValuesProfile);
+    	long id = db.insert(TABLE_PROFILES, null, initialValuesProfile);
+
+    	ContentValues initialValuesSettings = new ContentValues();
+    	initialValuesSettings.put(TABLE_SETTINGS_ID, TABLE_SETTINGS_ID_CURRENT);
+    	initialValuesSettings.put(TABLE_SETTINGS_CURRENT_PROFILE, id);
+    	initialValuesSettings.put(TABLE_SETTINGS_UNIQUE_ID, uuid);
+    	db.insert(TABLE_SETTINGS, null, initialValuesSettings);
     }
     
     @Override

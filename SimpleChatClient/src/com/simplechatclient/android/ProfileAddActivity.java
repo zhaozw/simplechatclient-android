@@ -2,6 +2,7 @@ package com.simplechatclient.android;
 
 import java.util.Locale;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +33,8 @@ public class ProfileAddActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_add_activity);
+		
+		this.setTitle(getString(R.string.title_profile_add));
 
 		// Set up the action bar.
 		final ActionBar actionBar = getSupportActionBar();
@@ -87,6 +90,17 @@ public class ProfileAddActivity extends ActionBarActivity implements
 			FragmentTransaction fragmentTransaction) {
 	}
 
+	
+	@Override
+	public void onBackPressed() {
+		//super.onBackPressed();
+		
+    	Intent profileListIntent = new Intent(getApplicationContext(), MainActivity.class);
+    	profileListIntent.putExtra("tab", "1"); // profile list
+        startActivity(profileListIntent);
+	}
+
+
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.
@@ -121,9 +135,9 @@ public class ProfileAddActivity extends ActionBarActivity implements
 			Locale l = Locale.getDefault();
 			switch (position) {
 			case 0:
-				return getString(R.string.title_profile_add).toUpperCase(l);
+				return getString(R.string.title_profile_add_tab).toUpperCase(l);
 			case 1:
-				return getString(R.string.title_profile_register).toUpperCase(l);
+				return getString(R.string.title_profile_register_tab).toUpperCase(l);
 			}
 			return null;
 		}

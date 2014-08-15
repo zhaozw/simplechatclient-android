@@ -25,6 +25,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 class ProfileAddFragment extends Fragment {
 
@@ -50,5 +51,13 @@ class ProfileAddFragment extends Fragment {
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
+		
+		/*
+				CompoundButton compoundButtonRegistered = (CompoundButton)findViewById(R.id.edit_profile_switch_registered);
+
+			compoundButtonRegistered.setChecked(true);
+		//compoundButtonRegistered.setOnClickListener(this);
+
+		 */
 	}
 }

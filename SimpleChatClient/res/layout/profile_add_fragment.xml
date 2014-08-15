@@ -8,4 +8,37 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.simplechatclient.android.ProfileAdd$PlaceholderFragment" >
 
+    <include
+        android:id="@+id/include1"
+        layout="@layout/add_profile_switch_registered" />
+
+    <EditText
+        android:id="@+id/editTextNewNick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/include1"
+        android:layout_marginTop="82dp"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/buttonAddNewProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextNewNick"
+        android:layout_alignParentBottom="true"
+        android:text="@string/add_profile" />
+
+    <EditText
+        android:id="@+id/editTextNewPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextNewNick"
+        android:layout_below="@+id/editTextNewNick"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="textPassword" />
+
 </RelativeLayout>

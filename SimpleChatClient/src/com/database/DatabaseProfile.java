@@ -20,6 +20,7 @@
 package com.database;
 
 public class DatabaseProfile {
+	private int id;
 	private String nick;
 	private String password;
 	private String font;
@@ -27,6 +28,12 @@ public class DatabaseProfile {
 	private String italic;
 	private String color;
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getNick() {
 		return nick;
 	}
