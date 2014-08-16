@@ -116,6 +116,7 @@ public class ProfileEditActivity extends ActionBarActivity implements View.OnCli
 		toast.show();
 
     	Intent profileListIntent = new Intent(context, MainActivity.class);
+    	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	profileListIntent.putExtra("tab", "1"); // profile list
         startActivity(profileListIntent);
 	}
@@ -161,6 +162,7 @@ public class ProfileEditActivity extends ActionBarActivity implements View.OnCli
 		toast.show();
 
     	Intent profileListIntent = new Intent(context, MainActivity.class);
+    	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	profileListIntent.putExtra("tab", "1"); // profile list
         startActivity(profileListIntent);
 	}

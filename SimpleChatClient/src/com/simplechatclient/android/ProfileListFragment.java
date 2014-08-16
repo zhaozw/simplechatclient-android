@@ -95,7 +95,8 @@ class ProfileListFragment extends Fragment implements View.OnClickListener {
 	private void profile_add_button()
 	{
     	Intent addProfileIntent = new Intent(context, ProfileAddActivity.class);
-        startActivity(addProfileIntent);		
+    	addProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(addProfileIntent);
 	}
 	
 	private OnItemClickListener onProfileClick = new OnItemClickListener(){
@@ -103,9 +104,10 @@ class ProfileListFragment extends Fragment implements View.OnClickListener {
         	String nick = profiles_list.get(position).toString();
         	
         	Intent editProfileIntent = new Intent(context, ProfileEditActivity.class);
+        	editProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         	editProfileIntent.putExtra("nick", nick);
             startActivity(editProfileIntent);
-        }		
+        }
 	};
 	
 	

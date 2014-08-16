@@ -96,6 +96,7 @@ public class ProfileAddActivity extends ActionBarActivity implements
 		//super.onBackPressed();
 		
     	Intent profileListIntent = new Intent(getApplicationContext(), MainActivity.class);
+    	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	profileListIntent.putExtra("tab", "1"); // profile list
         startActivity(profileListIntent);
 	}

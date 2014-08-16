@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -106,6 +107,7 @@ class LoginFragment extends Fragment implements View.OnClickListener {
 
 		// TODO
 		//Intent intent = new Intent(this, ChannelsActivity.class);
+		//intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //startActivity(intent);  
 	}
 
