@@ -14,10 +14,32 @@
     <string name="title_profile_add_tab">Dodaj istniejący</string>
     <string name="title_profile_register_tab">Zarejestruj się</string>
 
-    <string name="nick_registered">Zarejestrowany</string>
+    <string name="profile_add_nick">Nick</string>
+    <string name="profile_add_password">Hasło</string>
+
+    <string name="profile_register_nick">Nick</string>
+    <string name="profile_register_password">Hasło</string>
+    <string name="profile_register_captcha">Captcha</string>
+    
+    <string name="profile_register_progress_title">Trwa rejestracja</string>
+    <string name="profile_register_progress_text">Proszę czekać</string>
+    <string name="profile_register_successfull">Pomyślnie zarejestrowano</string>
+    <string name="profile_register_error_0">Nie udało się połączyć z serwerem</string>
+    <string name="profile_register_error_m1">Hasło musie mieć przynajmniej 6 znaków w tym co najmniej jedną cyfrę.</string>
+    <string name="profile_register_error_m2">Podany nick już istnieje</string>
+    <string name="profile_register_error_m3">Nieprawidłowy nick. Nick musi mieć co najmniej 3 znaki i zaczynać się od litery</string>
+    <string name="profile_register_error_m4">Podany nick jest niedostępny</string>
+    <string name="profile_register_error_m99">Wystąpił nieznany błąd. Spróbuj ponownie za chwilę.</string>
+    <string name="profile_register_error_m101">Nie udało się połączyć z serwerem. Spróbuj ponownie za chwilę.</string>
+    <string name="profile_register_error_m102">Błąd serwera. Spróbuj ponownie za chwilę.</string>
+    <string name="profile_register_error_m104">Nieprawidłowy kod</string>
+    <string name="profile_register_error">Nieznany błąd:</string>
+    
+    <string name="nick_registered">Nick stały/tymczasowy</string>
     <string name="remove_profile">Usuń</string>
     <string name="save_profile">Zapisz</string>
     
+    <string name="successfully_added">Pomyślnie dodano</string>
     <string name="successfully_removed">Pomyślnie usunięto</string>
     <string name="successfully_saved">Pomyślnie zapisano</string>
         

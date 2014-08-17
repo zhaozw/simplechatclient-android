@@ -37,7 +37,7 @@ import com.onet.OnetAuth;
 import com.onet.OnetKernel;
 
 public class Network {
-    private static final String TAG = "NETWORK";
+    private static final String TAG = "Network";
 
     private Socket socket;
     private BufferedReader in;
@@ -82,27 +82,69 @@ public class Network {
     
     public void connect()
     {
-    	if (!networkThread.isAlive())
-    		networkThread.start();
+		try
+		{
+	    	if ((!networkThread.isAlive()) || (socket.isClosed()))
+	    		networkThread.start();
+		}
+		catch (IllegalThreadStateException e)
+		{
+			Log.e(TAG, "Illegal thread exception:" + e.getMessage());
+            e.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, "Network exception:" + e.getMessage());
+            e.printStackTrace();
+		}
     }
     
     public void disconnect()
     {
-    	if (networkThread.isAlive())
-    		networkThread.stop();
+		try
+		{
+	    	if ((networkThread.isAlive()) || (!socket.isClosed()))
+	    		networkThread.stop();
+		}
+		catch (IllegalThreadStateException e)
+		{
+			Log.e(TAG, "Illegal thread exception:" + e.getMessage());
+	        e.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, "Network exception:" + e.getMessage());
+            e.printStackTrace();
+		}
     }
     
     public void reconnect()
     {
-    	if (networkThread.isAlive())
-    		networkThread.stop();
-    	if (!networkThread.isAlive())
-    		networkThread.start();
+		try
+		{
+	    	if ((networkThread.isAlive()) || (socket.isClosed()))
+	    		networkThread.stop();
+	    	if ((!networkThread.isAlive()) || (!socket.isClosed()))
+	    		networkThread.start();
+		}
+		catch (IllegalThreadStateException e)
+		{
+			Log.e(TAG, "Illegal thread exception:" + e.getMessage());
+	        e.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, "Network exception:" + e.getMessage());
+            e.printStackTrace();
+		}
     }
     
     public boolean isConnected()
     {
-        return socket.isConnected();
+    	if (socket != null)
+    		return socket.isConnected();
+    	else
+    		return false;
     }   
 
     static class NetworkHandler extends Handler {
@@ -155,7 +197,7 @@ public class Network {
                     Log.e(TAG, "IOException:" + e.getMessage());
                     e.printStackTrace();
                 } finally {
-                    if (!socket.isClosed())
+                    if ((socket != null) && (!socket.isClosed()))
                         socket.close();
                 }
             } catch (Exception e) {

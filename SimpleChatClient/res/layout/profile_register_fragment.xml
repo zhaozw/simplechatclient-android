@@ -2,6 +2,70 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
+
+    <EditText
+        android:id="@+id/editTextRegisterNick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="36dp"
+        android:hint="@string/profile_register_nick"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextRegisterPassword"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/editTextRegisterPassword"
+        android:layout_marginBottom="22dp"
+        android:text="Zarejestruj" />
+
+    <EditText
+        android:id="@+id/editTextRegisterPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextRegisterNick"
+        android:layout_alignRight="@+id/editTextRegisterNick"
+        android:layout_below="@+id/editTextRegisterNick"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="@string/profile_register_password"
+        android:inputType="textPassword" />
+
+    <ImageView
+        android:id="@+id/imageViewRegisterCaptcha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextRegisterPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/abc_ab_stacked_transparent_dark_holo"
+        android:visibility="invisible" />
+
+    <ProgressBar
+        android:id="@+id/progressBarRegisterCaptcha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageViewRegisterCaptcha"
+        android:layout_centerHorizontal="true"
+        android:visibility="visible" />
+
+    <EditText
+        android:id="@+id/editTextRegisterCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextRegisterPassword"
+        android:layout_alignRight="@+id/editTextRegisterPassword"
+        android:layout_below="@+id/progressBarRegisterCaptcha"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:hint="@string/profile_register_captcha" />
 
 </RelativeLayout>

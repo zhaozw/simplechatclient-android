@@ -46,7 +46,7 @@ import com.core.Settings;
 
 public class OnetAuth {
     private static final String AJAX_API = "http://czat.onet.pl/include/ajaxapi.xml.php3";
-    private static final String TAG = "ONETAUTH";
+    private static final String TAG = "OnetAuth";
 
     private boolean authorizing = false;
     private boolean registeredNick;
