@@ -16,6 +16,7 @@
 
     <string name="profile_add_nick">Nick</string>
     <string name="profile_add_password">Hasło</string>
+    <string name="profile_already_exists">Profil już istnieje</string>
 
     <string name="profile_register_nick">Nick</string>
     <string name="profile_register_password">Hasło</string>

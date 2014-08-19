@@ -234,7 +234,40 @@ public class Config {
 		
 		return count;
 	}
-	
+
+	public boolean profileExists(String nick)
+	{
+		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+		Cursor cursor = null;
+
+		try
+		{
+			String selectQuery = "SELECT COUNT(*) AS c FROM " + DatabaseHelper.TABLE_PROFILES + " WHERE nick = "+ nick;
+			cursor = db.rawQuery(selectQuery, null);
+
+			if (cursor != null)
+				cursor.moveToFirst();
+
+			long count = cursor.getInt(cursor.getColumnIndexOrThrow("c"));
+			if (count > 0)
+				return true;
+			else
+				return false;
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, e.getMessage());
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (db != null)
+				db.close();
+		}
+		
+		return false;
+	}
+
 	public List<DatabaseProfile> getProfiles()
 	{
 		List<DatabaseProfile> profiles = new ArrayList<DatabaseProfile>();

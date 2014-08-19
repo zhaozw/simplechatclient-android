@@ -107,17 +107,23 @@ class ProfileAddFragment extends Fragment implements View.OnClickListener {
 			
 			add_nick = "~"+add_nick;
 		}
-				
-		Config current_config = new Config(context);
-		current_config.addProfile(add_nick, add_password);
-		
-		Toast toast = Toast.makeText(context, getResources().getString(R.string.successfully_added), Toast.LENGTH_SHORT);
-		toast.show();
 
-    	Intent profileListIntent = new Intent(context, MainActivity.class);
-    	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	profileListIntent.putExtra("tab", "1"); // profile list
-        startActivity(profileListIntent);
+		Config current_config = new Config(context);
+		if (!current_config.profileExists(add_nick))
+		{
+			current_config.addProfile(add_nick, add_password);
+			
+			Toast toast = Toast.makeText(context, getResources().getString(R.string.successfully_added), Toast.LENGTH_SHORT);
+			toast.show();
+	
+	    	Intent profileListIntent = new Intent(context, MainActivity.class);
+	    	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    	profileListIntent.putExtra("tab", "1"); // profile list
+	        startActivity(profileListIntent);
+		} else {
+			Toast toast = Toast.makeText(context, getResources().getString(R.string.profile_already_exists), Toast.LENGTH_SHORT);
+			toast.show();
+		}
 	}
 	
 	@Override
