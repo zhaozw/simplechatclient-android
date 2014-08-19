@@ -63,7 +63,7 @@ import android.widget.Toast;
 
 import com.core.Config;
 
-class ProfileRegisterFragment extends Fragment implements View.OnClickListener {
+public class ProfileRegisterFragment extends Fragment implements View.OnClickListener {
 
 	private Context context;
 	private View view;

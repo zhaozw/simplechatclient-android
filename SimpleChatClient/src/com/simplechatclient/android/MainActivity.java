@@ -149,7 +149,7 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		//super.onBackPressed();
 	}
-
+	 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.

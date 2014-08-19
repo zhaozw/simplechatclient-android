@@ -41,7 +41,7 @@ import com.core.Settings;
 import com.database.DatabaseProfile;
 import com.database.DatabaseSetting;
 
-class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginFragment extends Fragment implements View.OnClickListener {
 
 	private Context context;
 	private View view;

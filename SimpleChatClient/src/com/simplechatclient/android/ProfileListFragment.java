@@ -38,7 +38,7 @@ import android.widget.ListView;
 import com.core.Config;
 import com.database.DatabaseProfile;
 
-class ProfileListFragment extends Fragment implements View.OnClickListener {
+public class ProfileListFragment extends Fragment implements View.OnClickListener {
 
 	private Context context;
 	private View view;
@@ -58,7 +58,7 @@ class ProfileListFragment extends Fragment implements View.OnClickListener {
 		context = container.getContext();		
 		return view;
 	}
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
