@@ -31,3 +31,6 @@ local.properties
 *.iws
 /appcompat_v7/.idea/
 /SimpleChatClient/.idea/
+
+/appcompat_v7/.settings/
+/SimpleChatClient/.settings/
