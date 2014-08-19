@@ -77,7 +77,7 @@ public class ProfileAddFragment extends Fragment implements View.OnClickListener
 		}
 		else
 		{
-			editTextNewPassword.setVisibility(View.INVISIBLE);
+			editTextNewPassword.setVisibility(View.GONE);
 		}
 	}
 	
@@ -135,5 +135,7 @@ public class ProfileAddFragment extends Fragment implements View.OnClickListener
 		
 		Button buttonAddNewProfile = (Button)view.findViewById(R.id.buttonAddNewProfile);
 		buttonAddNewProfile.setOnClickListener(this);
+		
+		add_profile_switch_registered();
 	}
 }

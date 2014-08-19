@@ -302,7 +302,7 @@ public class ProfileRegisterFragment extends Fragment implements View.OnClickLis
 	    	}
 	    	
 	    	ProgressBar progressBarRegisterCaptcha = (ProgressBar)view.findViewById(R.id.progressBarRegisterCaptcha);
-	    	progressBarRegisterCaptcha.setVisibility(View.INVISIBLE);
+	    	progressBarRegisterCaptcha.setVisibility(View.GONE);
 	    	ImageView captcha = (ImageView)view.findViewById(R.id.imageViewRegisterCaptcha);
 	        captcha.setVisibility(View.VISIBLE);
 	        captcha.setImageBitmap(bitmap);
