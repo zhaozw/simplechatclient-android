@@ -248,8 +248,7 @@ public class ProfileRegisterFragment extends Fragment implements View.OnClickLis
 		Button buttonRegister = (Button)view.findViewById(R.id.buttonRegister);
 		buttonRegister.setOnClickListener(this);
 		
-		String url = "http://czat.onet.pl/myimg.gif";
-		new DownloadImageTask().execute(url);
+		new DownloadImageTask().execute("http://czat.onet.pl/myimg.gif");
 	}
 	
 	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
@@ -297,7 +296,10 @@ public class ProfileRegisterFragment extends Fragment implements View.OnClickLis
 	    
 	    protected void onPostExecute(Bitmap bitmap) {
 	    	if ((bitmap.getWidth() == 1) && (bitmap.getHeight() == 1))
+	    	{
+	    		new DownloadImageTask().execute("http://czat.onet.pl/myimg.gif");
 	    		return; // empty image
+	    	}
 	    	
 	    	ProgressBar progressBarRegisterCaptcha = (ProgressBar)view.findViewById(R.id.progressBarRegisterCaptcha);
 	    	progressBarRegisterCaptcha.setVisibility(View.INVISIBLE);
