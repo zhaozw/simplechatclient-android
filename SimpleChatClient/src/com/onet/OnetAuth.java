@@ -304,7 +304,8 @@ public class OnetAuth {
                     downloadSecureLogin();
                 else {
                     // showCaptchaDialog();
-                    String code = null;
+                	// TODO crash null pointer exception
+                    String code = "empty";
                     downloadCheckCode(code);
                 }
             }
