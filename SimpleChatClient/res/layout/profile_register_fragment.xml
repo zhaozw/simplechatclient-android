@@ -73,7 +73,8 @@
                     android:layout_marginTop="30dp"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="@string/profile_register_captcha" />
+                    android:hint="@string/profile_register_captcha" 
+                    android:inputType="textPassword" />
             </LinearLayout>
 
         </RelativeLayout>
