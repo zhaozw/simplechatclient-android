@@ -19,11 +19,15 @@
 
 package com.onet;
 
+import android.util.Log;
+
 import com.core.Network;
 import com.core.Settings;
 
 public class OnetKernel {
-    private String[] data;
+	private static final String TAG = "OnetKernel";
+	
+	private String[] data;
 
     private static OnetKernel instance = new OnetKernel();
     public static synchronized OnetKernel getInstance() { return instance; }
@@ -35,18 +39,37 @@ public class OnetKernel {
         if (data.length <= 1)
             return;
 
-        String cmd0 = data[0];
-        String cmd1 = data[1];
+        String data0 = data[0];
+        String data1 = data[1];
+        String data3 = data[3];
         
-        if (cmd0.equalsIgnoreCase("ping"))
-            raw_ping();
-        else if (cmd0.equalsIgnoreCase("error"))
-            raw_error();
+        if (data0.equalsIgnoreCase("ping")) { raw_ping(); return; }
+        else if (data0.equalsIgnoreCase("error")) { raw_error(); return; }
+        else if (data1.equalsIgnoreCase("pong")) { raw_pong(); return; }
         
-        if (cmd1.equalsIgnoreCase("001"))
-            raw_001();
-        else if (cmd1.equalsIgnoreCase("801"))
-            raw_801();
+        if (data1.equalsIgnoreCase("001")) { raw_001(); return; }
+        else if (data1.equalsIgnoreCase("801")) { raw_801(); return; }
+        
+        if ((data1.equalsIgnoreCase("notice")) && (!data3.isEmpty()))
+        {
+        	if ((data3.length() != 4) || (data3.equalsIgnoreCase(":***")))
+        	{
+        		raw_notice();
+        		return;
+        	}
+        	else
+        	{
+        		if (data3.length() == 3)
+        		{
+        			int int3 = Integer.valueOf(data3);
+        			
+        			if (int3 == 141) { raw_141n(); return; }
+        			else if (int3 == 142) { raw_142n(); return; }
+        		}
+        	}
+        }
+        
+        Log.i(TAG, "Unknown RAW: "+data);
     }
     
     // PING :cf1f1.onet
@@ -60,13 +83,56 @@ public class OnetKernel {
     // ERROR :Closing link (unknown@95.48.183.154) [Registration timeout]
     private void raw_error()
     {
+    	// TODO
+    }
+    
+    // :cf1f4.onet PONG cf1f4.onet :1340185644095
+    private void raw_pong()
+    {
+    	// TODO
+    }
+
+	 // :Llanero!43347263@admin.onet NOTICE #channel :test
+	 // :cf1f2.onet NOTICE scc_test :Your message has been filtered and opers notified: spam #2480
+	 // :Llanero!43347263@admin.onet NOTICE $* :458852 * * :%Fb%%C008100%Weź udział w Konkursie Mikołajkowym - skompletuj zaprzęg Świetego Mikołaja! Więcej info w Wieściach z Czata ! http://czat.onet.pl/1632594,wiesci.html
+	 // :Panie_kierowniku!57643619@devel.onet NOTICE Darom :458852 * * :bum
+	 // :Panie_kierowniku!57643619@devel.onet NOTICE Darom :458853 * * :bum
+	 // :Panie_kierowniku!57643619@devel.onet NOTICE Darom :458854 * * :bum
+	 // :Panie_kierowniku!57643619@devel.onet NOTICE Darom :458855 * * :bum
+    private void raw_notice()
+    {
+    	// TODO
     }
     
     // :cf1f4.onet 001 scc_test :Welcome to the OnetCzat IRC Network scc_test!51976824@83.28.35.219
     private void raw_001()
     {
-    	// autojoin 
-    	Network.getInstance().send(String.format("JOIN #scc"));
+    	Settings.getInstance().set("ignore_favourites", "false");
+    	
+    	// protocol
+    	Network.getInstance().send("PROTOCTL ONETNAMESX");
+    	
+    	// channels list
+    	Network.getInstance().send("SLIST  R- 0 0 100 null");    	
+    }
+
+	 // NS FAVOURITES
+	 // :NickServ!service@service.onet NOTICE scc_test :141 :#Scrabble #Quiz #scc
+    private void raw_141n()
+    {
+    	// TODO
+    }
+
+	 // NS FAVOURITES
+	 // :NickServ!service@service.onet NOTICE scc_test :142 :end of favourites list
+    private void raw_142n()
+    {
+    	if (Settings.getInstance().get("ignore_favourites") == "false")
+    	{
+    		Settings.getInstance().set("ignore_favourites", "true");
+    		
+    		// TODO
+    	}
     }
 
     // :cf1f3.onet 801 scc_test :q5VMy1wl6hKL5ZUt
