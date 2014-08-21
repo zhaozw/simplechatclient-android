@@ -161,6 +161,8 @@ public class Network {
         }
     };
 
+	// TODO java.lang.RuntimeException: Can't create handler inside thread that has not called Looper.prepare()
+
     class NetworkThread extends Thread {
         public void run() {
             try
@@ -174,7 +176,15 @@ public class Network {
                     out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
                     // auth
-                    OnetAuth.getInstance().authorize();
+                    try
+                    {
+                    	OnetAuth.getInstance().authorize();
+                    }
+                    catch (Exception e)
+                    {
+                    	Log.e(TAG, e.toString());
+                    	e.printStackTrace();
+                    }
                     
                     String line = null;
                     while ((line = in.readLine()) != null)

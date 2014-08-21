@@ -3,25 +3,20 @@
 
     <string name="app_name">Simple Chat Client</string>
     <string name="action_settings">Ustawienia</string>
-    
     <string name="title_login">Logowanie</string>
     <string name="title_profiles">Profile</string>
     <string name="login_button">Zaloguj</string>
-    
     <string name="add_profile">Dodaj</string>
     <string name="title_profile_edit">Edycja profilu</string>
     <string name="title_profile_add">Dodaj profil</string>
     <string name="title_profile_add_tab">Dodaj istniejący</string>
     <string name="title_profile_register_tab">Zarejestruj się</string>
-
     <string name="profile_add_nick">Nick</string>
     <string name="profile_add_password">Hasło</string>
     <string name="profile_already_exists">Profil już istnieje</string>
-
     <string name="profile_register_nick">Nick</string>
     <string name="profile_register_password">Hasło</string>
     <string name="profile_register_captcha">Captcha</string>
-    
     <string name="profile_register_progress_title">Trwa rejestracja</string>
     <string name="profile_register_progress_text">Proszę czekać</string>
     <string name="profile_register_successfull">Pomyślnie zarejestrowano</string>
@@ -35,13 +30,11 @@
     <string name="profile_register_error_m102">Błąd serwera. Spróbuj ponownie za chwilę.</string>
     <string name="profile_register_error_m104">Nieprawidłowy kod</string>
     <string name="profile_register_error">Nieznany błąd:</string>
-    
     <string name="nick_registered">Nick stały/tymczasowy</string>
     <string name="remove_profile">Usuń</string>
     <string name="save_profile">Zapisz</string>
-    
     <string name="successfully_added">Pomyślnie dodano</string>
     <string name="successfully_removed">Pomyślnie usunięto</string>
     <string name="successfully_saved">Pomyślnie zapisano</string>
-        
+
 </resources>

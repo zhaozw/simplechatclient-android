@@ -41,6 +41,8 @@
             android:name=".ProfileAddActivity"
             android:label="@string/title_profile_add" >
         </activity>
-    </application>
+        <activity android:name=".TabsActivity"></activity>
+        <activity android:name=".TabsFragment" ></activity>
+        </application>
 
 </manifest>
