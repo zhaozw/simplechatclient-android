@@ -46,6 +46,7 @@ public class OnetKernel {
         if (data0.equalsIgnoreCase("ping")) { raw_ping(); return; }
         else if (data0.equalsIgnoreCase("error")) { raw_error(); return; }
         else if (data1.equalsIgnoreCase("pong")) { raw_pong(); return; }
+        else if (data1.equalsIgnoreCase("mode")) { raw_mode(); return; }
         
         if (data1.equalsIgnoreCase("001")) { raw_001(); return; }
         else if (data1.equalsIgnoreCase("801")) { raw_801(); return; }
@@ -104,6 +105,33 @@ public class OnetKernel {
     	// TODO
     }
     
+	 // :Merovingian!26269559@jest.piekny.i.uroczy.ma.przesliczne.oczy MODE Merovingian :+b
+	 // :Merovingian!26269559@2294E8.94913F.2EAEC9.11F26D MODE Merovingian :+b
+	 // :ankaszo!51613093@F4C727.446F67.966AC9.BAAE26 MODE ankaszo -W
+	 // :ChanServ!service@service.onet MODE #glupia_nazwa +k bum
+	 // :ChanServ!service@service.onet MODE #bzzzz -l
+	 // :NickServ!service@service.onet MODE scc_test +r
+	 // :ChanServ!service@service.onet MODE #scc +ips
+	 // :ChanServ!service@service.onet MODE #scc +o scc_test
+	 // :ChanServ!service@service.onet MODE #scc +eo *!51976824@* scc_test
+	 // :ChanServ!service@service.onet MODE #abc123 +il-e 1 *!51976824@*
+    private void raw_mode()
+    {
+    	// TODO
+    	
+        // registered nick
+    	/*
+        if ((strNick == Settings.getInstance().get("nick")) && (strFlag == "+r"))
+        {
+            // channel homes
+            Network.getInstance().send("CS HOMES");
+
+            // get my stats
+            Network.getInstance().send(String.format("RS INFO %s", Settings.getInstance().get("nick")));
+        }
+        */
+    }
+    
     // :cf1f4.onet 001 scc_test :Welcome to the OnetCzat IRC Network scc_test!51976824@83.28.35.219
     private void raw_001()
     {
@@ -135,6 +163,24 @@ public class OnetKernel {
     	}
     }
 
+	 // CS HOMES
+	 // :ChanServ!service@service.onet NOTICE scc_test :151 :h#scc
+	 // NS OFFLINE
+	 // :NickServ!service@service.onet NOTICE Merovingian :151 :jubee_blue
+    private void raw_151n()
+    {
+    	// TODO
+    }
+    
+	// CS HOMES
+	// :ChanServ!service@service.onet NOTICE scc_test :152 :end of homes list
+	// NS OFFLINE
+	// :NickServ!service@service.onet NOTICE Merovingian :152 :end of offline senders list
+    private void raw_152n()
+    {
+    	// TODO
+    }
+    
     // :cf1f3.onet 801 scc_test :q5VMy1wl6hKL5ZUt
     // :cf1f2.onet 801 384-unknown :mIGlbZP0R056xedZ
     private void raw_801()
