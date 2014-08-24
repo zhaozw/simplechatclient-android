@@ -165,6 +165,7 @@ public class Network {
 
     class NetworkThread extends Thread {
         public void run() {
+        	Log.i(TAG, "Network thread started");
             try
             {
                 try

@@ -22,9 +22,11 @@ package com.onet;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -38,9 +40,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+
 import com.core.Network;
 import com.core.Settings;
 
@@ -58,6 +64,9 @@ public class OnetAuth {
 
     private static OnetAuth instance = new OnetAuth();
     public static synchronized OnetAuth getInstance() { return instance; }
+    
+    private String current_category;
+    private String current_result;
     
     public OnetAuth()
     {
@@ -77,10 +86,55 @@ public class OnetAuth {
         	registeredNick = true;
         
         override = true;
-
         authorizing = true;
-
+        current_category = null;
+        current_result = null;
+          
         downloadChat();
+    }
+
+    public void kernel()
+    {
+    	if (current_category.equals("chat"))
+            downloadDeploy();
+        else if (current_category.equals("deploy")) {
+            parseDeploy(current_result);
+            downloadKropka1();
+        }
+        else if (current_category.equals("kropka_1"))
+            downloadKropka1Full();
+        else if (current_category.equals("kropka_1_full"))
+            downloadKropka5Full();
+        else if (current_category.equals("kropka_5_full"))
+            downloadSk();
+        else if (current_category.equals("sk")) {
+            if (registeredNick)
+                downloadSecureLogin();
+            else {
+                // showCaptchaDialog();
+            	// TODO crash null pointer exception
+                String code = "empty";
+                downloadCheckCode(code);
+            }
+        }
+        else if (current_category.equals("secure_login")) {
+            if (override)
+                downloadOverride();
+            else
+                downloadUo();
+        }
+        else if (current_category.equals("override"))
+            downloadUo();
+        else if (current_category.equals("check_code"))
+            downloadUo();
+        else if (current_category.equals("uo")) {
+            parseUo(current_result);
+            authorizing = false;
+        }
+        else {
+            Log.e(TAG, "Undefined category: "+current_category);
+            authorizing = false;
+        }    	
     }
 
     private void downloadChat() {
@@ -88,7 +142,7 @@ public class OnetAuth {
         String content = "ch=&n=&p=&category=0";
         String category = "chat";
 
-        new HttpDownload().execute(url, content, category);
+        new HttpDownload(url, content, category).start();
     }
 
     private void downloadDeploy() {
@@ -96,7 +150,7 @@ public class OnetAuth {
         String content = null;
         String category = "deploy";
 
-        new HttpDownload().execute(url, content, category);
+        new HttpDownload(url, content, category).start();
     }
 
     private void parseDeploy(String data)
@@ -110,7 +164,7 @@ public class OnetAuth {
         String content = null;
         String category = "kropka_1";
         
-        new HttpDownload().execute(url, content, category);
+        new HttpDownload(url, content, category).start();
     }
 
     private void downloadKropka1Full() {
@@ -118,7 +172,7 @@ public class OnetAuth {
         String content = null;
         String category = "kropka_1_full";
         
-        new HttpDownload().execute(url, content, category);
+        new HttpDownload(url, content, category).start();
     }
 
     private void downloadKropka5Full() {
@@ -126,7 +180,7 @@ public class OnetAuth {
         String content = null;
         String category = "kropka_5_full";
         
-        new HttpDownload().execute(url, content, category);
+        new HttpDownload(url, content, category).start();
     }
 
     private void downloadSk() {
@@ -134,7 +188,7 @@ public class OnetAuth {
         String content = null;
         String category = "sk";
         
-        new HttpDownload().execute(url, content, category);
+        new HttpDownload(url, content, category).start();
     }
 
     @SuppressLint("DefaultLocale")
@@ -143,7 +197,7 @@ public class OnetAuth {
         String content = String.format("api_function=checkCode&params=a:1:{s:4:\"code\";s:%d:\"%s\";}", code.length(), code);
         String category = "check_code";
 
-        new HttpDownload().execute(url, content, category);
+        new HttpDownload(url, content, category).start();
     }
 
     private void downloadSecureLogin() {
@@ -151,7 +205,7 @@ public class OnetAuth {
         String content = String.format("r=&url=&login=%s&haslo=%s&app_id=20&ssl=1&ok=1", nick, password);
         String category = "secure_login";
 
-        new HttpDownload().execute(url, content, category);
+        new HttpDownload(url, content, category).start();
     }
 
     @SuppressLint("DefaultLocale")
@@ -160,7 +214,7 @@ public class OnetAuth {
         String content = String.format("api_function=userOverride&params=a:1:{s:4:\"nick\";s:%d:\"%s\";}", nick.length(), nick);
         String category = "override";
 
-        new HttpDownload().execute(url, content, category);
+        new HttpDownload(url, content, category).start();
     }
 
     @SuppressLint("DefaultLocale")
@@ -171,7 +225,7 @@ public class OnetAuth {
         String content = String.format("api_function=getUoKey&params=a:3:{s:4:\"nick\";s:%d:\"%s\";s:8:\"tempNick\";i:%d;s:7:\"version\";s:%d:\"%s\";}", nick.length(), nick, isRegistered, version.length(), version);
         String category = "uo";
 
-        new HttpDownload().execute(url, content, category);
+        new HttpDownload(url, content, category).start();
     }
 
     private String parseVersion(String data) {
@@ -230,110 +284,56 @@ public class OnetAuth {
         }
     }
 
-    private class HttpDownload extends AsyncTask<String, Void, String> {
-        private String category;
-        
-        @Override
-        protected String doInBackground(String... params) {
-            String url = params[0];
-            String content = params[1];
-            category = params[2];
+    public class HttpDownload extends Thread {
+    	private String url;
+    	private String content;
+    	private String category;
+    	
+    	public HttpDownload(String _url, String _content, String _category) {
+	       url = _url;
+	       content = _content;
+	       category = _category;
+	    }
 
-            HttpResponse httpResponse;
-
-            try {
-                if (content == null) {
-                    HttpGet httpGet = new HttpGet(url);
-                    httpResponse = httpclient.execute(httpGet);
-                } else {
-                    HttpPost httpPost = new HttpPost(url);
-                    httpPost.setEntity(new StringEntity(content));
-                    httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-                    httpResponse = httpclient.execute(httpPost);
-                }
-    
-                int status = httpResponse.getStatusLine().getStatusCode();
-                if (status == 200) {
-                    HttpEntity httpEntity = httpResponse.getEntity();
-                    return EntityUtils.toString(httpEntity);
-                }
-            } catch (ClientProtocolException e) {
-                Log.e(TAG, "Unable to retrieve web page (ClientProtocolException:"+e.getMessage()+"): " + url);
-                e.getStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                Log.e(TAG, "Unable to retrieve web page (UnsupportedEncodingException:"+e.getMessage()+"): " + url);
-                e.getStackTrace();
-            } catch (IllegalArgumentException e) {
-                Log.e(TAG, "Unable to retrieve web page (IllegalArgumentException:"+e.getMessage()+"): " + url);
-                e.getStackTrace();
-            } catch (IOException e) {
-                Log.e(TAG, "Unable to retrieve web page (IOException:"+e.getMessage()+"): " + url);
-                e.getStackTrace();
-            }
-            
-            return null;
-        }
-        
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            /*
-            if (result == null)
-            {
-                Log.e(TAG, "Unable to parse web page");
-                authorizing = false;
-                return;
-            }
-            */
-
-            if (category.equals("chat"))
-                downloadDeploy();
-            else if (category.equals("deploy")) {
-                parseDeploy(result);
-                downloadKropka1();
-            }
-            else if (category.equals("kropka_1"))
-                downloadKropka1Full();
-            else if (category.equals("kropka_1_full"))
-                downloadKropka5Full();
-            else if (category.equals("kropka_5_full"))
-                downloadSk();
-            else if (category.equals("sk")) {
-                if (registeredNick)
-                    downloadSecureLogin();
-                else {
-                    // showCaptchaDialog();
-                	// TODO crash null pointer exception
-                    String code = "empty";
-                    downloadCheckCode(code);
-                }
-            }
-            else if (category.equals("secure_login")) {
-                if (override)
-                    downloadOverride();
-                else
-                    downloadUo();
-            }
-            else if (category.equals("override"))
-                downloadUo();
-            else if (category.equals("check_code"))
-                downloadUo();
-            else if (category.equals("uo")) {
-                parseUo(result);
-                authorizing = false;
-            }
-            else {
-                Log.e(TAG, "Undefined category: "+category);
-                authorizing = false;
-            }
-        }
-        
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            
-            authorizing = false;
-        }
+	    public void run() {
+	    	Log.i(TAG, "HttpDownload: "+url);
+	    	
+	    	current_category = category;
+	    	
+	        HttpResponse httpResponse;
+	
+	        try {
+	            if (content == null) {
+	                HttpGet httpGet = new HttpGet(url);
+	                httpResponse = httpclient.execute(httpGet);
+	            } else {
+	                HttpPost httpPost = new HttpPost(url);
+	                httpPost.setEntity(new StringEntity(content));
+	                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+	                httpResponse = httpclient.execute(httpPost);
+	            }
+	
+	            int status = httpResponse.getStatusLine().getStatusCode();
+	            if (status == 200) {
+	                HttpEntity httpEntity = httpResponse.getEntity();
+	                current_result = EntityUtils.toString(httpEntity);
+	            }
+	        } catch (ClientProtocolException e) {
+	            Log.e(TAG, "Unable to retrieve web page (ClientProtocolException:"+e.getMessage()+"): " + url);
+	            e.getStackTrace();
+	        } catch (UnsupportedEncodingException e) {
+	            Log.e(TAG, "Unable to retrieve web page (UnsupportedEncodingException:"+e.getMessage()+"): " + url);
+	            e.getStackTrace();
+	        } catch (IllegalArgumentException e) {
+	            Log.e(TAG, "Unable to retrieve web page (IllegalArgumentException:"+e.getMessage()+"): " + url);
+	            e.getStackTrace();
+	        } catch (IOException e) {
+	            Log.e(TAG, "Unable to retrieve web page (IOException:"+e.getMessage()+"): " + url);
+	            e.getStackTrace();
+	        }
+	        
+	        current_result = null;
+            kernel();
+	    }
     }
 }

@@ -41,7 +41,6 @@ public class OnetKernel {
 
         String data0 = data[0];
         String data1 = data[1];
-        String data3 = data[3];
         
         if (data0.equalsIgnoreCase("ping")) { raw_ping(); return; }
         else if (data0.equalsIgnoreCase("error")) { raw_error(); return; }
@@ -50,26 +49,30 @@ public class OnetKernel {
         
         if (data1.equalsIgnoreCase("001")) { raw_001(); return; }
         else if (data1.equalsIgnoreCase("801")) { raw_801(); return; }
-        
-        if ((data1.equalsIgnoreCase("notice")) && (!data3.isEmpty()))
+
+        if (data.length >= 3)
         {
-        	if ((data3.length() != 4) || (data3.equalsIgnoreCase(":***")))
-        	{
-        		raw_notice();
-        		return;
-        	}
-        	else
-        	{
-        		if (data3.length() == 3)
-        		{
-        			int int3 = Integer.valueOf(data3);
-        			
-        			if (int3 == 141) { raw_141n(); return; }
-        			else if (int3 == 142) { raw_142n(); return; }
-        		}
-        	}
+	        String data3 = data[3];
+	        if ((data1.equalsIgnoreCase("notice")) && (!data3.isEmpty()))
+	        {
+	        	if ((data3.length() != 4) || (data3.equalsIgnoreCase(":***")))
+	        	{
+	        		raw_notice();
+	        		return;
+	        	}
+	        	else
+	        	{
+	        		if (data3.length() == 3)
+	        		{
+	        			int int3 = Integer.valueOf(data3);
+	        			
+	        			if (int3 == 141) { raw_141n(); return; }
+	        			else if (int3 == 142) { raw_142n(); return; }
+	        		}
+	        	}
+	        }
         }
-        
+
         Log.i(TAG, "Unknown RAW: "+data);
     }
     
