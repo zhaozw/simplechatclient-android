@@ -42,13 +42,12 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.annotation.SuppressLint;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
+import com.core.Messages;
 import com.core.Network;
 import com.core.Settings;
+import com.models.Channels;
 
 public class OnetAuth {
     private static final String AJAX_API = "http://czat.onet.pl/include/ajaxapi.xml.php3";
@@ -89,52 +88,57 @@ public class OnetAuth {
         authorizing = true;
         current_category = null;
         current_result = null;
-          
-        downloadChat();
+
+        authkernel();
     }
 
-    public void kernel()
+    public void authkernel()
     {
-    	if (current_category.equals("chat"))
-            downloadDeploy();
-        else if (current_category.equals("deploy")) {
-            parseDeploy(current_result);
-            downloadKropka1();
-        }
-        else if (current_category.equals("kropka_1"))
-            downloadKropka1Full();
-        else if (current_category.equals("kropka_1_full"))
-            downloadKropka5Full();
-        else if (current_category.equals("kropka_5_full"))
-            downloadSk();
-        else if (current_category.equals("sk")) {
-            if (registeredNick)
-                downloadSecureLogin();
-            else {
-                // showCaptchaDialog();
-            	// TODO crash null pointer exception
-                String code = "empty";
-                downloadCheckCode(code);
+    	if (current_category == null)
+    		downloadChat();
+    	else
+    	{
+        	if (current_category.equals("chat"))
+                downloadDeploy();
+            else if (current_category.equals("deploy")) {
+                parseDeploy(current_result);
+                downloadKropka1();
             }
-        }
-        else if (current_category.equals("secure_login")) {
-            if (override)
-                downloadOverride();
-            else
+            else if (current_category.equals("kropka_1"))
+                downloadKropka1Full();
+            else if (current_category.equals("kropka_1_full"))
+                downloadKropka5Full();
+            else if (current_category.equals("kropka_5_full"))
+                downloadSk();
+            else if (current_category.equals("sk")) {
+                if (registeredNick)
+                    downloadSecureLogin();
+                else {
+                    // showCaptchaDialog();
+                	// TODO crash null pointer exception
+                    String code = "empty";
+                    downloadCheckCode(code);
+                }
+            }
+            else if (current_category.equals("secure_login")) {
+                if (override)
+                    downloadOverride();
+                else
+                    downloadUo();
+            }
+            else if (current_category.equals("override"))
                 downloadUo();
-        }
-        else if (current_category.equals("override"))
-            downloadUo();
-        else if (current_category.equals("check_code"))
-            downloadUo();
-        else if (current_category.equals("uo")) {
-            parseUo(current_result);
-            authorizing = false;
-        }
-        else {
-            Log.e(TAG, "Undefined category: "+current_category);
-            authorizing = false;
-        }    	
+            else if (current_category.equals("check_code"))
+                downloadUo();
+            else if (current_category.equals("uo")) {
+                parseUo(current_result);
+                authorizing = false;
+            }
+            else {
+                Log.e(TAG, "Undefined category: "+current_category);
+                authorizing = false;
+            }
+    	}
     }
 
     private void downloadChat() {
@@ -249,6 +253,14 @@ public class OnetAuth {
     // <?xml version="1.0" encoding="ISO-8859-2"?><root><error err_code="-2" err_text="U.ytkownik nie zalogowany" ></error></root>
     private void parseUo(String data) {
         try {
+        	Log.i(TAG, "pareUO: "+data);
+
+        	if (data == null)
+        	{
+                Messages.getInstance().showMessage(Channels.STATUS, "Błąd autoryzacji [Brak odpowiedzi od serwera]");
+        		return;
+        	}
+        	
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.parse(new InputSource(new StringReader(data)));
             document.getDocumentElement().normalize();
@@ -270,6 +282,7 @@ public class OnetAuth {
                 }
             } else {
                 Log.e(TAG, String.format("Authentication error [%s]", err_text));
+                Messages.getInstance().showMessage(Channels.STATUS, String.format("Błąd autoryzacji [%s]", err_text));
                 return;
             }
         } catch (ParserConfigurationException e) {
@@ -299,7 +312,8 @@ public class OnetAuth {
 	    	Log.i(TAG, "HttpDownload: "+url);
 	    	
 	    	current_category = category;
-	    	
+	        current_result = null;
+
 	        HttpResponse httpResponse;
 	
 	        try {
@@ -330,10 +344,9 @@ public class OnetAuth {
 	        } catch (IOException e) {
 	            Log.e(TAG, "Unable to retrieve web page (IOException:"+e.getMessage()+"): " + url);
 	            e.getStackTrace();
+	        } finally {
+	            authkernel();	        	
 	        }
-	        
-	        current_result = null;
-            kernel();
 	    }
     }
 }

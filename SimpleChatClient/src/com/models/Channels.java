@@ -17,26 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.core;
+package com.models;
 
-import android.widget.ListView;
+public class Channels {
 
-import com.simplechatclient.android.R;
-import com.simplechatclient.android.TabsManager;
+    public static String STATUS = "Status";
+    public static String DEBUG = "Debug";
 
-
-public class Messages {
-    private static Messages instance = new Messages();
-    public static synchronized Messages getInstance() {return instance; }
-    
-    public void showMessage(String channel, String data)
-    {
-    	//ListView listView = TabsManager.getInstance().get(channel).getView().findViewById(R.id.listView1);
-    	//listView.
-    	
-    }
-    
-    public void showMessageAll(String data)
-    {
-    }
 }
