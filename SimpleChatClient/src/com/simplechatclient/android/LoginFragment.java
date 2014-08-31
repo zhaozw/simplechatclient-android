@@ -103,11 +103,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 	private void button_login()
 	{
-		Network.getInstance().connect();
-
 		Intent intent = new Intent(context, TabsActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);  
+        startActivity(intent);
+        
+		// network start
+		Network.getInstance().connect();
 	}
 
 	private OnItemSelectedListener spinnerListener = new OnItemSelectedListener() {

@@ -19,9 +19,7 @@
 
 package com.core;
 
-import android.widget.ListView;
-
-import com.simplechatclient.android.R;
+import com.simplechatclient.android.TabsFragment;
 import com.simplechatclient.android.TabsManager;
 
 
@@ -31,9 +29,9 @@ public class Messages {
     
     public void showMessage(String channel, String data)
     {
-    	//ListView listView = TabsManager.getInstance().get(channel).getView().findViewById(R.id.listView1);
-    	//listView.
-    	
+    	TabsFragment fragment = TabsManager.getInstance().getFromName(channel);
+    	if (fragment != null)
+    		fragment.addMessage(data);
     }
     
     public void showMessageAll(String data)

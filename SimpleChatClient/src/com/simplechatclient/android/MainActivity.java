@@ -40,6 +40,8 @@ import com.database.DatabaseSetting;
 public class MainActivity extends ActionBarActivity implements
 		ActionBar.TabListener {
 
+	private static final String TAG = "MainActivity";
+	
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
 	 * fragments for each of the sections. We use a {@link FragmentPagerAdapter}
@@ -109,12 +111,11 @@ public class MainActivity extends ActionBarActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
-		
-		
+				
 		String selected_tab = getIntent().getStringExtra("tab");
 		if (selected_tab != null)
 		{
-			int int_selected_tab = Integer.valueOf(selected_tab);
+			int int_selected_tab = Integer.parseInt(selected_tab);
 			mViewPager.setCurrentItem(int_selected_tab);
 		}
 	}

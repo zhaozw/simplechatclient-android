@@ -94,7 +94,7 @@ public class ProfileEditActivity extends ActionBarActivity implements View.OnCli
 			current_config.createRandomUser();
 		}
 
-		if (Integer.valueOf(Settings.getInstance().get("current_profile")) == profile.getId())
+		if (Integer.parseInt(Settings.getInstance().get("current_profile")) == profile.getId())
 		{
 			List<DatabaseProfile> profiles = current_config.getProfiles();
 			DatabaseProfile current_profile = profiles.get(0);
@@ -152,7 +152,7 @@ public class ProfileEditActivity extends ActionBarActivity implements View.OnCli
 		
 		current_config.updateProfile(profile);
 		
-		if (Integer.valueOf(Settings.getInstance().get("current_profile")) == profile.getId())
+		if (Integer.parseInt(Settings.getInstance().get("current_profile")) == profile.getId())
 		{
 			Settings.getInstance().set("nick", profile.getNick());
 			Settings.getInstance().set("password", profile.getPassword());

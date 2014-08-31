@@ -168,7 +168,7 @@ public class ProfileRegisterFragment extends Fragment implements View.OnClickLis
 		            Document document = builder.parse(new InputSource(new StringReader(data)));
 		            document.getDocumentElement().normalize();
 	
-		            status = Integer.valueOf(document.getElementsByTagName("status").item(0).getTextContent());
+		            status = Integer.parseInt(document.getElementsByTagName("status").item(0).getTextContent());
 	    		}
 	            
 	            //if (dialogProgress != null && dialogProgress.isShowing())

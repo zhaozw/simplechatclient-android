@@ -23,6 +23,7 @@ import android.util.Log;
 
 import com.core.Network;
 import com.core.Settings;
+import com.simplechatclient.android.TabsManager;
 
 public class OnetKernel {
 	private static final String TAG = "OnetKernel";
@@ -45,6 +46,7 @@ public class OnetKernel {
         if (data0.equalsIgnoreCase("ping")) { raw_ping(); return; }
         else if (data0.equalsIgnoreCase("error")) { raw_error(); return; }
         else if (data1.equalsIgnoreCase("pong")) { raw_pong(); return; }
+        else if (data1.equalsIgnoreCase("join")) { raw_join(); return; }
         else if (data1.equalsIgnoreCase("mode")) { raw_mode(); return; }
         
         if (data1.equalsIgnoreCase("001")) { raw_001(); return; }
@@ -64,7 +66,7 @@ public class OnetKernel {
 	        	{
 	        		if (data3.length() == 3)
 	        		{
-	        			int int3 = Integer.valueOf(data3);
+	        			int int3 = Integer.parseInt(data3);
 	        			
 	        			if (int3 == 141) { raw_141n(); return; }
 	        			else if (int3 == 142) { raw_142n(); return; }
@@ -73,7 +75,7 @@ public class OnetKernel {
 	        }
         }
 
-        Log.i(TAG, "Unknown RAW: "+data);
+        //Log.i(TAG, "Unknown RAW: "+message);
     }
     
     // PING :cf1f1.onet
@@ -96,6 +98,25 @@ public class OnetKernel {
     	// TODO
     }
 
+    // :scc_test!51976824@3DE379.B7103A.6CF799.6902F4 JOIN #Quiz :rx,0
+    private void raw_join()
+    {
+    	String nick = data[0];
+    	if (nick.startsWith(":")) nick = nick.substring(1);
+    	nick = nick.substring(0, nick.indexOf("!"));
+    	
+    	String channel = data[2];
+
+    	// add
+		TabsManager.getInstance().add(channel);
+
+		// info
+    	if ((nick.equalsIgnoreCase(Settings.getInstance().get("nick"))) && (!channel.startsWith("^")))
+    	{
+    		Network.getInstance().send(String.format("CS INFO %s i", channel));
+    	}
+    }
+    
 	 // :Llanero!43347263@admin.onet NOTICE #channel :test
 	 // :cf1f2.onet NOTICE scc_test :Your message has been filtered and opers notified: spam #2480
 	 // :Llanero!43347263@admin.onet NOTICE $* :458852 * * :%Fb%%C008100%Weź udział w Konkursie Mikołajkowym - skompletuj zaprzęg Świetego Mikołaja! Więcej info w Wieściach z Czata ! http://czat.onet.pl/1632594,wiesci.html
@@ -144,7 +165,10 @@ public class OnetKernel {
     	Network.getInstance().send("PROTOCTL ONETNAMESX");
     	
     	// channels list
-    	Network.getInstance().send("SLIST  R- 0 0 100 null");    	
+    	//Network.getInstance().send("SLIST  R- 0 0 100 null");   
+    	
+    	// TODO remove
+    	Network.getInstance().send("JOIN #scc");
     }
 
 	 // NS FAVOURITES

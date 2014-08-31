@@ -52,6 +52,8 @@ public class Network {
     private static Network instance = new Network();
     public static synchronized Network getInstance() {return instance; }
 
+    // TODO jak network bedzie Servicem to mozna stworzyc Intent do auth 
+    // TODO dla tymczasowego nicka http://stackoverflow.com/a/3607934
     private Network()
     {
         super();

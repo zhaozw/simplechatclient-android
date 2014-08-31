@@ -23,15 +23,15 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
+import android.util.Log;
 
-import com.simplechatclient.android.MainActivity.SectionsPagerAdapter;
+import com.models.Channels;
 
 public class TabsManager {
     private static TabsManager instance = new TabsManager();
     public static synchronized TabsManager getInstance() {return instance; }
 
+    private static final String TAG = "TabsManager";
     private HashMap<String, TabsChannel> tabs;
     private TabsActivity tabsActivity;
 
@@ -50,17 +50,22 @@ public class TabsManager {
 
 	public void add(String channel)
     {
+		Log.i(TAG, "add: "+channel);
+		
     	TabsChannel NewTabChannel = new TabsChannel();
     	NewTabChannel.setAvatar(null);
     	NewTabChannel.setDisplayedOptions(false);
     	NewTabChannel.setName(channel);
-    	NewTabChannel.setFragment(new TabsFragment());
+    	NewTabChannel.setFragment(TabsFragment.newInstance());
     	NewTabChannel.setOffline(false);
     	NewTabChannel.setPosition(tabs.size());
     	
     	tabs.put(channel, NewTabChannel);
     	
-    	this.tabsActivity.add(channel);
+    	if (channel != Channels.STATUS)
+    		this.tabsActivity.add(channel);
+
+    	Log.i(TAG, "added: "+channel +" size: "+tabs.size());
     }
 
     public void remove(String channel)
@@ -83,18 +88,28 @@ public class TabsManager {
     	return null;
     }
     
-    public Fragment get(int position)
+    public TabsFragment get(int position)
     {
     	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
     	    TabsChannel tabsChannel = entry.getValue();
     		if (tabsChannel.getPosition() == position)
+    		{
+    			Log.w(TAG, "TabsManager get "+position+" zwrocono "+tabsChannel.getName());
     			return tabsChannel.getFragment();
+    		}
     	}
+    	Log.w(TAG, "TabsManager get "+position+" zwrocono null");
     	return null;
     }
     
-    public Fragment get(String channel)
+    public TabsFragment getFromName(String channel)
     {
-    	return tabs.get(channel).getFragment();
+    	TabsChannel tabsChannel = tabs.get(channel);
+    	if (tabsChannel != null)
+    	{
+    		return tabsChannel.getFragment();
+    	}
+    	else
+    		return null;
     }
 }

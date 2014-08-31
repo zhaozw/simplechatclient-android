@@ -21,8 +21,6 @@ package com.simplechatclient.android;
 
 import java.util.Locale;
 
-import com.simplechatclient.android.MainActivity.SectionsPagerAdapter;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,11 +29,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.core.Network;
+import com.models.Channels;
+
 public class TabsActivity extends ActionBarActivity implements ActionBar.TabListener {
 
+	private static final String TAG = "TabsActivity";
+	
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
 	 * fragments for each of the sections. We use a {@link FragmentPagerAdapter}
@@ -43,14 +47,14 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 	 * becomes too memory intensive, it may be best to switch to a
 	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
-	private SectionsPagerAdapter mSectionsPagerAdapter;
+	SectionsPagerTabsAdapter mSectionsPagerAdapter;
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
-	private ViewPager mViewPager;
+	ViewPager mViewPager;
 
-	private ActionBar actionBar;
+	ActionBar actionBar;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +69,11 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
+		mSectionsPagerAdapter = new SectionsPagerTabsAdapter(
 				getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager = (ViewPager) findViewById(R.id.pagerTabs);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
 		// When swiping between different sections, select the corresponding
@@ -84,14 +88,17 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 				});
 
 		// status
-		this.add("Status");
+		TabsManager.getInstance().add(Channels.STATUS);
+		this.add(Channels.STATUS);
 	}
-
+	
 	public void add(String channel)
 	{
 		actionBar.addTab(actionBar.newTab()
 				.setText(channel)
-				.setTabListener(this));		
+				.setTabListener(this));
+		
+		mViewPager.getAdapter().notifyDataSetChanged();
 	}
 	
 	@Override
@@ -118,26 +125,29 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 			FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
+		Log.i(TAG, "onTabSelected");
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
 	public void onTabUnselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
+		Log.i(TAG, "onTabUnselected");
 	}
 
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
+		Log.i(TAG, "onTabReselected");
 	}
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.
 	 */
-	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+	public class SectionsPagerTabsAdapter extends FragmentPagerAdapter {
 
-		public SectionsPagerAdapter(FragmentManager fm) {
+		public SectionsPagerTabsAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
@@ -146,16 +156,19 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a PlaceholderFragment (defined as a static inner class
 			// below).
+			Log.i(TAG, "getItem position: "+position);
 			return TabsManager.getInstance().get(position);
 		}
 
 		@Override
 		public int getCount() {
+			Log.i(TAG, "getCount: "+TabsManager.getInstance().count());
 			return TabsManager.getInstance().count();
 		}
-
+		
 		@Override
 		public CharSequence getPageTitle(int position) {
+			Log.i(TAG, "getPageTitle: position "+ position + " name: "+TabsManager.getInstance().getName(position));
 			Locale l = Locale.getDefault();
 			return TabsManager.getInstance().getName(position).toUpperCase(l);
 		}

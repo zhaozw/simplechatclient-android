@@ -19,7 +19,6 @@
 
 package com.simplechatclient.android;
 
-import android.support.v4.app.Fragment;
 
 public class TabsChannel
 {
@@ -28,7 +27,7 @@ public class TabsChannel
 	private String avatar;
 	private boolean displayedOptions;
     private boolean offline;
-	private Fragment fragment;
+	private TabsFragment fragment;
 	
 	public int getPosition() {
 		return position;
@@ -60,10 +59,10 @@ public class TabsChannel
 	public void setOffline(boolean offline) {
 		this.offline = offline;
 	}
-	public Fragment getFragment() {
+	public TabsFragment getFragment() {
 		return fragment;
 	}
-	public void setFragment(Fragment fragment) {
+	public void setFragment(TabsFragment fragment) {
 		this.fragment = fragment;
 	}
 }
