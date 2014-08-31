@@ -29,11 +29,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.core.Network;
 import com.models.Channels;
 
 public class TabsActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -125,20 +123,17 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 			FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
-		Log.i(TAG, "onTabSelected");
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
 	public void onTabUnselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
-		Log.i(TAG, "onTabUnselected");
 	}
 
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
-		Log.i(TAG, "onTabReselected");
 	}
 
 	/**
@@ -156,19 +151,16 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a PlaceholderFragment (defined as a static inner class
 			// below).
-			Log.i(TAG, "getItem position: "+position);
 			return TabsManager.getInstance().get(position);
 		}
 
 		@Override
 		public int getCount() {
-			Log.i(TAG, "getCount: "+TabsManager.getInstance().count());
 			return TabsManager.getInstance().count();
 		}
 		
 		@Override
 		public CharSequence getPageTitle(int position) {
-			Log.i(TAG, "getPageTitle: position "+ position + " name: "+TabsManager.getInstance().getName(position));
 			Locale l = Locale.getDefault();
 			return TabsManager.getInstance().getName(position).toUpperCase(l);
 		}

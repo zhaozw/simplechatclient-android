@@ -43,7 +43,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
