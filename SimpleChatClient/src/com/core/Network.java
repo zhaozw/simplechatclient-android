@@ -156,11 +156,28 @@ public class Network {
         public void handleMessage(Message msg) {
             Bundle bundle = msg.getData();
             String data = bundle.getString("network_message");
+            String command = bundle.getString("network_command");
 
-            Log.i(TAG, data);
-            //Messages.getInstance().showMessage("Status", String.format("-> %s\r\n", data));
+            if (command.equalsIgnoreCase("kernel"))
+            {
+            	Log.i(TAG, data);
+            	Messages.getInstance().showMessage("Status", String.format("-> %s\r\n", data));
 
-            OnetKernel.getInstance().parse(data);
+            	OnetKernel.getInstance().parse(data);
+            }
+            else if (command.equalsIgnoreCase("auth"))
+            {
+                // auth
+                try
+                {
+                	OnetAuth.getInstance().authorize();
+                }
+                catch (Exception e)
+                {
+                	Log.e(TAG, e.toString());
+                	e.printStackTrace();
+                }
+            }
         }
     };
 
@@ -179,16 +196,15 @@ public class Network {
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-                    // auth
-                    try
-                    {
-                    	OnetAuth.getInstance().authorize();
-                    }
-                    catch (Exception e)
-                    {
-                    	Log.e(TAG, e.toString());
-                    	e.printStackTrace();
-                    }
+                    Message msgAuth =  new Message();
+                    Bundle bundleAuth = new Bundle();
+
+                    bundleAuth.putString("network_message", new String());
+                    bundleAuth.putString("network_command", "auth");
+                    msgAuth.setData(bundleAuth);
+
+                    networkHandler.sendMessage(msgAuth);
+
                     
                     String line = null;
                     while ((line = in.readLine()) != null)
@@ -199,6 +215,7 @@ public class Network {
                             Bundle bundle = new Bundle();
     
                             bundle.putString("network_message", line);
+                            bundle.putString("network_command", "kernel");
                             msg.setData(bundle);
     
                             networkHandler.sendMessage(msg);

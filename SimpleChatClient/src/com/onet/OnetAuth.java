@@ -42,6 +42,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.core.Messages;
@@ -64,16 +67,18 @@ public class OnetAuth {
     private static OnetAuth instance = new OnetAuth();
     public static synchronized OnetAuth getInstance() { return instance; }
     
+    private AuthHandler authHandler;
     private String current_category;
     private String current_result;
     
     public OnetAuth()
     {
         httpclient = new DefaultHttpClient();
+        authHandler = new AuthHandler();
     }
 
     public void authorize() {
-        if (authorizing) {
+        if (Settings.getInstance().get("authorizing") == "true") {
             Log.w(TAG, "Already authorizing");
             return;
         }
@@ -85,61 +90,74 @@ public class OnetAuth {
         	registeredNick = true;
         
         override = true;
-        authorizing = true;
+        Settings.getInstance().set("authorizing", "true");
         current_category = null;
         current_result = null;
 
-        authkernel();
+        downloadChat();
     }
 
-    public void authkernel()
-    {
-    	if (current_category == null)
-    		downloadChat();
-    	else
-    	{
-        	if (current_category.equals("chat"))
-                downloadDeploy();
-            else if (current_category.equals("deploy")) {
-                parseDeploy(current_result);
-                downloadKropka1();
-            }
-            else if (current_category.equals("kropka_1"))
-                downloadKropka1Full();
-            else if (current_category.equals("kropka_1_full"))
-                downloadKropka5Full();
-            else if (current_category.equals("kropka_5_full"))
-                downloadSk();
-            else if (current_category.equals("sk")) {
-                if (registeredNick)
-                    downloadSecureLogin();
-                else {
-                    // showCaptchaDialog();
-                	// TODO crash null pointer exception
-                    String code = "empty";
-                    downloadCheckCode(code);
+    private class AuthHandler extends Handler {
+
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle bundle = msg.getData();
+            
+            //String current_category = msg.getData().getString("current_category");
+            //String current_result = msg.getData().getString("current_result");
+            
+            authkernel();
+        }
+        
+        public void authkernel()
+        {
+        	if (current_category == null)
+        		downloadChat();
+        	else
+        	{
+            	if (current_category.equals("chat"))
+                    downloadDeploy();
+                else if (current_category.equals("deploy")) {
+                    parseDeploy(current_result);
+                    downloadKropka1();
                 }
-            }
-            else if (current_category.equals("secure_login")) {
-                if (override)
-                    downloadOverride();
-                else
+                else if (current_category.equals("kropka_1"))
+                    downloadKropka1Full();
+                else if (current_category.equals("kropka_1_full"))
+                    downloadKropka5Full();
+                else if (current_category.equals("kropka_5_full"))
+                    downloadSk();
+                else if (current_category.equals("sk")) {
+                    if (registeredNick)
+                        downloadSecureLogin();
+                    else {
+                        // showCaptchaDialog();
+                    	// TODO crash null pointer exception
+                        String code = "empty";
+                        downloadCheckCode(code);
+                    }
+                }
+                else if (current_category.equals("secure_login")) {
+                    if (override)
+                        downloadOverride();
+                    else
+                        downloadUo();
+                }
+                else if (current_category.equals("override"))
                     downloadUo();
-            }
-            else if (current_category.equals("override"))
-                downloadUo();
-            else if (current_category.equals("check_code"))
-                downloadUo();
-            else if (current_category.equals("uo")) {
-                parseUo(current_result);
-                authorizing = false;
-            }
-            else {
-                Log.e(TAG, "Undefined category: "+current_category);
-                authorizing = false;
-            }
-    	}
-    }
+                else if (current_category.equals("check_code"))
+                    downloadUo();
+                else if (current_category.equals("uo")) {
+                    parseUo(current_result);
+                    Settings.getInstance().set("authorizing", "false");
+                }
+                else {
+                    Log.e(TAG, "Undefined category: "+current_category);
+                    Settings.getInstance().set("authorizing", "false");
+                }
+        	}
+        }
+    };
 
     private void downloadChat() {
         String url = "http://czat.onet.pl/chat.html";
@@ -345,7 +363,14 @@ public class OnetAuth {
 	            Log.e(TAG, "Unable to retrieve web page (IOException:"+e.getMessage()+"): " + url);
 	            e.getStackTrace();
 	        } finally {
-	            authkernel();	        	
+	        	Message msg =  new Message();
+                Bundle bundle = new Bundle();
+
+                bundle.putString("current_category", current_category);
+                bundle.putString("current_result", current_result);
+                msg.setData(bundle);
+
+                authHandler.sendMessage(msg);
 	        }
 	    }
     }
