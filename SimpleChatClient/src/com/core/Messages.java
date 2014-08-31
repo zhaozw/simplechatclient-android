@@ -27,6 +27,11 @@ public class Messages {
     private static Messages instance = new Messages();
     public static synchronized Messages getInstance() {return instance; }
     
+	public static final int NOTICE_INFO = 100 | 0x070000;
+	public static final int NOTICE_WARNING = 101 | 0x070000;
+	public static final int NOTICE_ERROR = 102 | 0x070000;
+	public static final int NOTICE_QUESTION = 103 | 0x070000;
+
     public void showMessage(String channel, String data)
     {
     	TabsFragment fragment = TabsManager.getInstance().getFromName(channel);
@@ -36,5 +41,12 @@ public class Messages {
     
     public void showMessageAll(String data)
     {
+    }
+
+    public void showMessageActive(String data)
+    {
+    	TabsFragment fragment = TabsManager.getInstance().getActive();
+    	if (fragment != null)
+    		fragment.addMessage(data);
     }
 }

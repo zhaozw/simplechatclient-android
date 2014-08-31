@@ -111,4 +111,10 @@ public class TabsManager {
     	else
     		return null;
     }
+    
+    public TabsFragment getActive()
+    {
+    	int position = this.tabsActivity.getCurrentItem();
+    	return this.get(position);
+    }
 }

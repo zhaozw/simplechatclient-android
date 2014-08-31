@@ -136,6 +136,11 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 			FragmentTransaction fragmentTransaction) {
 	}
 
+	public int getCurrentItem()
+	{
+		return mViewPager.getCurrentItem();
+	}
+	
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.

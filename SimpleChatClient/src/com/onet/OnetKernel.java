@@ -21,6 +21,7 @@ package com.onet;
 
 import android.util.Log;
 
+import com.core.Messages;
 import com.core.Network;
 import com.core.Settings;
 import com.simplechatclient.android.TabsManager;
@@ -32,7 +33,7 @@ public class OnetKernel {
 
     private static OnetKernel instance = new OnetKernel();
     public static synchronized OnetKernel getInstance() { return instance; }
-    
+
     public void parse(String message)
     {
         data = message.split(" ");
@@ -46,6 +47,7 @@ public class OnetKernel {
         if (data0.equalsIgnoreCase("ping")) { raw_ping(); return; }
         else if (data0.equalsIgnoreCase("error")) { raw_error(); return; }
         else if (data1.equalsIgnoreCase("pong")) { raw_pong(); return; }
+        else if (data1.equalsIgnoreCase("privmsg")) { raw_privmsg(); return; }
         else if (data1.equalsIgnoreCase("join")) { raw_join(); return; }
         else if (data1.equalsIgnoreCase("mode")) { raw_mode(); return; }
         
@@ -117,6 +119,50 @@ public class OnetKernel {
     	}
     }
     
+	 // :Merovingian!26269559@2294E8.94913F.2EAEC9.11F26D PRIVMSG @#scc :hello
+	 // :Merovingian!26269559@2294E8.94913F.2EAEC9.11F26D PRIVMSG %#scc :hello
+	 // :Merovingian!26269559@2294E8.94913F.2EAEC9.11F26D PRIVMSG +#scc :hello
+	 // :Merovingian!26269559@2294E8.94913F.2EAEC9.11F26D PRIVMSG #scc :hello
+	 // :Merovingian!26269559@2294E8.94913F.2EAEC9.11F26D PRIVMSG ^scc_test :hello
+    private void raw_privmsg()
+    {
+    	String nick = data[0];
+    	if (nick.startsWith(":")) nick = nick.substring(1);
+    	if (nick.contains("!")) nick = nick.substring(0, nick.indexOf("!"));
+    	
+    	String nickOrChannel = data[2];
+    	
+    	String message = new String();
+    	for (int i = 3; i < data.length; ++i) { if (i != 3) message += " "; message += data[i]; }
+    	if (message.startsWith(":")) message = message.substring(1);
+    	
+        String display = String.format("<%s> %s", nick, message);
+
+    	// channel
+        if (nickOrChannel.contains("#"))
+        {
+            String fullChannel = nickOrChannel;
+            @SuppressWarnings("unused")
+			String group = fullChannel.substring(fullChannel.indexOf("#"));
+            
+            String channel = fullChannel.substring(fullChannel.indexOf("#"));
+            
+            Messages.getInstance().showMessage(channel, display);
+        }
+        // priv
+        else if (nickOrChannel.contains("^"))
+        {
+        	String channel = nickOrChannel;
+        	
+        	Messages.getInstance().showMessage(channel, display);
+        }
+        // notice
+        else
+        {
+            Messages.getInstance().showMessageActive(display);
+        }
+    }
+    
 	 // :Llanero!43347263@admin.onet NOTICE #channel :test
 	 // :cf1f2.onet NOTICE scc_test :Your message has been filtered and opers notified: spam #2480
 	 // :Llanero!43347263@admin.onet NOTICE $* :458852 * * :%Fb%%C008100%Weź udział w Konkursie Mikołajkowym - skompletuj zaprzęg Świetego Mikołaja! Więcej info w Wieściach z Czata ! http://czat.onet.pl/1632594,wiesci.html
@@ -126,7 +172,67 @@ public class OnetKernel {
 	 // :Panie_kierowniku!57643619@devel.onet NOTICE Darom :458855 * * :bum
     private void raw_notice()
     {
-    	// TODO
+    	String who = data[0];
+    	if (who.startsWith(":")) who = who.substring(1);
+    	if (who.contains("!")) who = who.substring(0, who.indexOf("!"));
+    	
+    	String nickOrChannel = data[2];
+    	    	
+    	String category = data[3];
+    	if (category.startsWith(":")) category = category.substring(1);
+    	
+    	int iCategory = 0;
+    	try { iCategory = Integer.parseInt(category); } catch (NumberFormatException e) {}
+
+    	String message = new String();
+    	String categoryString = new String();
+
+    	switch (iCategory)
+    	{
+	        case Messages.NOTICE_INFO:
+	            //if (categoryString.isEmpty()) categoryString = getResources().getString(R.string.notice_information)+": ";
+	        case Messages.NOTICE_WARNING:
+	            //if (categoryString.isEmpty()) categoryString = tr("Warning")+": ";
+	        case Messages.NOTICE_ERROR:
+	            //if (categoryString.isEmpty()) categoryString = tr("Error")+": ";
+	        case Messages.NOTICE_QUESTION:
+	            //if (categoryString.isEmpty()) categoryString = tr("Question")+": ";
+	
+	            for (int i = 6; i < data.length; ++i) { if (i != 6) message += " "; message += data[i]; }
+	            if (message.startsWith(":")) message = message.substring(1);
+	            break;
+	        default:
+	            for (int i = 3; i < data.length; ++i) { if (i != 3) message += " "; message += data[i]; }
+	            if (message.startsWith(":")) message = message.substring(1);
+	            break;
+    	}
+    	
+        String display = String.format("-%s- %s%s", who, categoryString, message);
+        Log.i(TAG, "notice display: "+display);
+        
+    	// channel
+        if (nickOrChannel.contains("#"))
+        {
+            String fullChannel = nickOrChannel;
+            @SuppressWarnings("unused")
+			String group = fullChannel.substring(fullChannel.indexOf("#"));
+            
+            String channel = fullChannel.substring(fullChannel.indexOf("#"));
+            
+            Messages.getInstance().showMessage(channel, display);
+        }
+        // priv
+        else if (nickOrChannel.contains("^"))
+        {
+        	String channel = nickOrChannel;
+        	
+        	Messages.getInstance().showMessage(channel, display);
+        }
+        // notice
+        else
+        {
+            Messages.getInstance().showMessageActive(display);
+        }
     }
     
 	 // :Merovingian!26269559@jest.piekny.i.uroczy.ma.przesliczne.oczy MODE Merovingian :+b
@@ -212,7 +318,8 @@ public class OnetKernel {
     // :cf1f2.onet 801 384-unknown :mIGlbZP0R056xedZ
     private void raw_801()
     {
-        String key = data[3].substring(1);
+        String key = data[3];
+        if (key.startsWith(":")) key = key.substring(1);
 
         String auth = OnetUtils.transform(key);
         String nick = Settings.getInstance().get("nick");

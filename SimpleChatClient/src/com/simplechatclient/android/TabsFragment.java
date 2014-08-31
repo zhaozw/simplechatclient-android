@@ -40,6 +40,7 @@ public class TabsFragment extends Fragment {
 	
 	private ArrayList<String> listItems;
 	private ArrayAdapter<String> adapter;
+	ListView listview;
 	
 	public static TabsFragment newInstance() {
 		TabsFragment fragment = new TabsFragment();
@@ -54,12 +55,6 @@ public class TabsFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.tabs_fragment, container, false);
 		context = container.getContext();		
-
-		ListView listview = (ListView)view.findViewById(R.id.listView1);
-
-		adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listItems);
-		listview.setAdapter(adapter);
-
 		return view;
 	}
 
@@ -67,6 +62,10 @@ public class TabsFragment extends Fragment {
 	public void onStart() {
 		super.onStart();
 		
+		listview = (ListView)view.findViewById(R.id.listView1);
+
+		adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listItems);
+		listview.setAdapter(adapter);
 	}
 	
 	public void addMessage(String data)
@@ -75,6 +74,17 @@ public class TabsFragment extends Fragment {
 		
 		listItems.add(data);
 		adapter.notifyDataSetChanged();
+		
+		scrollToBottom();
 	}
-
+	
+	private void scrollToBottom() {
+		listview.post(new Runnable() {
+	        @Override
+	        public void run() {
+	            // Select the last row so it will scroll into view...
+	        	listview.setSelection(adapter.getCount() - 1);
+	        }
+	    });
+	}
 }
