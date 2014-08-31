@@ -1294,10 +1294,10 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f050034;
         public static final int action_bar_title=0x7f050033;
         public static final int action_context_bar=0x7f05002e;
+        public static final int action_logout=0x7f05006b;
         public static final int action_menu_divider=0x7f050027;
         public static final int action_menu_presenter=0x7f050028;
         public static final int action_mode_close_button=0x7f050035;
-        public static final int action_settings=0x7f050069;
         public static final int activity_chooser_view_content=0x7f050036;
         public static final int add_profile_switch_registered=0x7f05004d;
         public static final int alignBounds=0x7f050002;
@@ -1319,7 +1319,7 @@ containing a value of this type.
         public static final int dialog=0x7f050020;
         public static final int disableHome=0x7f05001a;
         public static final int dropdown=0x7f050021;
-        public static final int editText1=0x7f050068;
+        public static final int editTextChannel=0x7f050069;
         public static final int editTextEditNick=0x7f050058;
         public static final int editTextEditPassword=0x7f050059;
         public static final int editTextNewNick=0x7f05004e;
@@ -1346,9 +1346,10 @@ containing a value of this type.
         public static final int include1=0x7f050054;
         public static final int left=0x7f050006;
         public static final int linearLayout1=0x7f050060;
+        public static final int linearLayoutChannel=0x7f050067;
         public static final int linearLayoutProfileEdit=0x7f050057;
         public static final int listMode=0x7f050013;
-        public static final int listView1=0x7f050067;
+        public static final int listViewChannel=0x7f05006a;
         public static final int listViewProfiles=0x7f05005d;
         public static final int list_item=0x7f05003a;
         public static final int middle=0x7f050024;
@@ -1364,6 +1365,7 @@ containing a value of this type.
         public static final int radio=0x7f050040;
         public static final int right=0x7f050007;
         public static final int scrollView1=0x7f050052;
+        public static final int scrollViewChannel=0x7f050068;
         public static final int search_badge=0x7f050043;
         public static final int search_bar=0x7f050042;
         public static final int search_button=0x7f050044;
@@ -1497,7 +1499,7 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
-        public static final int action_settings=0x7f0a000e;
+        public static final int action_logout=0x7f0a000e;
         public static final int add_profile=0x7f0a0012;
         public static final int app_name=0x7f0a000d;
         public static final int login_button=0x7f0a0011;

@@ -21,6 +21,7 @@ package com.simplechatclient.android;
 
 import java.util.Locale;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +33,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.core.Network;
 import com.models.Channels;
 
 public class TabsActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -112,7 +114,14 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_logout) {
+			Network.getInstance().disconnect();
+			
+			Intent profileListIntent = new Intent(this, MainActivity.class);
+        	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        	profileListIntent.putExtra("tab", "0"); // profile list
+            startActivity(profileListIntent);
+            
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

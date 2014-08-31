@@ -55,7 +55,7 @@ public class TabsManager {
     	NewTabChannel.setAvatar(null);
     	NewTabChannel.setDisplayedOptions(false);
     	NewTabChannel.setName(channel);
-    	NewTabChannel.setFragment(TabsFragment.newInstance());
+    	NewTabChannel.setFragment(TabsFragment.newInstance(channel));
     	NewTabChannel.setOffline(false);
     	NewTabChannel.setPosition(tabs.size());
     	

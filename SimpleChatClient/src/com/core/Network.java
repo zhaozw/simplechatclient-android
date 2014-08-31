@@ -83,10 +83,20 @@ public class Network {
         }
     }
     
-    public void connect()
+    private synchronized void stopThread(Thread theThread)
     {
+        if (theThread != null)
+        {
+            theThread = null;
+        }
+    }
+
+    public void connect()
+    {    	
 		try
 		{
+	    	Messages.getInstance().showMessageAll("Logowanie ...");
+
 	    	if ((!networkThread.isAlive()) || (socket.isClosed()))
 	    		networkThread.start();
 		}
@@ -106,8 +116,14 @@ public class Network {
     {
 		try
 		{
+			Messages.getInstance().showMessageAll("Wylogowywanie ...");
+			
 	    	if ((networkThread.isAlive()) || (!socket.isClosed()))
-	    		networkThread.stop();
+	    	{
+	    		this.send("QUIT");
+	    		socket.close();
+	    		this.stopThread(networkThread);
+	    	}
 		}
 		catch (IllegalThreadStateException e)
 		{
@@ -126,7 +142,11 @@ public class Network {
 		try
 		{
 	    	if ((networkThread.isAlive()) || (socket.isClosed()))
-	    		networkThread.stop();
+	    	{
+	    		this.send("QUIT");
+	    		socket.close();
+	    		this.stopThread(networkThread);
+	    	}
 	    	if ((!networkThread.isAlive()) || (!socket.isClosed()))
 	    		networkThread.start();
 		}
@@ -161,7 +181,7 @@ public class Network {
             if (command.equalsIgnoreCase("kernel"))
             {
             	Log.i(TAG, data);
-            	Messages.getInstance().showMessage("Status", String.format("-> %s\r\n", data));
+            	//Messages.getInstance().showMessage(Channels.STATUS, String.format("-> %s\r\n", data));
 
             	OnetKernel.getInstance().parse(data);
             }

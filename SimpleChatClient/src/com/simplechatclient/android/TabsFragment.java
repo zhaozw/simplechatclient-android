@@ -21,14 +21,24 @@ package com.simplechatclient.android;
 
 import java.util.ArrayList;
 
+import com.core.Messages;
+import com.core.Network;
+import com.core.Settings;
+import com.models.Channels;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -41,14 +51,17 @@ public class TabsFragment extends Fragment {
 	private ArrayList<String> listItems;
 	private ArrayAdapter<String> adapter;
 	ListView listview;
+	EditText editText;
+	private String name;
 	
-	public static TabsFragment newInstance() {
-		TabsFragment fragment = new TabsFragment();
+	public static TabsFragment newInstance(String name) {
+		TabsFragment fragment = new TabsFragment(name);
 		return fragment;
 	}
 	
-	public TabsFragment() {
+	public TabsFragment(String name) {
 		listItems = new ArrayList<String>();
+		this.name = name;
 	}
 
 	@Override
@@ -62,12 +75,42 @@ public class TabsFragment extends Fragment {
 	public void onStart() {
 		super.onStart();
 		
-		listview = (ListView)view.findViewById(R.id.listView1);
+		listview = (ListView)view.findViewById(R.id.listViewChannel);
+		editText = (EditText)view.findViewById(R.id.editTextChannel);
 
 		adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listItems);
 		listview.setAdapter(adapter);
+		
+		editText.setOnEditorActionListener(new OnEditorActionListener() {
+		    @Override
+		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		        boolean handled = false;
+		        if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
+		            
+		        	String data = editText.getText().toString();
+		        	if (!name.equalsIgnoreCase(Channels.STATUS))
+		        	{
+		        		String networkData = String.format("PRIVMSG %s :%s", name, data);
+		        		Network.getInstance().send(networkData);
+		        		
+		        		String display = String.format("<%s> %s", Settings.getInstance().get("nick"), data);
+		        		Messages.getInstance().showMessage(name, display);
+		        	}
+		        	else
+		        	{
+		        		Network.getInstance().send(data);
+		        	}
+
+		        	// clear
+		        	editText.setText("");
+		        	
+		            handled = true;
+		        }
+		        return handled;
+		    }
+		});
 	}
-	
+		
 	public void addMessage(String data)
 	{
 		if (adapter == null) return;
@@ -87,4 +130,5 @@ public class TabsFragment extends Fragment {
 	        }
 	    });
 	}
+
 }
