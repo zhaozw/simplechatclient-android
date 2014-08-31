@@ -34,9 +34,13 @@ public class Messages {
 
     public void showMessage(String channel, String data)
     {
-    	TabsFragment fragment = TabsManager.getInstance().getFromName(channel);
-    	if (fragment != null)
-    		fragment.addMessage(data);
+    	try
+    	{
+    		TabsFragment fragment = TabsManager.getInstance().getFromName(channel);
+    		if (fragment != null)
+    			fragment.addMessage(data);
+    	}
+    	catch (NullPointerException e) {}
     }
     
     public void showMessageAll(String data)
@@ -45,8 +49,12 @@ public class Messages {
 
     public void showMessageActive(String data)
     {
-    	TabsFragment fragment = TabsManager.getInstance().getActive();
-    	if (fragment != null)
-    		fragment.addMessage(data);
+    	try
+    	{
+    		TabsFragment fragment = TabsManager.getInstance().getActive();
+    		if (fragment != null)
+    			fragment.addMessage(data);
+    	}
+    	catch (NullPointerException e) {}
     }
 }

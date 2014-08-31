@@ -242,7 +242,7 @@ public class Config {
 
 		try
 		{
-			String selectQuery = "SELECT COUNT(*) AS c FROM " + DatabaseHelper.TABLE_PROFILES + " WHERE nick = "+ nick;
+			String selectQuery = "SELECT COUNT(*) AS c FROM " + DatabaseHelper.TABLE_PROFILES + " WHERE nick = \""+ nick +"\"";
 			cursor = db.rawQuery(selectQuery, null);
 
 			if (cursor != null)
