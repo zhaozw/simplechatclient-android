@@ -96,6 +96,7 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 	protected void onDestroy() {
 		super.onDestroy();
 		
+		Network.getInstance().disconnect();
 		TabsManager.getInstance().removeAll();
 	}
 

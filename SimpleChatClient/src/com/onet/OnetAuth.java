@@ -327,7 +327,8 @@ public class OnetAuth {
 	    }
 
 	    public void run() {
-	    	Log.i(TAG, "HttpDownload: "+url);
+	    	Log.i(TAG, "HttpDownload url: "+url);
+	    	Log.i(TAG, "HttpDownload content: "+content);
 	    	
 	    	current_category = category;
 	        current_result = null;

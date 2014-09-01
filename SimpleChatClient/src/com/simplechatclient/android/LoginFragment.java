@@ -126,6 +126,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         		Settings.getInstance().set("nick", selected_nick);
         		Settings.getInstance().set("current_profile", Integer.toString(selected_nick_id));
         		
+                Settings.getInstance().set("nick", profile.getNick());
+                Settings.getInstance().set("password", profile.getPassword());
+                Settings.getInstance().set("font", profile.getFont());
+                Settings.getInstance().set("bold", profile.getBold());
+                Settings.getInstance().set("italic", profile.getItalic());
+                Settings.getInstance().set("color", profile.getColor());
+        		
         		setting.setCurrent_profile(selected_nick_id);
         		current_config.updateSettings(setting);
         	}
