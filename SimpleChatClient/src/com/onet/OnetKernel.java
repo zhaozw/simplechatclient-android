@@ -38,7 +38,7 @@ public class OnetKernel {
     {
         data = message.split(" ");
         
-        if (data.length <= 1)
+        if (data.length <= 2)
             return;
 
         String data0 = data[0];
@@ -54,7 +54,7 @@ public class OnetKernel {
         if (data1.equalsIgnoreCase("001")) { raw_001(); return; }
         else if (data1.equalsIgnoreCase("801")) { raw_801(); return; }
 
-        if (data.length >= 3)
+        if (data.length >= 4)
         {
 	        String data3 = data[3];
 	        if ((data1.equalsIgnoreCase("notice")) && (!data3.isEmpty()))
