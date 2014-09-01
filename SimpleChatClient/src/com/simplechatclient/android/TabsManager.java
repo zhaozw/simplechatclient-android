@@ -69,7 +69,26 @@ public class TabsManager {
 
     public void remove(String channel)
     {
-    	// TODO
+    	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
+    	    TabsChannel tabsChannel = entry.getValue();
+    	    if (tabsChannel.getName() == channel)
+    	    {
+    	    	tabsChannel.setFragment(null);
+    	    	tabsChannel = null;
+    	    	return;
+    	    }
+    	}
+    }
+    
+    public void removeAll()
+    {
+    	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
+    	    TabsChannel tabsChannel = entry.getValue();
+    	    tabsChannel.setFragment(null);
+    	    tabsChannel = null;
+    	}
+    	
+    	tabs.clear();
     }
     
     public int count()

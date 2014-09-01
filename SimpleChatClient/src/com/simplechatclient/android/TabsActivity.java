@@ -92,6 +92,13 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 		this.add(Channels.STATUS);
 	}
 	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		TabsManager.getInstance().removeAll();
+	}
+
 	public void add(String channel)
 	{
 		actionBar.addTab(actionBar.newTab()

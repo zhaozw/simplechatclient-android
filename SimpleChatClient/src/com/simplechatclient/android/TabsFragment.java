@@ -63,6 +63,14 @@ public class TabsFragment extends Fragment {
 		listItems = new ArrayList<String>();
 		this.name = name;
 	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		
+		listItems = null;
+		adapter = null;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
