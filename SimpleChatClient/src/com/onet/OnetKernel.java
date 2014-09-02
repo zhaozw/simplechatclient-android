@@ -21,6 +21,7 @@ package com.onet;
 
 import android.util.Log;
 
+import com.core.Convert;
 import com.core.Messages;
 import com.core.Network;
 import com.core.Settings;
@@ -38,7 +39,7 @@ public class OnetKernel {
     {
         data = message.split(" ");
         
-        if (data.length <= 2)
+        if (data.length < 2)
             return;
 
         String data0 = data[0];
@@ -91,7 +92,11 @@ public class OnetKernel {
     // ERROR :Closing link (unknown@95.48.183.154) [Registration timeout]
     private void raw_error()
     {
-    	// TODO
+    	String message = new String();
+    	for (int i = 0; i < data.length; ++i) { if (i != 0) message += " "; message += data[i]; }
+    	if (message.startsWith(":")) message = message.substring(1);
+
+    	Messages.getInstance().showMessageAll(message);
     }
     
     // :cf1f4.onet PONG cf1f4.onet :1340185644095
@@ -139,6 +144,7 @@ public class OnetKernel {
     	for (int i = 3; i < data.length; ++i) { if (i != 3) message += " "; message += data[i]; }
     	if (message.startsWith(":")) message = message.substring(1);
     	
+    	message = Convert.simpleConvert(message);
         String display = String.format("<%s> %s", nick, message);
 
     	// channel

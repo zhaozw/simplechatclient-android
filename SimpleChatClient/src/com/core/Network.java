@@ -92,7 +92,7 @@ public class Network {
     public void send(String data)
     {
         data = utfToIso(data);
-        Log.i(TAG, "->"+data);
+        Log.i(TAG, "-> "+data);
     	
         try {
             if ((socket != null) && (socket.isConnected())) {
@@ -252,7 +252,7 @@ public class Network {
                         if (line.length() != 0)
                         {
                         	line = isoToUtf(line);
-                        	Log.i(TAG, "<-"+line);
+                        	Log.i(TAG, "<- "+line);
 
                             Message msg =  new Message();
                             Bundle bundle = new Bundle();

@@ -120,6 +120,11 @@ public class TabsManager {
     	return null;
     }
     
+    public HashMap<String, TabsChannel> getAll()
+    {
+    	return tabs;
+    }
+    
     public TabsFragment getFromName(String channel)
     {
     	TabsChannel tabsChannel = tabs.get(channel);

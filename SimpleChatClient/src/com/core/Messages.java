@@ -19,6 +19,10 @@
 
 package com.core;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+import com.simplechatclient.android.TabsChannel;
 import com.simplechatclient.android.TabsFragment;
 import com.simplechatclient.android.TabsManager;
 
@@ -45,6 +49,17 @@ public class Messages {
     
     public void showMessageAll(String data)
     {
+    	HashMap<String, TabsChannel> tabs = TabsManager.getInstance().getAll();
+    	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
+        	try
+        	{
+        		TabsChannel tabsChannel = entry.getValue();
+        		TabsFragment fragment = tabsChannel.getFragment();
+        		if (fragment != null)
+        			fragment.addMessage(data);
+        	}
+        	catch (NullPointerException e) {}
+    	}
     }
 
     public void showMessageActive(String data)
