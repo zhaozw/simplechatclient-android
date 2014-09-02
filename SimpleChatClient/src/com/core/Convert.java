@@ -2,7 +2,7 @@ package com.core;
 
 public class Convert {
 
-	private static String[] fonts = {"Arial", "Times", "Verdana", "Tahoma", "Courier"};
+	private static String[] fonts = {"arial", "times", "verdana", "tahoma", "courier"};
 	private static String[] colors = {"000000", "623c00", "c86c00", "ff6500", "ff0000", "e40f0f", "990033", "8800ab", "ce00ff", "0f2ab1", "3030ce", "006699", "1a866e", "008100", "959595"};
 
 	public static  String removeColor(String data)
