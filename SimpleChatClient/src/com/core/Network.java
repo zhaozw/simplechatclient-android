@@ -24,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -33,7 +34,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.models.Channels;
 import com.onet.OnetAuth;
 import com.onet.OnetKernel;
 
@@ -65,11 +65,35 @@ public class Network {
         out = null;
     }
     
+    private String utfToIso(String data)
+    {
+    	String result = new String();
+    	
+		try {
+    		result = new String(data.getBytes(), "ISO-8859-2");
+		} catch (UnsupportedEncodingException e) {
+		}
+
+		return result;
+    }
+    
+    private String isoToUtf(String data)
+    {   	
+    	String result = new String();
+            	
+		try {
+    		result = new String(data.getBytes(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+		}
+		
+		return result;
+    }
+    
     public void send(String data)
     {
-        Log.i(TAG, data);
-        //Messages.getInstance().showMessage("Status", String.format("%s\r\n", data));
-        
+        data = utfToIso(data);
+        Log.i(TAG, "->"+data);
+    	
         try {
             if ((socket != null) && (socket.isConnected())) {
                 out.write(String.format("%s\r\n", data));
@@ -180,9 +204,6 @@ public class Network {
 
             if (command.equalsIgnoreCase("kernel"))
             {
-            	Log.i(TAG, data);
-            	//Messages.getInstance().showMessage(Channels.STATUS, String.format("-> %s\r\n", data));
-
             	OnetKernel.getInstance().parse(data);
             }
             else if (command.equalsIgnoreCase("auth"))
@@ -213,8 +234,8 @@ public class Network {
                     InetAddress serverAddr = InetAddress.getByName(server);
                     socket = new Socket(serverAddr, port);
                 
-                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                    in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "ISO-8859-2"));
+                    out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "ISO-8859-2"));
 
                     Message msgAuth =  new Message();
                     Bundle bundleAuth = new Bundle();
@@ -224,13 +245,15 @@ public class Network {
                     msgAuth.setData(bundleAuth);
 
                     networkHandler.sendMessage(msgAuth);
-
                     
                     String line = null;
                     while ((line = in.readLine()) != null)
                     {
                         if (line.length() != 0)
                         {
+                        	line = isoToUtf(line);
+                        	Log.i(TAG, "<-"+line);
+
                             Message msg =  new Message();
                             Bundle bundle = new Bundle();
     
@@ -255,7 +278,7 @@ public class Network {
                 Log.e(TAG, "Exception:" + e.getMessage());
                 e.printStackTrace();
             }
-            
+
             Log.i(TAG, "Network thread closed");
         }
     }
