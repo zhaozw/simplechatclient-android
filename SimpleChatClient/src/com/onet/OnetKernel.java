@@ -109,13 +109,16 @@ public class OnetKernel {
     	
     	String channel = data[2];
 
-    	// add
-		TabsManager.getInstance().add(channel);
-
-		// info
-    	if ((nick.equalsIgnoreCase(Settings.getInstance().get("nick"))) && (!channel.startsWith("^")))
+    	if (nick.equalsIgnoreCase(Settings.getInstance().get("nick")))
     	{
-    		Network.getInstance().send(String.format("CS INFO %s i", channel));
+	    	// add
+			TabsManager.getInstance().add(channel);
+
+			// info
+	    	if (!channel.startsWith("^"))
+	    	{
+	    		Network.getInstance().send(String.format("CS INFO %s i", channel));
+	    	}
     	}
     }
     
