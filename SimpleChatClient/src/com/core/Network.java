@@ -55,6 +55,7 @@ public class Network {
 
     // TODO jak network bedzie Servicem to mozna stworzyc Intent do auth 
     // TODO dla tymczasowego nicka http://stackoverflow.com/a/3607934
+
     private Network()
     {
         super();
@@ -121,6 +122,7 @@ public class Network {
 		{
 	    	Messages.getInstance().showMessageAll("Logowanie ...");
 
+	        // TODO thread already started
 	    	if ((!networkThread.isAlive()) || (socket.isClosed()))
 	    		networkThread.start();
 		}

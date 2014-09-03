@@ -101,7 +101,7 @@ public class OnetAuth {
 
         @Override
         public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
+            //Bundle bundle = msg.getData();
             
             //String current_category = msg.getData().getString("current_category");
             //String current_result = msg.getData().getString("current_result");

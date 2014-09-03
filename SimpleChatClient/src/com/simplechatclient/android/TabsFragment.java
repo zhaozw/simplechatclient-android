@@ -21,14 +21,10 @@ package com.simplechatclient.android;
 
 import java.util.ArrayList;
 
-import com.core.Messages;
-import com.core.Network;
-import com.core.Settings;
-import com.models.Channels;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,11 +36,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.core.Messages;
+import com.core.Network;
+import com.core.Settings;
+import com.models.Channels;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class TabsFragment extends Fragment {
 
+	private static final String TAG = "TabsFragment";
+	
 	private Context context;
 	private View view;
 	
@@ -95,6 +98,7 @@ public class TabsFragment extends Fragment {
 		        if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
 		            
 		        	String data = editText.getText().toString();
+		        	Log.i(TAG, "sending: "+data);
 		        	if (!name.equalsIgnoreCase(Channels.STATUS))
 		        	{
 		        		String networkData = String.format("PRIVMSG %s :%s", name, data);
