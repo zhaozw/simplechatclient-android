@@ -11,6 +11,7 @@
     <string name="title_profile_add">Dodaj profil</string>
     <string name="title_profile_add_tab">Dodaj istniejący</string>
     <string name="title_profile_register_tab">Zarejestruj się</string>
+    <string name="button_register">Zarejestruj</string>
     <string name="profile_add_nick">Nick</string>
     <string name="profile_add_password">Hasło</string>
     <string name="profile_already_exists">Profil już istnieje</string>

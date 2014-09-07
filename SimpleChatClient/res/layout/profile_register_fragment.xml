@@ -88,6 +88,6 @@
         android:layout_alignLeft="@+id/scrollView1"
         android:layout_alignParentBottom="true"
         android:layout_weight="1"
-        android:text="Zarejestruj" />
+        android:text="@string/button_register" />
 
 </RelativeLayout>
