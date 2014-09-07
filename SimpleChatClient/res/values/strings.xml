@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">Simple Chat Client</string>
+    <string name="action_menu">Menu</string>
+    <string name="action_settings">Ustawienia</string>
     <string name="action_logout">Wyloguj</string>
     <string name="title_login">Logowanie</string>
     <string name="title_profiles">Profile</string>

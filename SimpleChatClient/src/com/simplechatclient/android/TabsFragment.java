@@ -22,11 +22,15 @@ package com.simplechatclient.android;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -68,12 +72,42 @@ public class TabsFragment extends Fragment {
 	}
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		
 		listItems = null;
 	}
 
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// TODO Auto-generated method stub
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+	        case R.id.action_logout:
+				Network.getInstance().disconnect();
+				
+				Intent profileListIntent = new Intent(context, MainActivity.class);
+	        	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	        	profileListIntent.putExtra("tab", "0"); // profile list
+	            startActivity(profileListIntent);
+	            
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+		}
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.tabs_fragment, container, false);
