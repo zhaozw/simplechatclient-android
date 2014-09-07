@@ -145,7 +145,7 @@ public class OnetKernel {
     	if (message.startsWith(":")) message = message.substring(1);
     	
     	message = Convert.simpleConvert(message);
-        String display = String.format("<%s> %s", nick, message);
+        String display = String.format("%s: %s", nick, message);
 
     	// channel
         if (nickOrChannel.contains("#"))
