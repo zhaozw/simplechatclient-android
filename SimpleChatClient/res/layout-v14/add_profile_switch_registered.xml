@@ -9,6 +9,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/editTextNewNick"
         android:text="@string/nick_registered" 
+        android:checked="false"
         tools:ignore="NewApi" />
     
 </merge>

@@ -8,6 +8,7 @@
         android:layout_alignLeft="@+id/editTextNewNick"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/editTextNewNick"
+        android:checked="false"
         android:text="@string/nick_registered" />
 
 </merge>
