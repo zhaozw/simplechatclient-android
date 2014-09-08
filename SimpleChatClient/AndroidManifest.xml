@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".TabsActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,7 +41,7 @@
             android:name=".ProfileAddActivity"
             android:label="@string/title_profile_add" >
         </activity>
-        <activity android:name=".TabsActivity" android:theme="@style/Theme.AppCompat.Light"></activity>
+        <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".TabsFragment" ></activity>
         </application>
 

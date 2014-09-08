@@ -115,7 +115,7 @@ public class ProfileEditActivity extends ActionBarActivity implements View.OnCli
 		Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.successfully_removed), Toast.LENGTH_SHORT);
 		toast.show();
 
-    	Intent profileListIntent = new Intent(context, MainActivity.class);
+    	Intent profileListIntent = new Intent(context, ProfileActivity.class);
     	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	profileListIntent.putExtra("tab", "1"); // profile list
         startActivity(profileListIntent);
@@ -161,7 +161,7 @@ public class ProfileEditActivity extends ActionBarActivity implements View.OnCli
 		Toast toast = Toast.makeText(context, getResources().getString(R.string.successfully_saved), Toast.LENGTH_SHORT);
 		toast.show();
 
-    	Intent profileListIntent = new Intent(context, MainActivity.class);
+    	Intent profileListIntent = new Intent(context, ProfileActivity.class);
     	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	profileListIntent.putExtra("tab", "1"); // profile list
         startActivity(profileListIntent);

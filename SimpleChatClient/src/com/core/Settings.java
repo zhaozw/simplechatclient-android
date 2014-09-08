@@ -28,6 +28,7 @@ public class Settings {
 
     private Settings() {
         map = new HashMap<String, String>();
+        map.put("first_run", "true");
     }
 
     public static synchronized Settings getInstance() {

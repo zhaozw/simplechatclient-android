@@ -210,6 +210,8 @@ public class Network {
             }
             else if (command.equalsIgnoreCase("auth"))
             {
+            	Messages.getInstance().showMessageAll("Połączono");
+            	
                 // auth
                 try
                 {

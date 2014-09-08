@@ -21,6 +21,7 @@ package com.simplechatclient.android;
 
 import java.util.Locale;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,7 +33,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.core.Config;
 import com.core.Network;
+import com.core.Settings;
+import com.database.DatabaseProfile;
+import com.database.DatabaseSetting;
 import com.models.Channels;
 
 public class TabsActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -60,8 +65,6 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_activity);
 
-		TabsManager.getInstance().setTabsActivity(this);
-		
 		// Set up the action bar.
 		actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -86,9 +89,45 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 					}
 				});
 
+		// read profile
+		// settings
+		Config current_config = new Config(getApplicationContext());
+        
+        DatabaseSetting current_settings = current_config.getSetting();
+        DatabaseProfile current_profile = current_config.getProfile(current_settings.getCurrent_profile());
+        
+        Settings.getInstance().set("current_profile", Integer.toString(current_settings.getCurrent_profile()));
+        Settings.getInstance().set("unique_id", current_settings.getUnique_id());
+        
+        Settings.getInstance().set("nick", current_profile.getNick());
+        Settings.getInstance().set("password", current_profile.getPassword());
+        Settings.getInstance().set("font", current_profile.getFont());
+        Settings.getInstance().set("bold", current_profile.getBold());
+        Settings.getInstance().set("italic", current_profile.getItalic());
+        Settings.getInstance().set("color", current_profile.getColor());
+
 		// status
 		TabsManager.getInstance().add(Channels.STATUS);
 		this.add(Channels.STATUS);
+
+        // tabs manager
+		TabsManager.getInstance().setTabsActivity(this);
+
+		// is first run
+		if (Settings.getInstance().get("first_run") == "true")
+		{			
+			// first run false
+			Settings.getInstance().set("first_run", "false");
+
+			Intent profileListIntent = new Intent(this, ProfileActivity.class);
+	    	//profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    	profileListIntent.putExtra("tab", "0"); // main
+	        startActivity(profileListIntent);
+		}
+		else
+		{
+			
+		}
 	}
 	
 	@Override

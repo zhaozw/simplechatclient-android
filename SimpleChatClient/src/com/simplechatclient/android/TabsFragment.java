@@ -97,7 +97,7 @@ public class TabsFragment extends Fragment {
 	        case R.id.action_logout:
 				Network.getInstance().disconnect();
 				
-				Intent profileListIntent = new Intent(context, MainActivity.class);
+				Intent profileListIntent = new Intent(context, ProfileActivity.class);
 	        	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	        	profileListIntent.putExtra("tab", "0"); // profile list
 	            startActivity(profileListIntent);

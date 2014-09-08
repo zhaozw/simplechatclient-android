@@ -1448,7 +1448,7 @@ containing a value of this type.
         public static final int abc_simple_decor=0x7f030017;
         public static final int add_profile_switch_registered=0x7f030018;
         public static final int login_fragment=0x7f030019;
-        public static final int main_activity=0x7f03001a;
+        public static final int profile_activity=0x7f03001a;
         public static final int profile_add_activity=0x7f03001b;
         public static final int profile_add_fragment=0x7f03001c;
         public static final int profile_edit_activity=0x7f03001d;

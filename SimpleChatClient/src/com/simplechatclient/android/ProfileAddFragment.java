@@ -116,7 +116,7 @@ public class ProfileAddFragment extends Fragment implements View.OnClickListener
 			Toast toast = Toast.makeText(context, getResources().getString(R.string.successfully_added), Toast.LENGTH_SHORT);
 			toast.show();
 	
-	    	Intent profileListIntent = new Intent(context, MainActivity.class);
+	    	Intent profileListIntent = new Intent(context, ProfileActivity.class);
 	    	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    	profileListIntent.putExtra("tab", "1"); // profile list
 	        startActivity(profileListIntent);
