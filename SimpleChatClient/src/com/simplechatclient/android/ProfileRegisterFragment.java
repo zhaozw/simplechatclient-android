@@ -69,6 +69,7 @@ public class ProfileRegisterFragment extends Fragment {
 	private Context context;
 	private View view;
 	private HttpClient httpclient;
+	private int max_numbers_read_captcha = 1;
 	private static final String AJAX_API = "http://czat.onet.pl/include/ajaxapi.xml.php3";
     private static final String TAG = "ProfileRegisterFragment";
 	
@@ -309,7 +310,10 @@ public class ProfileRegisterFragment extends Fragment {
 	    protected void onPostExecute(Bitmap bitmap) {
 	    	if ((bitmap.getWidth() == 1) && (bitmap.getHeight() == 1))
 	    	{
-	    		new DownloadImageTask().execute("http://czat.onet.pl/myimg.gif");
+	    		max_numbers_read_captcha++;
+	    		if (max_numbers_read_captcha <= 3) {
+	    			new DownloadImageTask().execute("http://czat.onet.pl/myimg.gif");
+	    		}
 	    		return; // empty image
 	    	}
 	    	
