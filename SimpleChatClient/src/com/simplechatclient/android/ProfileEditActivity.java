@@ -24,9 +24,11 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -35,7 +37,7 @@ import com.core.Settings;
 import com.database.DatabaseProfile;
 import com.database.DatabaseSetting;
 
-public class ProfileEditActivity extends ActionBarActivity implements View.OnClickListener {
+public class ProfileEditActivity extends ActionBarActivity {
 	
 	private DatabaseProfile profile;
 	private Config current_config;
@@ -48,6 +50,12 @@ public class ProfileEditActivity extends ActionBarActivity implements View.OnCli
 		setContentView(R.layout.profile_edit_activity);
 		context = getApplicationContext();
 		
+		final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
+
+        setHasOptionsMenu(true);
+        
 		nick = getIntent().getStringExtra("nick");
 
 		current_config = new Config(this);
@@ -64,24 +72,31 @@ public class ProfileEditActivity extends ActionBarActivity implements View.OnCli
 		} else {
 			editTextPassword.setVisibility(View.INVISIBLE);
 		}
-		
-		Button button_remove = (Button)findViewById(R.id.edit_profile_button_remove);
-		Button button_save = (Button)findViewById(R.id.edit_profile_button_save);
-
-		button_remove.setOnClickListener(this);
-		button_save.setOnClickListener(this);
+	}
+	
+	private void setHasOptionsMenu(boolean b) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void onClick(View v) {
-		switch (v.getId())
-		{
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.profile_edit, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
 			case R.id.edit_profile_button_remove:
 				button_remove();
-				break;
+				return true;
 			case R.id.edit_profile_button_save:
 				button_save();
-				break;
+				return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
 		}
 	}
 	

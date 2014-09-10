@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-sdk
-        android:minSdkVersion="7"
+        android:minSdkVersion="8"
         android:targetSdkVersion="19" />
 
     <application
@@ -27,22 +27,46 @@
         </activity>
         <activity
             android:name=".LoginFragment"
-            android:label="@string/title_login" >
+            android:label="@string/title_login"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:parentActivityName="com.simplechatclient.android.TabsActivity" >
+             
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.simplechatclient.android.TabsActivity" />
         </activity>
         <activity
             android:name=".ProfileListFragment"
-            android:label="@string/title_profiles" >
+            android:label="@string/title_profiles"
+            android:parentActivityName="com.simplechatclient.android.LoginFragment" >
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.simplechatclient.android.LoginFragment" />
+            
         </activity>
         <activity
             android:name=".ProfileEditActivity"
-            android:label="@string/title_profile_edit" >
+            android:label="@string/title_profile_edit"
+            android:parentActivityName="com.simplechatclient.android.ProfileListFragment" >
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.simplechatclient.android.ProfileListFragment" />
+            
         </activity>
         <activity
             android:name=".ProfileAddActivity"
-            android:label="@string/title_profile_add" >
+            android:label="@string/title_profile_add"
+            android:parentActivityName="com.simplechatclient.android.ProfileListFragment" >
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.simplechatclient.android.ProfileListFragment" />
         </activity>
-        <activity android:name=".ProfileActivity"></activity>
-        <activity android:name=".TabsFragment" ></activity>
+        <activity android:name=".ProfileActivity">
+            
+        </activity>
+        <activity android:name=".TabsFragment" >
+            
+        </activity>
         </application>
 
 </manifest>

@@ -52,9 +52,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -62,7 +64,7 @@ import android.widget.Toast;
 
 import com.core.Config;
 
-public class ProfileRegisterFragment extends Fragment implements View.OnClickListener {
+public class ProfileRegisterFragment extends Fragment {
 
 	private Context context;
 	private View view;
@@ -77,25 +79,39 @@ public class ProfileRegisterFragment extends Fragment implements View.OnClickLis
 
 	public ProfileRegisterFragment() {
 	}
-
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.profile_register_fragment, container, false);
 		context = container.getContext();
 		return view;
 	}
-	
+
 	@Override
-	public void onClick(View v) {
-		switch (v.getId())
-		{
-			case R.id.buttonRegister:
-				buttonRegister();
-				break;
-		}
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.profile_register, menu);
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	@SuppressLint("DefaultLocale") private void buttonRegister()
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId())
+		{
+			case R.id.profile_register_button_register:
+				register_nick();
+				break;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+	
+	@SuppressLint("DefaultLocale") private void register_nick()
 	{		
 		EditText editTextRegisterNick = (EditText)view.findViewById(R.id.editTextRegisterNick);
 		EditText editTextRegisterPassword = (EditText)view.findViewById(R.id.editTextRegisterPassword);
@@ -244,9 +260,6 @@ public class ProfileRegisterFragment extends Fragment implements View.OnClickLis
 	public void onStart() {
 		super.onStart();
 
-		Button buttonRegister = (Button)view.findViewById(R.id.buttonRegister);
-		buttonRegister.setOnClickListener(this);
-		
 		new DownloadImageTask().execute("http://czat.onet.pl/myimg.gif");
 	}
 	

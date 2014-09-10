@@ -24,9 +24,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -45,6 +47,12 @@ public class ProfileAddFragment extends Fragment implements View.OnClickListener
 
 	public ProfileAddFragment() {
 	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,14 +62,29 @@ public class ProfileAddFragment extends Fragment implements View.OnClickListener
 	}
 	
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.profile_add, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId())
+		{
+			case R.id.profile_add_button_add:
+				add_new_profile();
+				break;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
 	public void onClick(View v) {
 		switch (v.getId())
 		{
 			case R.id.add_profile_switch_registered:
 				add_profile_switch_registered();
-				break;
-			case R.id.buttonAddNewProfile:
-				button_add_new_profile();
 				break;
 		}
 	}
@@ -81,7 +104,7 @@ public class ProfileAddFragment extends Fragment implements View.OnClickListener
 		}
 	}
 	
-	private void button_add_new_profile()
+	private void add_new_profile()
 	{
 		EditText editTextNewNick = (EditText)view.findViewById(R.id.editTextNewNick);
 		EditText editTextNewPassword = (EditText)view.findViewById(R.id.editTextNewPassword);
@@ -108,6 +131,13 @@ public class ProfileAddFragment extends Fragment implements View.OnClickListener
 			add_nick = "~"+add_nick;
 		}
 
+		if (add_nick.length() <= 1)
+		{
+			Toast toast = Toast.makeText(context, getResources().getString(R.string.profile_length_too_small), Toast.LENGTH_SHORT);
+			toast.show();
+			return;
+		}
+		
 		Config current_config = new Config(context);
 		if (!current_config.profileExists(add_nick))
 		{
@@ -132,9 +162,6 @@ public class ProfileAddFragment extends Fragment implements View.OnClickListener
 		
 		CompoundButton compoundButtonRegistered = (CompoundButton)view.findViewById(R.id.add_profile_switch_registered);
 		compoundButtonRegistered.setOnClickListener(this);
-		
-		Button buttonAddNewProfile = (Button)view.findViewById(R.id.buttonAddNewProfile);
-		buttonAddNewProfile.setOnClickListener(this);
 		
 		add_profile_switch_registered();
 	}

@@ -33,7 +33,7 @@ import android.support.v7.app.ActionBarActivity;
 public class ProfileActivity extends ActionBarActivity implements
 		ActionBar.TabListener {
 
-	private static final String TAG = "MainActivity";
+	//private static final String TAG = "MainActivity";
 	
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -57,6 +57,8 @@ public class ProfileActivity extends ActionBarActivity implements
 		// Set up the action bar.
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.

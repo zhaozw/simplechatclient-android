@@ -27,12 +27,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 
 import com.core.Config;
@@ -41,7 +43,7 @@ import com.core.Settings;
 import com.database.DatabaseProfile;
 import com.database.DatabaseSetting;
 
-public class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginFragment extends Fragment {
 
 	private Context context;
 	private View view;
@@ -53,6 +55,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 	}
 
 	public LoginFragment() {
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -86,19 +95,25 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 			spinner.setSelection(default_position); 
 		
 		spinner.setOnItemSelectedListener(spinnerListener);
-		
-		Button button_login = (Button)view.findViewById(R.id.button_login);
-		button_login.setOnClickListener(this);
 	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.login, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
 	
 	@Override
-	public void onClick(View v) {
-		switch (v.getId())
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId())
 		{
-			case R.id.button_login:
+			case R.id.login_button:
 				button_login();
 				break;
 		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void button_login()
@@ -140,7 +155,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 		@Override
 		public void onNothingSelected(AdapterView<?> parent) {
-			// Auto-generated method stub
 		}
 	};
 	

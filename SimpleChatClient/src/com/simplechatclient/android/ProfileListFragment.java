@@ -27,18 +27,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.core.Config;
 import com.database.DatabaseProfile;
 
-public class ProfileListFragment extends Fragment implements View.OnClickListener {
+public class ProfileListFragment extends Fragment {
 
 	private Context context;
 	private View view;
@@ -52,10 +54,17 @@ public class ProfileListFragment extends Fragment implements View.OnClickListene
 	public ProfileListFragment() {
 	}
 
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.profile_list_fragment, container, false);
-		context = container.getContext();		
+		context = container.getContext();
 		return view;
 	}
 
@@ -77,19 +86,24 @@ public class ProfileListFragment extends Fragment implements View.OnClickListene
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, profiles_list);
 		listview.setAdapter(adapter);		
 		listview.setOnItemClickListener(onProfileClick);
-		
-		Button profile_add_button = (Button)view.findViewById(R.id.profile_add_button);
-		profile_add_button.setOnClickListener(this);
 	}
 
 	@Override
-	public void onClick(View v) {
-		switch (v.getId())
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.profile_list, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId())
 		{
-			case R.id.profile_add_button:
+			case R.id.profile_list_button_add:
 				profile_add_button();
 				break;
 		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void profile_add_button()

@@ -84,10 +84,8 @@ public class TabsFragment extends Fragment {
 		listItems = null;
 	}
 
-
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 

@@ -42,7 +42,7 @@ import com.models.Channels;
 
 public class TabsActivity extends ActionBarActivity implements ActionBar.TabListener {
 
-	private static final String TAG = "TabsActivity";
+	//private static final String TAG = "TabsActivity";
 	
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -68,6 +68,8 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 		// Set up the action bar.
 		actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
