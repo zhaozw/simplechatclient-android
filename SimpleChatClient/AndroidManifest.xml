@@ -42,7 +42,7 @@
             android:parentActivityName="com.simplechatclient.android.LoginFragment" >
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.simplechatclient.android.LoginFragment" />
+            android:value="com.simplechatclient.android.ProfileActivity" />
             
         </activity>
         <activity
@@ -51,7 +51,7 @@
             android:parentActivityName="com.simplechatclient.android.ProfileListFragment" >
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.simplechatclient.android.ProfileListFragment" />
+            android:value="com.simplechatclient.android.ProfileActivity" />
             
         </activity>
         <activity
@@ -60,7 +60,7 @@
             android:parentActivityName="com.simplechatclient.android.ProfileListFragment" >
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.simplechatclient.android.ProfileListFragment" />
+            android:value="com.simplechatclient.android.ProfileActivity" />
         </activity>
         <activity android:name=".ProfileActivity">
             
