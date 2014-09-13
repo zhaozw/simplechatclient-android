@@ -19,12 +19,15 @@
 
 package com.onet;
 
+import java.util.ArrayList;
+
 import android.util.Log;
 
 import com.core.Convert;
 import com.core.Messages;
 import com.core.Network;
 import com.core.Settings;
+import com.models.ChannelsFavourites;
 import com.simplechatclient.android.TabsManager;
 
 public class OnetKernel {
@@ -58,7 +61,7 @@ public class OnetKernel {
         if (data.length >= 4)
         {
 	        String data3 = data[3];
-	        if ((data1.equalsIgnoreCase("notice")) && (!data3.isEmpty()))
+	        if ((data1.equalsIgnoreCase("notice")) && (data3 != null))
 	        {
 	        	if ((data3.length() != 4) || (data3.equalsIgnoreCase(":***")))
 	        	{
@@ -67,6 +70,7 @@ public class OnetKernel {
 	        	}
 	        	else
 	        	{
+	        		data3 = data3.substring(1);
 	        		if (data3.length() == 3)
 	        		{
 	        			int int3 = Integer.parseInt(data3);
@@ -256,25 +260,53 @@ public class OnetKernel {
 	 // :ChanServ!service@service.onet MODE #abc123 +il-e 1 *!51976824@*
     private void raw_mode()
     {
-    	// TODO
+    	String who = data[0];
+    	if (who.startsWith(":")) who = who.substring(1);
+    	if (who.contains("!")) who = who.substring(0, who.indexOf("!"));
     	
-        // registered nick
-    	/*
-        if ((strNick == Settings.getInstance().get("nick")) && (strFlag == "+r"))
-        {
-            // channel homes
-            Network.getInstance().send("CS HOMES");
+    	String nickOrChannel = data[2];
 
-            // get my stats
-            Network.getInstance().send(String.format("RS INFO %s", Settings.getInstance().get("nick")));
-        }
-        */
+    	if ((nickOrChannel.startsWith("#")) || (nickOrChannel.startsWith("^")))
+    	{
+    		// TODO
+    	}
+    	else
+    	{
+    		String nick = nickOrChannel;
+    		String flag = data[3];
+    		if (flag.startsWith(":")) flag = flag.substring(1);
+    		
+    		// get =-
+    		String plusminus = Character.toString(flag.charAt(0));
+    		// fix flag
+    		flag = flag.substring(1);
+    		
+    		String[] flags = flag.split("");
+
+    		for (String f : flags)
+    		{
+    			String current_flag = plusminus+f;
+    			
+    			// TODO
+    			
+    			// registered nick
+    			if ((nick.equalsIgnoreCase(Settings.getInstance().get("nick"))) && (current_flag.equalsIgnoreCase("+r")))
+    			{
+    	            // channel homes
+    	            Network.getInstance().send("CS HOMES");
+
+    	            // get my stats
+    	            Network.getInstance().send(String.format("RS INFO %s", nick));    				
+    			}
+    		}
+    	}
     }
     
     // :cf1f4.onet 001 scc_test :Welcome to the OnetCzat IRC Network scc_test!51976824@83.28.35.219
     private void raw_001()
     {
     	Settings.getInstance().set("ignore_favourites", "false");
+    	ChannelsFavourites.getInstance().clear();
     	
     	// protocol
     	Network.getInstance().send("PROTOCTL ONETNAMESX");
@@ -287,7 +319,13 @@ public class OnetKernel {
 	 // :NickServ!service@service.onet NOTICE scc_test :141 :#Scrabble #Quiz #scc
     private void raw_141n()
     {
-    	// TODO
+        for (int i = 4; i < data.length; ++i) { 
+        	String channel = data[i];
+        	if (channel.startsWith(":")) channel = channel.substring(1);
+
+        	Log.i(TAG, "favourites adding: "+channel);
+        	ChannelsFavourites.getInstance().add(channel);
+    	}
     }
 
 	 // NS FAVOURITES
@@ -298,7 +336,19 @@ public class OnetKernel {
     	{
     		Settings.getInstance().set("ignore_favourites", "true");
     		
-    		// TODO
+    		 ArrayList<String> channels = ChannelsFavourites.getInstance().get();
+    		 
+    		 String massJoin = "";
+    		 for (String channel : channels)
+    		 {
+    			 if (massJoin == null)
+    				 massJoin += channel;
+    			 else
+    				 massJoin += ","+channel;
+    		 }
+    		 Log.i(TAG, "mass join: "+massJoin);
+    		 if (massJoin != null)
+    			 Network.getInstance().send(String.format("JOIN %s", massJoin));
     	}
     }
 
@@ -308,7 +358,18 @@ public class OnetKernel {
 	 // :NickServ!service@service.onet NOTICE Merovingian :151 :jubee_blue
     private void raw_151n()
     {
-    	// TODO
+    	String nick = data[0];
+    	if (nick.startsWith(":")) nick = nick.substring(1);
+    	if (nick.contains("!")) nick = nick.substring(0, nick.indexOf("!"));
+
+    	if (nick.equalsIgnoreCase("chanserv"))
+    	{
+    		
+    	}
+    	else if (nick.equalsIgnoreCase("nickserv"))
+    	{
+    		// TODO
+    	}
     }
     
 	// CS HOMES

@@ -21,30 +21,38 @@ package com.models;
 
 import java.util.ArrayList;
 
-public class ChannelsHomes {
+public class ChannelsFavourites {
 
-	private ArrayList<String> channelHomes;
+	private ArrayList<String> channelFavourites = new ArrayList<String>();
+
+    private static ChannelsFavourites instance = new ChannelsFavourites();
+    public static synchronized ChannelsFavourites getInstance() { return instance; }
+
+    public ChannelsFavourites()
+    {
+    }
 	
 	public void add(String channel)
 	{
-		channelHomes.add(channel);
+		channelFavourites.add(channel);
 	}
 	
 	public void remove(String channel)
 	{
-		if (channelHomes.contains(channel))
+		if (channelFavourites.contains(channel))
 		{
-			channelHomes.remove(channelHomes.indexOf(channel));
+			channelFavourites.remove(channelFavourites.indexOf(channel));
 		}
 	}
 	
 	public void clear()
 	{
-		channelHomes.clear();
+		if (channelFavourites != null)
+			channelFavourites.clear();
 	}
-	
+
 	public ArrayList<String> get()
 	{
-		return channelHomes;
+		return channelFavourites;
 	}
 }

@@ -123,6 +123,8 @@ public class TabsFragment extends Fragment {
 		adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listItems);
 		listview.setAdapter(adapter);
 		
+		scrollToBottom();
+		
 		editText.setOnEditorActionListener(new OnEditorActionListener() {
 		    @Override
 		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
