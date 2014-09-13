@@ -158,6 +158,9 @@ public class TabsFragment extends Fragment {
 	{
 		if (adapter == null) return;
 		
+		if (listItems.size() > 100)
+			listItems.remove(0);
+		
 		listItems.add(data);
 		adapter.notifyDataSetChanged();
 		
