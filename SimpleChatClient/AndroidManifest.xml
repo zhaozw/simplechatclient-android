@@ -28,10 +28,7 @@
         <activity
             android:name=".LoginFragment"
             android:label="@string/title_login"
-            android:uiOptions="splitActionBarWhenNarrow"
             android:parentActivityName="com.simplechatclient.android.TabsActivity" >
-            <meta-data android:name="android.support.UI_OPTIONS"
-    		android:value="splitActionBarWhenNarrow" />
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.simplechatclient.android.TabsActivity" />

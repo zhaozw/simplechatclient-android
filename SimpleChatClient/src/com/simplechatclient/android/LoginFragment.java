@@ -27,14 +27,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.core.Config;
@@ -43,7 +42,7 @@ import com.core.Settings;
 import com.database.DatabaseProfile;
 import com.database.DatabaseSetting;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements View.OnClickListener {
 
 	private Context context;
 	private View view;
@@ -61,7 +60,6 @@ public class LoginFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -83,6 +81,7 @@ public class LoginFragment extends Fragment {
 			profiles_list.add(profile.getNick());
 	    }
 
+		Button login = (Button)view.findViewById(R.id.button_login);
 		Spinner spinner = (Spinner)view.findViewById(R.id.spinnerNick);
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, profiles_list);		
@@ -95,25 +94,13 @@ public class LoginFragment extends Fragment {
 			spinner.setSelection(default_position); 
 		
 		spinner.setOnItemSelectedListener(spinnerListener);
+		login.setOnClickListener(this);
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.login, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId())
-		{
-			case R.id.login_button:
-				button_login();
-				break;
-		}
-
-		return super.onOptionsItemSelected(item);
+	public void onClick(View v) {
+		if (v.getId() == R.id.button_login)
+			button_login();
 	}
 
 	private void button_login()

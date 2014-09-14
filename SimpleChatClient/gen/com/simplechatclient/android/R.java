@@ -1288,8 +1288,8 @@ containing a value of this type.
         public static final int ic_launcher=0x7f02005c;
     }
     public static final class id {
-        public static final int RelativeLayout1=0x7f050057;
-        public static final int RelativeLayoutProfileEdit=0x7f050054;
+        public static final int RelativeLayout1=0x7f050058;
+        public static final int RelativeLayoutProfileEdit=0x7f050055;
         public static final int action_bar=0x7f05002d;
         public static final int action_bar_activity_content=0x7f050026;
         public static final int action_bar_container=0x7f05002c;
@@ -1310,6 +1310,7 @@ containing a value of this type.
         public static final int always=0x7f05001d;
         public static final int beginning=0x7f050023;
         public static final int bottom=0x7f050005;
+        public static final int button_login=0x7f050050;
         public static final int center=0x7f05000c;
         public static final int center_horizontal=0x7f05000a;
         public static final int center_vertical=0x7f050008;
@@ -1321,14 +1322,14 @@ containing a value of this type.
         public static final int dialog=0x7f050020;
         public static final int disableHome=0x7f05001a;
         public static final int dropdown=0x7f050021;
-        public static final int editTextChannel=0x7f050062;
-        public static final int editTextEditNick=0x7f050055;
-        public static final int editTextEditPassword=0x7f050056;
+        public static final int editTextChannel=0x7f050063;
+        public static final int editTextEditNick=0x7f050056;
+        public static final int editTextEditPassword=0x7f050057;
         public static final int editTextNewNick=0x7f05004e;
-        public static final int editTextNewPassword=0x7f050053;
-        public static final int editTextRegisterCode=0x7f05005e;
-        public static final int editTextRegisterNick=0x7f05005a;
-        public static final int editTextRegisterPassword=0x7f05005b;
+        public static final int editTextNewPassword=0x7f050054;
+        public static final int editTextRegisterCode=0x7f05005f;
+        public static final int editTextRegisterNick=0x7f05005b;
+        public static final int editTextRegisterPassword=0x7f05005c;
         public static final int edit_profile_button_remove=0x7f050067;
         public static final int edit_profile_button_save=0x7f050066;
         public static final int edit_query=0x7f050041;
@@ -1344,33 +1345,32 @@ containing a value of this type.
         public static final int icon=0x7f05003b;
         public static final int ifRoom=0x7f05001c;
         public static final int image=0x7f050038;
-        public static final int imageViewRegisterCaptcha=0x7f05005c;
-        public static final int include1=0x7f050052;
+        public static final int imageViewRegisterCaptcha=0x7f05005d;
+        public static final int include1=0x7f050053;
         public static final int left=0x7f050006;
-        public static final int linearLayout1=0x7f050059;
-        public static final int linearLayoutChannel=0x7f050060;
+        public static final int linearLayout1=0x7f05005a;
+        public static final int linearLayoutChannel=0x7f050061;
         public static final int listMode=0x7f050013;
-        public static final int listViewChannel=0x7f050063;
-        public static final int listViewProfiles=0x7f050058;
+        public static final int listViewChannel=0x7f050064;
+        public static final int listViewProfiles=0x7f050059;
         public static final int list_item=0x7f05003a;
-        public static final int login_button=0x7f050064;
         public static final int middle=0x7f050024;
         public static final int never=0x7f05001b;
         public static final int none=0x7f050022;
         public static final int normal=0x7f050012;
         public static final int overflow=0x7f05006a;
-        public static final int pager=0x7f050050;
-        public static final int pagerTabs=0x7f05005f;
+        public static final int pager=0x7f050051;
+        public static final int pagerTabs=0x7f050060;
         public static final int profile_add_button_add=0x7f050065;
         public static final int profile_list_button_add=0x7f050068;
         public static final int profile_register_button_register=0x7f050069;
-        public static final int progressBarRegisterCaptcha=0x7f05005d;
+        public static final int progressBarRegisterCaptcha=0x7f05005e;
         public static final int progress_circular=0x7f050029;
         public static final int progress_horizontal=0x7f05002a;
         public static final int radio=0x7f050040;
         public static final int right=0x7f050007;
-        public static final int scrollView1=0x7f050051;
-        public static final int scrollViewChannel=0x7f050061;
+        public static final int scrollView1=0x7f050052;
+        public static final int scrollViewChannel=0x7f050062;
         public static final int search_badge=0x7f050043;
         public static final int search_bar=0x7f050042;
         public static final int search_button=0x7f050044;
@@ -1461,12 +1461,11 @@ containing a value of this type.
         public static final int tabs_fragment=0x7f030022;
     }
     public static final class menu {
-        public static final int login=0x7f0c0000;
-        public static final int profile_add=0x7f0c0001;
-        public static final int profile_edit=0x7f0c0002;
-        public static final int profile_list=0x7f0c0003;
-        public static final int profile_register=0x7f0c0004;
-        public static final int tabs=0x7f0c0005;
+        public static final int profile_add=0x7f0c0000;
+        public static final int profile_edit=0x7f0c0001;
+        public static final int profile_list=0x7f0c0002;
+        public static final int profile_register=0x7f0c0003;
+        public static final int tabs=0x7f0c0004;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
