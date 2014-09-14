@@ -1513,6 +1513,7 @@ containing a value of this type.
         public static final int action_settings=0x7f0a000f;
         public static final int add_profile=0x7f0a0014;
         public static final int app_name=0x7f0a000d;
+        public static final int edit_text_hint=0x7f0a0034;
         public static final int login_button=0x7f0a0013;
         public static final int nick_registered=0x7f0a002e;
         public static final int profile_add_nick=0x7f0a001a;

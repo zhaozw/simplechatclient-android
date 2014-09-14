@@ -34,7 +34,8 @@
                     android:layout_marginTop="36dp"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="@string/profile_add_nick" />
+                    android:hint="@string/profile_add_nick" 
+                    android:inputType="textPersonName" />
 
                 <EditText
                     android:id="@+id/editTextNewPassword"
