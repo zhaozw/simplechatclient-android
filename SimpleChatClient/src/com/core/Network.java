@@ -283,6 +283,7 @@ public class Network {
                 e.printStackTrace();
             }
 
+            Messages.getInstance().showMessageAll("Rozłączono");
             Log.i(TAG, "Network thread closed");
         }
     }
