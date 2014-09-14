@@ -60,6 +60,10 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 
 	ActionBar actionBar;
 
+	public TabsActivity()
+	{
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

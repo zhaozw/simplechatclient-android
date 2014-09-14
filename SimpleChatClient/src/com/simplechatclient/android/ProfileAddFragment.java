@@ -58,9 +58,20 @@ public class ProfileAddFragment extends Fragment implements View.OnClickListener
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.profile_add_fragment, container, false);
 		context = container.getContext();
+		
+		myStart();
+		
 		return view;
 	}
 	
+	public void myStart() {
+		
+		CompoundButton compoundButtonRegistered = (CompoundButton)view.findViewById(R.id.add_profile_switch_registered);
+		compoundButtonRegistered.setOnClickListener(this);
+		
+		add_profile_switch_registered();
+	}
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.profile_add, menu);
@@ -154,15 +165,5 @@ public class ProfileAddFragment extends Fragment implements View.OnClickListener
 			Toast toast = Toast.makeText(context, getResources().getString(R.string.profile_already_exists), Toast.LENGTH_SHORT);
 			toast.show();
 		}
-	}
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		
-		CompoundButton compoundButtonRegistered = (CompoundButton)view.findViewById(R.id.add_profile_switch_registered);
-		compoundButtonRegistered.setOnClickListener(this);
-		
-		add_profile_switch_registered();
-	}
+	}	
 }

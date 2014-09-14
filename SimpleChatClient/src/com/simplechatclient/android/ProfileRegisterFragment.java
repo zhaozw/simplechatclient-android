@@ -91,6 +91,9 @@ public class ProfileRegisterFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.profile_register_fragment, container, false);
 		context = container.getContext();
+		
+		myStart();
+
 		return view;
 	}
 
@@ -257,10 +260,7 @@ public class ProfileRegisterFragment extends Fragment {
 	    }
 	}
 	    
-	@Override
-	public void onStart() {
-		super.onStart();
-
+	public void myStart() {
 		new DownloadImageTask().execute("http://czat.onet.pl/myimg.gif");
 	}
 	

@@ -46,7 +46,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 	private Context context;
 	private View view;
-	ArrayList<String> profiles_list;
+	private ArrayList<String> profiles_list;
 	
 	public static LoginFragment newInstance() {
 		LoginFragment fragment = new LoginFragment();
@@ -58,7 +58,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 	}
 
@@ -66,12 +65,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.login_fragment, container, false);
 		context = container.getContext();
+		
+		myStart();
+		
 		return view;
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
+	public void myStart() {
 		
 		Config current_config = new Config(context);
 		List<DatabaseProfile> profiles = current_config.getProfiles();

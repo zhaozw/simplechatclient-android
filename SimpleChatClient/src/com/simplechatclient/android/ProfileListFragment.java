@@ -65,12 +65,13 @@ public class ProfileListFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.profile_list_fragment, container, false);
 		context = container.getContext();
+		
+		myStart();
+
 		return view;
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
+	public void myStart() {
 		
 		// profiles list
 		Config current_config = new Config(context);
