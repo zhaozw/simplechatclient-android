@@ -57,6 +57,7 @@ public class OnetKernel {
         
         if (data1.equalsIgnoreCase("001")) { raw_001(); return; }
         else if (data1.equalsIgnoreCase("801")) { raw_801(); return; }
+        else if (data1.equalsIgnoreCase("817")) { raw_817(); return; }
 
         if (data.length >= 4)
         {
@@ -398,5 +399,24 @@ public class OnetKernel {
             Network.getInstance().send(String.format("AUTHKEY %s", auth));
             Network.getInstance().send(String.format("USER * %s czat-app.onet.pl :%s", UOKey, nick));
         }
+    }
+    
+    // :cf1f2.onet 817 scc_test #scc 1253216797 mikefear - :%Fb:arial%%Ce40f0f%re
+    private void raw_817()
+    {
+    	String channel = data[3];
+
+    	String time = data[4];
+    	
+    	String nick = data[5];
+    	
+    	String message = new String();
+    	for (int i = 7; i < data.length; ++i) { if (i != 7) message += " "; message += data[i]; }
+    	if (message.startsWith(":")) message = message.substring(1);
+    	
+    	message = Convert.simpleConvert(message);
+        String display = String.format("%s: %s", nick, message);
+        
+        Messages.getInstance().showMessage(channel, display);
     }
 }
