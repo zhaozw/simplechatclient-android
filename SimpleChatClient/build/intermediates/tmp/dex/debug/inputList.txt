@@ -1,0 +1,6 @@
+D:\projekty\mero\simplechatclient-android\SimpleChatClient\build\intermediates\classes\debug
+C:\Users\mero\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar
+D:\projekty\mero\simplechatclient-android\SimpleChatClient\build\intermediates\exploded-aar\com.android.support\gridlayout-v7\21.0.3\classes.jar
+D:\projekty\mero\simplechatclient-android\SimpleChatClient\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar
+D:\projekty\mero\simplechatclient-android\SimpleChatClient\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar
+D:\projekty\mero\simplechatclient-android\SimpleChatClient\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar

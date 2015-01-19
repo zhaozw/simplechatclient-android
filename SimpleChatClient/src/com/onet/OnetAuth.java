@@ -56,7 +56,6 @@ public class OnetAuth {
     private static final String AJAX_API = "http://czat.onet.pl/include/ajaxapi.xml.php3";
     private static final String TAG = "OnetAuth";
 
-    private boolean authorizing = false;
     private boolean registeredNick;
     private boolean override = false;
     private String nick;
@@ -83,8 +82,8 @@ public class OnetAuth {
             return;
         }
         
-        nick = Settings.getInstance().get("nick").toString();
-        password = Settings.getInstance().get("password").toString();
+        nick = Settings.getInstance().get("nick");
+        password = Settings.getInstance().get("password");
 
         if (!nick.contains("~"))
         	registeredNick = true;
@@ -157,7 +156,7 @@ public class OnetAuth {
                 }
         	}
         }
-    };
+    }
 
     private void downloadChat() {
         String url = "http://czat.onet.pl/chat.html";
@@ -241,7 +240,7 @@ public class OnetAuth {
 
     @SuppressLint("DefaultLocale")
 	private void downloadUo() {
-        int isRegistered = (registeredNick == true ? 0 : 1);
+        int isRegistered = (registeredNick ? 0 : 1);
 
         String url = AJAX_API;
         String content = String.format("api_function=getUoKey&params=a:3:{s:4:\"nick\";s:%d:\"%s\";s:8:\"tempNick\";i:%d;s:7:\"version\";s:%d:\"%s\";}", nick.length(), nick, isRegistered, version.length(), version);
@@ -252,14 +251,14 @@ public class OnetAuth {
 
     private String parseVersion(String data) {
         if (data != null) {
-            if (data.indexOf("OnetCzatLoader") != -1) {
+            if (data.contains("OnetCzatLoader")) {
                 String strFind1 = "signed-OnetCzatLoader-";
                 String strFind2 = ".jar";
                 int pos1 = data.indexOf(strFind1) + strFind1.length();
                 int pos2 = data.indexOf(strFind2, pos1);
                 String ver = data.substring(pos1, pos2);
 
-                if ((ver != null) && (ver.length() > 0) && (ver.length() < 20))
+                if ((ver.length() > 0) && (ver.length() < 20))
                     return ver;
             }
         }
@@ -301,7 +300,6 @@ public class OnetAuth {
             } else {
                 Log.e(TAG, String.format("Authentication error [%s]", err_text));
                 Messages.getInstance().showMessage(Channels.STATUS, String.format("Błąd autoryzacji [%s]", err_text));
-                return;
             }
         } catch (ParserConfigurationException e) {
             Log.e(TAG, "Parse XML configuration exception:"+ e.getMessage());

@@ -112,7 +112,10 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
         Settings.getInstance().set("italic", current_profile.getItalic());
         Settings.getInstance().set("color", current_profile.getColor());
 
-		// status
+        // network
+        //Network.getInstance().setActivity(this.getApplicationContext());
+
+        // status
 		TabsManager.getInstance().add(Channels.STATUS);
 		this.add(Channels.STATUS);
 
@@ -129,10 +132,6 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 	    	//profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    	profileListIntent.putExtra("tab", "0"); // main
 	        startActivity(profileListIntent);
-		}
-		else
-		{
-			
 		}
 	}
 	

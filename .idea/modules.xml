@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/SimpleChatClient/SimpleChatClient.iml" filepath="$PROJECT_DIR$/SimpleChatClient/SimpleChatClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simplechatclient-android.iml" filepath="$PROJECT_DIR$/simplechatclient-android.iml" />
+    </modules>
+  </component>
+</project>
+

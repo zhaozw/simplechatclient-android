@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context="com.simplechatclient.android.TabsActivity$PlaceholderFragment" >
+
+    <LinearLayout
+        android:id="@+id/linearLayoutChannel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <ScrollView
+            android:id="@+id/scrollViewChannel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <EditText
+                    android:id="@+id/editTextChannel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:hint="@string/edit_text_hint">
+
+                    <requestFocus />
+                </EditText>
+
+            </RelativeLayout>
+
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayoutChannel"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/listViewChannel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </ListView>
+    </LinearLayout>
+
+</RelativeLayout><!-- From: file:/D:/projekty/mero/simplechatclient-android/SimpleChatClient/res/layout/tabs_fragment.xml -->

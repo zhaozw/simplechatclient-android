@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" >
+
+    <Switch
+        android:id="@+id/add_profile_switch_registered"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignLeft="@+id/editTextNewNick"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/editTextNewNick"
+        android:text="@string/nick_registered" 
+        android:checked="false"
+        tools:ignore="NewApi" />
+    
+</merge><!-- From: file:/D:/projekty/mero/simplechatclient-android/SimpleChatClient/res/layout-v14/add_profile_switch_registered.xml -->

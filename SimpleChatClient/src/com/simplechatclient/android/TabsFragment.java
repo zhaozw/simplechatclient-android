@@ -38,7 +38,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 import com.core.Messages;
 import com.core.Network;
@@ -133,7 +132,7 @@ public class TabsFragment extends Fragment {
 		
 		editText.setOnEditorActionListener(mWriteListener);
 	}
-
+	
 	private TextView.OnEditorActionListener mWriteListener = new  TextView.OnEditorActionListener() { 
 	    @Override
 	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
