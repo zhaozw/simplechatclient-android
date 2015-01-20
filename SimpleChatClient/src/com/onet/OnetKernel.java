@@ -1,7 +1,7 @@
 /*
  * Simple Chat Client
  *
- *   Copyright (C) 2014 Piotr Łuczko <piotr.luczko@gmail.com>
+ *   Copyright (C) 2015 Piotr Łuczko <piotr.luczko@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,7 +67,6 @@ public class OnetKernel {
 	        	if ((data3.length() != 4) || (data3.equalsIgnoreCase(":***")))
 	        	{
 	        		raw_notice();
-	        		return;
 	        	}
 	        	else
 	        	{
@@ -76,8 +75,8 @@ public class OnetKernel {
 	        		{
 	        			int int3 = Integer.parseInt(data3);
 	        			
-	        			if (int3 == 141) { raw_141n(); return; }
-	        			else if (int3 == 142) { raw_142n(); return; }
+	        			if (int3 == 141) { raw_141n(); }
+	        			else if (int3 == 142) { raw_142n(); }
 	        		}
 	        	}
 	        }
@@ -339,7 +338,7 @@ public class OnetKernel {
     		
     		 ArrayList<String> channels = ChannelsFavourites.getInstance().get();
     		 
-    		 String massJoin = "";
+    		 String massJoin = null;
     		 for (String channel : channels)
     		 {
     			 if (massJoin == null)
