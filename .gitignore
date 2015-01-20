@@ -21,15 +21,17 @@ local.properties
 .classpath
 .project
   
+.navigation/
+
 # Android Studio
 .idea/
-.gradle
-gradle
+.gradle/
+gradle/
 /*/local.properties
-/*/out
-/*/*/build
-build
-/*/*/production
+/*/out/
+/*/*/build/
+build/
+/*/*/production/
 *.iml
 *.iws
 *.ipr

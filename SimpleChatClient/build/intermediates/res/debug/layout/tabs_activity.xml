@@ -1,8 +1,0 @@
-<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pagerTabs"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.simplechatclient.android.TabsActivity" />
-
-<!-- From: file:/D:/projekty/mero/simplechatclient-android/SimpleChatClient/res/layout/tabs_activity.xml -->
