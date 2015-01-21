@@ -68,7 +68,7 @@ public class Network {
     
     private String utfToIso(String data)
     {
-    	String result = new String();
+    	String result = "";
     	
 		try {
     		result = new String(data.getBytes(), "ISO-8859-2");
@@ -80,7 +80,7 @@ public class Network {
     
     private String isoToUtf(String data)
     {   	
-    	String result = new String();
+    	String result = "";
             	
 		try {
     		result = new String(data.getBytes(), "UTF-8");
@@ -244,7 +244,7 @@ public class Network {
                     Message msgAuth =  new Message();
                     Bundle bundleAuth = new Bundle();
 
-                    bundleAuth.putString("network_message", new String());
+                    bundleAuth.putString("network_message", "");
                     bundleAuth.putString("network_command", "auth");
                     msgAuth.setData(bundleAuth);
 

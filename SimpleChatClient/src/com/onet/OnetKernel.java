@@ -96,7 +96,7 @@ public class OnetKernel {
     // ERROR :Closing link (unknown@95.48.183.154) [Registration timeout]
     private void raw_error()
     {
-    	String message = new String();
+    	String message = "";
     	for (int i = 0; i < data.length; ++i) { if (i != 0) message += " "; message += data[i]; }
     	if (message.startsWith(":")) message = message.substring(1);
 
@@ -144,7 +144,7 @@ public class OnetKernel {
     	
     	String nickOrChannel = data[2];
     	
-    	String message = new String();
+    	String message = "";
     	for (int i = 3; i < data.length; ++i) { if (i != 3) message += " "; message += data[i]; }
     	if (message.startsWith(":")) message = message.substring(1);
     	
@@ -197,8 +197,8 @@ public class OnetKernel {
     	int iCategory = 0;
     	try { iCategory = Integer.parseInt(category); } catch (NumberFormatException e) {}
 
-    	String message = new String();
-    	String categoryString = new String();
+    	String message = "";
+    	String categoryString = "";
 
     	switch (iCategory)
     	{
@@ -409,7 +409,7 @@ public class OnetKernel {
     	
     	String nick = data[5];
     	
-    	String message = new String();
+    	String message = "";
     	for (int i = 7; i < data.length; ++i) { if (i != 7) message += " "; message += data[i]; }
     	if (message.startsWith(":")) message = message.substring(1);
     	
