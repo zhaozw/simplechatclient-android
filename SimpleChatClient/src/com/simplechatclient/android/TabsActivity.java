@@ -30,6 +30,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -133,13 +134,21 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 	    	profileListIntent.putExtra("tab", "0"); // main
 	        startActivity(profileListIntent);
 		}
-	}
-	
-	@Override
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // network start
+        Network.getInstance().connect();
+    }
+
+    @Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
-		Network.getInstance().disconnect();
+		Log.w("Tabc activity", "onDestroy");
+		//Network.getInstance().disconnect();
 		TabsManager.getInstance().removeAll();
 	}
 
