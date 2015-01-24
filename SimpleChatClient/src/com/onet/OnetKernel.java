@@ -62,7 +62,7 @@ public class OnetKernel {
         if (data.length >= 4)
         {
 	        String data3 = data[3];
-	        if ((data1.equalsIgnoreCase("notice")) && (data3 != null))
+	        if ((data1.equalsIgnoreCase("notice")) && (!data3.isEmpty()))
 	        {
 	        	if ((data3.length() != 4) || (data3.equalsIgnoreCase(":***")))
 	        	{
@@ -338,16 +338,16 @@ public class OnetKernel {
     		
     		 ArrayList<String> channels = ChannelsFavourites.getInstance().get();
     		 
-    		 String massJoin = null;
+    		 String massJoin = "";
     		 for (String channel : channels)
     		 {
-    			 if (massJoin == null)
+    			 if (massJoin.isEmpty())
     				 massJoin += channel;
     			 else
     				 massJoin += ","+channel;
     		 }
     		 Log.i(TAG, "mass join: "+massJoin);
-    		 if (massJoin != null)
+    		 if (!massJoin.isEmpty())
     			 Network.getInstance().send(String.format("JOIN %s", massJoin));
     	}
     }

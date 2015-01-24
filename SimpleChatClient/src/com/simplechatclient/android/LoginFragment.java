@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -105,9 +106,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 	private void button_login()
 	{
+        Log.i("LoginFragment", "button login click");
+
 		Intent intent = new Intent(context, TabsActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+
+        // network start
+        Network.getInstance().connect();
     }
 
 	private OnItemSelectedListener spinnerListener = new OnItemSelectedListener() {

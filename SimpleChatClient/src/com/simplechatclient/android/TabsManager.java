@@ -108,11 +108,18 @@ public class TabsManager {
     
     public TabsFragment get(int position)
     {
+        /*
+        if (tabs.size() == 0)
+        {
+            this.add(Channels.STATUS);
+        }
+        */
+
     	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
     	    TabsChannel tabsChannel = entry.getValue();
     		if (tabsChannel.getPosition() == position)
     		{
-    			Log.w(TAG, "TabsManager get "+position+" zwrocono "+tabsChannel.getName());
+    			Log.i(TAG, "TabsManager get "+position+" zwrocono "+tabsChannel.getName());
     			return tabsChannel.getFragment();
     		}
     	}

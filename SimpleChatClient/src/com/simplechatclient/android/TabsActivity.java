@@ -70,6 +70,8 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_activity);
 
+        Log.i("Tabc activity", "onCreate");
+
 		// Set up the action bar.
 		actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -117,11 +119,13 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
         //Network.getInstance().setActivity(this.getApplicationContext());
 
         // status
-		TabsManager.getInstance().add(Channels.STATUS);
+        TabsManager.getInstance().add(Channels.STATUS);
 		this.add(Channels.STATUS);
 
         // tabs manager
 		TabsManager.getInstance().setTabsActivity(this);
+
+        // TODO tutaj dodac dodawanie wszystkich tabow albo jakis rodzaj zapamietywania instancji
 
 		// is first run
 		if (Settings.getInstance().get("first_run") == "true")
@@ -139,20 +143,24 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     protected void onStart() {
         super.onStart();
-
-        // network start
-        Network.getInstance().connect();
+        Log.i("Tabc activity", "onStart");
     }
 
     @Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.w("Tabc activity", "onDestroy");
+		Log.i("Tabc activity", "onDestroy");
 		//Network.getInstance().disconnect();
 		TabsManager.getInstance().removeAll();
 	}
 
-	public void add(String channel)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("Tabc activity", "onResume");
+    }
+
+    public void add(String channel)
 	{
 		actionBar.addTab(actionBar.newTab()
 				.setText(channel)
