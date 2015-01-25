@@ -18,11 +18,12 @@ public class NetworkReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "NetworkReceiver onReceive");
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             String data = bundle.getString("message");
             String command = bundle.getString("command");
+
+            Log.i(TAG, "NetworkReceiver onReceive: "+command+" "+data);
 
             if (command.equalsIgnoreCase("kernel")) {
                 // kernel
