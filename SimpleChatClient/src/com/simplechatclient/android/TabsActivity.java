@@ -116,7 +116,7 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
         Settings.getInstance().set("color", current_profile.getColor());
 
         // network
-        //Network.getInstance().setActivity(this.getApplicationContext());
+        Network.getInstance().setActivity(this.getApplicationContext());
 
         // status
         TabsManager.getInstance().add(Channels.STATUS);

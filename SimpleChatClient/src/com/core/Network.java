@@ -29,6 +29,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -48,7 +50,7 @@ public class Network {
     private int port = 5015;
 
     private NetworkThread networkThread;
-    private NetworkHandler networkHandler;
+    Context context;
 
     private static Network instance = new Network();
     public static synchronized Network getInstance() {return instance; }
@@ -59,13 +61,17 @@ public class Network {
     private Network()
     {
         super();
-                
+
         networkThread = new NetworkThread();
-        networkHandler = new NetworkHandler();
         in = null;
         out = null;
     }
-    
+
+    public void setActivity(Context context)
+    {
+        this.context = context;
+    }
+
     private String utfToIso(String data)
     {
     	String result = "";
@@ -196,38 +202,6 @@ public class Network {
     		return false;
     }   
 
-    static class NetworkHandler extends Handler {
-        
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            String data = bundle.getString("network_message");
-            String command = bundle.getString("network_command");
-
-            if (command.equalsIgnoreCase("kernel"))
-            {
-            	OnetKernel.getInstance().parse(data);
-            }
-            else if (command.equalsIgnoreCase("auth"))
-            {
-            	Messages.getInstance().showMessageAll("Połączono");
-            	
-                // auth
-                try
-                {
-                	OnetAuth.getInstance().authorize();
-                }
-                catch (Exception e)
-                {
-                	Log.e(TAG, e.toString());
-                	e.printStackTrace();
-                }
-            }
-        }
-    };
-
-	// TODO java.lang.RuntimeException: Can't create handler inside thread that has not called Looper.prepare()
-
     class NetworkThread extends Thread {
         public void run() {
         	Log.i(TAG, "Network thread started");
@@ -241,15 +215,12 @@ public class Network {
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "ISO-8859-2"));
                     out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "ISO-8859-2"));
 
-                    Message msgAuth =  new Message();
-                    Bundle bundleAuth = new Bundle();
+                    Intent intentAuth = new Intent();
+                    intentAuth.setAction("com.simplechatclient.networkbroadcast");
+                    intentAuth.putExtra("message", "");
+                    intentAuth.putExtra("command", "auth");
+                    context.sendBroadcast(intentAuth);
 
-                    bundleAuth.putString("network_message", "");
-                    bundleAuth.putString("network_command", "auth");
-                    msgAuth.setData(bundleAuth);
-
-                    networkHandler.sendMessage(msgAuth);
-                    
                     String line = null;
                     while ((line = in.readLine()) != null)
                     {
@@ -258,14 +229,11 @@ public class Network {
                         	line = isoToUtf(line);
                         	Log.i(TAG, "<- "+line);
 
-                            Message msg =  new Message();
-                            Bundle bundle = new Bundle();
-    
-                            bundle.putString("network_message", line);
-                            bundle.putString("network_command", "kernel");
-                            msg.setData(bundle);
-    
-                            networkHandler.sendMessage(msg);
+                            Intent intentKernel = new Intent();
+                            intentKernel.setAction("com.simplechatclient.networkbroadcast");
+                            intentKernel.putExtra("message", line);
+                            intentKernel.putExtra("command", "kernel");
+                            context.sendBroadcast(intentKernel);
                         }
                     }
                 } catch (UnknownHostException e) {
