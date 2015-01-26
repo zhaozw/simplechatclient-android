@@ -19,6 +19,8 @@
 
 package com.core;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -40,6 +42,7 @@ public class Messages {
 	
     public void showMessage(String channel, String data)
     {
+        Log.i("Messages show", "channel: " + channel + " data: " + data);
     	try
     	{
     		TabsFragment fragment = TabsManager.getInstance().getFromName(channel);
@@ -51,6 +54,7 @@ public class Messages {
     
     public void showMessageAll(String data)
     {
+        Log.i("Messages show all", "data: " + data);
     	HashMap<String, TabsChannel> tabs = TabsManager.getInstance().getAll();
     	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
         	try
@@ -66,6 +70,7 @@ public class Messages {
 
     public void showMessageActive(String data)
     {
+        Log.i("Messages show active", "data: " + data);
     	try
     	{
     		TabsFragment fragment = TabsManager.getInstance().getActive();
