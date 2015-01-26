@@ -53,6 +53,9 @@ public class OnetKernel {
         else if (data1.equalsIgnoreCase("pong")) { raw_pong(); return; }
         else if (data1.equalsIgnoreCase("privmsg")) { raw_privmsg(); return; }
         else if (data1.equalsIgnoreCase("join")) { raw_join(); return; }
+        else if (data1.equalsIgnoreCase("part")) { raw_part(); return; }
+        else if (data1.equalsIgnoreCase("quit")) { raw_quit(); return; }
+        else if (data1.equalsIgnoreCase("kick")) { raw_kick(); return; }
         else if (data1.equalsIgnoreCase("mode")) { raw_mode(); return; }
         
         if (data1.equalsIgnoreCase("001")) { raw_001(); return; }
@@ -129,8 +132,87 @@ public class OnetKernel {
 	    		Network.getInstance().send(String.format("CS INFO %s i", channel));
 	    	}
     	}
+
+        // show message
+        String display = String.format("* %s wchodzi do pokoju %s", nick, channel);
+        Messages.getInstance().showMessage(channel, display);
     }
-    
+
+    // :scc_test!51976824@3DE379.B7103A.6CF799.6902F4 PART #scc
+    private void raw_part()
+    {
+        String nick = data[0];
+        if (nick.startsWith(":")) nick = nick.substring(1);
+        nick = nick.substring(0, nick.indexOf("!"));
+
+        String channel = data[2];
+
+        String reason = "";
+        for (int i = 3; i < data.length; ++i) { if (i != 3) reason += " "; reason += data[i]; }
+        if (reason.startsWith(":")) reason = reason.substring(1);
+
+        reason = Convert.simpleConvert(reason);
+
+        String display = "";
+
+        if (reason.isEmpty())
+            display = String.format("* %s wychodzi z pokoju %s", nick, channel);
+        else
+            display = String.format("* %s wychodzi z pokoju %s [%s]", nick, channel, reason);
+
+        Messages.getInstance().showMessage(channel, display);
+    }
+
+    // :Stark!38566204@A5F2F1.68FE5E.DE32AF.62ECB9 QUIT :Client exited
+    private void raw_quit()
+    {
+        String nick = data[0];
+        if (nick.startsWith(":")) nick = nick.substring(1);
+        nick = nick.substring(0, nick.indexOf("!"));
+
+        String reason = "";
+        for (int i = 2; i < data.length; ++i) { if (i != 2) reason += " "; reason += data[i]; }
+        if (reason.startsWith(":")) reason = reason.substring(1);
+
+        reason = Convert.simpleConvert(reason);
+
+        String display = "";
+
+        if (reason.isEmpty())
+            display = String.format("* %s wychodzi z czata", nick);
+        else
+            display = String.format("* %s wychodzi z czata [%s]", nick, reason);
+
+        Messages.getInstance().showMessageAll(display);
+    }
+
+    // :scc_test!51976824@3DE379.B7103A.6CF799.6902F4 KICK #scc Moment_w_atmosferze :sio
+    private void raw_kick()
+    {
+        String who = data[0];
+        if (who.startsWith(":")) who = who.substring(1);
+        who = who.substring(0, who.indexOf("!"));
+
+        String channel = data[2];
+
+        String nick = data[3];
+
+        String reason = "";
+        for (int i = 4; i < data.length; ++i) { if (i != 4) reason += " "; reason += data[i]; }
+        if (reason.startsWith(":")) reason = reason.substring(1);
+
+        reason = Convert.simpleConvert(reason);
+
+        String display = "";
+
+        if (reason.isEmpty())
+            display = String.format("* %s zostaje wyrzucony z %s przez %s", nick, channel, who);
+        else
+            display = String.format("* %s zostaje wyrzucony z %s przez %s. Powód: %s", nick, channel, who, reason);
+
+        Messages.getInstance().showMessage(channel, display);
+    }
+
 	 // :Merovingian!26269559@2294E8.94913F.2EAEC9.11F26D PRIVMSG @#scc :hello
 	 // :Merovingian!26269559@2294E8.94913F.2EAEC9.11F26D PRIVMSG %#scc :hello
 	 // :Merovingian!26269559@2294E8.94913F.2EAEC9.11F26D PRIVMSG +#scc :hello

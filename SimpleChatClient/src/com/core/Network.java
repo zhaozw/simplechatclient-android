@@ -31,13 +31,7 @@ import java.net.UnknownHostException;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-
-import com.onet.OnetAuth;
-import com.onet.OnetKernel;
 
 public class Network {
     private static final String TAG = "Network";
