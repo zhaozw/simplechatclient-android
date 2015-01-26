@@ -38,7 +38,7 @@ public class Messages {
 	public static final int NOTICE_ERROR = 102 | 0x070000;
 	public static final int NOTICE_QUESTION = 103 | 0x070000;
 
-	public enum Message {DEFAULT, JOIN, PART, QUIT, KICK, MODE, NOTICE, INFO, ME, ERROR, HILIGHT, MODERNOTICE};
+	public enum Message {DEFAULT, JOIN, PART, QUIT, KICK, MODE, NOTICE, INFO, ME, ERROR, HIGHLIGHT, MODERNOTICE}
 	
     public void showMessage(String channel, String data)
     {
@@ -48,6 +48,8 @@ public class Messages {
     		TabsFragment fragment = TabsManager.getInstance().getFromName(channel);
     		if (fragment != null)
     			fragment.addMessage(data);
+            else
+                Log.w("Messages show", "Missing fragment for channel "+channel+" data: "+data);
     	}
     	catch (NullPointerException e) {}
     }
@@ -63,6 +65,8 @@ public class Messages {
         		TabsFragment fragment = tabsChannel.getFragment();
         		if (fragment != null)
         			fragment.addMessage(data);
+                else
+                    Log.w("Messages show all", "Missing fragment for channel "+tabsChannel.getName()+" data: "+data);
         	}
         	catch (NullPointerException e) {}
     	}
@@ -76,6 +80,8 @@ public class Messages {
     		TabsFragment fragment = TabsManager.getInstance().getActive();
     		if (fragment != null)
     			fragment.addMessage(data);
+            else
+                Log.w("Messages show active", "Missing fragment for active channel data: "+data);
     	}
     	catch (NullPointerException e) {}
     }
