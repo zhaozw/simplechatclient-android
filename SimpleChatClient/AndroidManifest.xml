@@ -62,11 +62,18 @@
         <activity android:name=".TabsFragment" >
         </activity>
 
-        <receiver android:name=".NetworkReceiver" android:exported="false">
+        <receiver
+            android:name=".NetworkReceiver"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.simplechatclient.networkbroadcast" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".NetworkService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

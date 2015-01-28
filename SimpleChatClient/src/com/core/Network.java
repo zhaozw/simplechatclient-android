@@ -29,36 +29,33 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.simplechatclient.android.NetworkService;
+import com.simplechatclient.android.R;
 
 public class Network {
     private static final String TAG = "Network";
 
-    private Socket socket;
-    private BufferedReader in;
-    private BufferedWriter out;
-    
-    private String server = "czat-app.onet.pl";
-    private int port = 5015;
+    private Context context;
 
-    private NetworkThread networkThread;
-    Context context;
+    private NetworkService mBoundService;
+    private boolean mIsBound = false;
 
     private static Network instance = new Network();
     public static synchronized Network getInstance() {return instance; }
 
-    // TODO jak network bedzie Servicem to mozna stworzyc Intent do auth 
-    // TODO dla tymczasowego nicka http://stackoverflow.com/a/3607934
-
     private Network()
     {
         super();
-
-        networkThread = new NetworkThread();
-        in = null;
-        out = null;
     }
 
     public void setActivity(Context context)
@@ -66,189 +63,76 @@ public class Network {
         this.context = context;
     }
 
-    private String utfToIso(String data)
-    {
-    	String result = "";
-    	
-		try {
-    		result = new String(data.getBytes(), "ISO-8859-2");
-		} catch (UnsupportedEncodingException e) {
-		}
-
-		return result;
-    }
-    
-    private String isoToUtf(String data)
-    {   	
-    	String result = "";
-            	
-		try {
-    		result = new String(data.getBytes(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-		}
-		
-		return result;
-    }
-    
     public void send(String data)
     {
-        data = utfToIso(data);
-        Log.i(TAG, "-> "+data);
-    	
-        try {
-            if ((socket != null) && (socket.isConnected())) {
-                out.write(String.format("%s\r\n", data));
-                out.flush();
-            } else {
-                Log.w(TAG, "Send: Cannot send message: socket is closed");
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "Send: Cannot send message: "+e.getMessage());
-            e.printStackTrace();
-        }
+        Log.i("Network", "send: "+data);
+        if (mIsBound && mConnection != null)
+            mBoundService.send(data);
     }
-    
-    private synchronized void stopThread(Thread theThread)
-    {
-        if (theThread != null)
-        {
-            theThread = null;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // This is called when the connection with the service has been
+            // established, giving us the service object we can use to
+            // interact with the service.  Because we have bound to a explicit
+            // service that we know is running in our own process, we can
+            // cast its IBinder to a concrete class and directly access it.
+            mBoundService = ((NetworkService.LocalBinder)service).getService();
+
+            Log.w("service connection", "service connected");
+            // Tell the user about this for our demo.
+            Toast.makeText(context, R.string.local_service_connected, Toast.LENGTH_SHORT).show();
+
+            startHandler.sendEmptyMessage(0);
         }
-    }
+
+        public void onServiceDisconnected(ComponentName className) {
+            // This is called when the connection with the service has been
+            // unexpectedly disconnected -- that is, its process crashed.
+            // Because it is running in our same process, we should never
+            // see this happen.
+            Log.w("service connection", "service disconnected");
+            mBoundService = null;
+            Toast.makeText(context, R.string.local_service_disconnected, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private Handler startHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if (mIsBound && mBoundService != null)
+                mBoundService.start(context);
+        }
+    };
 
     public void connect()
-    {    	
-		try
-		{
-	    	Messages.getInstance().showMessageAll("Logowanie ...");
+    {
+        if (!mIsBound)
+        {
+            mIsBound = true;
 
-	        // TODO thread already started
-	    	if ((!networkThread.isAlive()) || (socket.isClosed()))
-	    		networkThread.start();
-		}
-		catch (IllegalThreadStateException e)
-		{
-			Log.e(TAG, "Illegal thread exception:" + e.getMessage());
-            e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			Log.e(TAG, "Network exception:" + e.getMessage());
-            e.printStackTrace();
-		}
+            context.bindService(new Intent(context, NetworkService.class), mConnection, Context.BIND_AUTO_CREATE);
+        }
+        else
+            Log.w(TAG, "Network Connect - error already connected");
     }
     
     public void disconnect()
     {
-		try
-		{
-			Messages.getInstance().showMessageAll("Wylogowywanie ...");
-			
-	    	if ((networkThread.isAlive()) || (!socket.isClosed()))
-	    	{
-	    		this.send("QUIT");
-	    		socket.close();
-	    		this.stopThread(networkThread);
-	    	}
-		}
-		catch (IllegalThreadStateException e)
-		{
-			Log.e(TAG, "Illegal thread exception:" + e.getMessage());
-	        e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			Log.e(TAG, "Network exception:" + e.getMessage());
-            e.printStackTrace();
-		}
+        if (mIsBound) {
+            mIsBound = false;
+
+            this.send("QUIT");
+
+            context.unbindService(mConnection);
+        }
+        else
+            Log.w(TAG, "Network disconnect - error already disconnected");
     }
-    
-    public void reconnect()
-    {
-		try
-		{
-	    	if ((networkThread.isAlive()) || (socket.isClosed()))
-	    	{
-	    		this.send("QUIT");
-	    		socket.close();
-	    		this.stopThread(networkThread);
-	    	}
-	    	if ((!networkThread.isAlive()) || (!socket.isClosed()))
-	    		networkThread.start();
-		}
-		catch (IllegalThreadStateException e)
-		{
-			Log.e(TAG, "Illegal thread exception:" + e.getMessage());
-	        e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			Log.e(TAG, "Network exception:" + e.getMessage());
-            e.printStackTrace();
-		}
-    }
-    
+
     public boolean isConnected()
     {
-    	if (socket != null)
-    		return socket.isConnected();
-    	else
-    		return false;
-    }   
-
-    class NetworkThread extends Thread {
-        public void run() {
-        	Log.i(TAG, "Network thread started");
-            try
-            {
-                try
-                {
-                    InetAddress serverAddr = InetAddress.getByName(server);
-                    socket = new Socket(serverAddr, port);
-                
-                    in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "ISO-8859-2"));
-                    out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "ISO-8859-2"));
-
-                    Intent intentAuth = new Intent();
-                    intentAuth.setAction("com.simplechatclient.networkbroadcast");
-                    intentAuth.putExtra("message", "");
-                    intentAuth.putExtra("command", "auth");
-                    context.sendBroadcast(intentAuth);
-
-                    String line = null;
-                    while ((line = in.readLine()) != null)
-                    {
-                        if (line.length() != 0)
-                        {
-                        	line = isoToUtf(line);
-                        	Log.i(TAG, "<- "+line);
-
-                            Intent intentKernel = new Intent();
-                            intentKernel.setAction("com.simplechatclient.networkbroadcast");
-                            intentKernel.putExtra("message", line);
-                            intentKernel.putExtra("command", "kernel");
-                            context.sendBroadcast(intentKernel);
-                        }
-                    }
-                } catch (UnknownHostException e) {
-                    Log.e(TAG, "Unknown host exception:" + e.getMessage());
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    Log.e(TAG, "IOException:" + e.getMessage());
-                    e.printStackTrace();
-                } finally {
-                    if ((socket != null) && (!socket.isClosed()))
-                        socket.close();
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Exception:" + e.getMessage());
-                e.printStackTrace();
-            }
-
-            Messages.getInstance().showMessageAll("Rozłączono");
-            Log.i(TAG, "Network thread closed");
-        }
+        return mIsBound;
     }
 }
-
-
