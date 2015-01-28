@@ -19,17 +19,12 @@
 
 package com.simplechatclient.android;
 
-import android.app.IntentService;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.core.Messages;
 
@@ -75,6 +70,7 @@ public class NetworkService extends Service {
         try {
             result = new String(data.getBytes(), "ISO-8859-2");
         } catch (UnsupportedEncodingException e) {
+            Log.w(TAG, "UnsupportedEncodingException: "+data);
         }
 
         return result;
@@ -87,6 +83,7 @@ public class NetworkService extends Service {
         try {
             result = new String(data.getBytes(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
+            Log.w(TAG, "UnsupportedEncodingException: "+data);
         }
 
         return result;
@@ -136,7 +133,7 @@ public class NetworkService extends Service {
                 intentAuth.putExtra("command", "auth");
                 context.sendBroadcast(intentAuth);
 
-                String line = null;
+                String line;
                 while ((line = in.readLine()) != null)
                 {
                     if (line.length() != 0)
@@ -181,8 +178,6 @@ public class NetworkService extends Service {
     @Override
     public void onDestroy() {
         Log.w("NetworkService", "Stopped");
-        // Tell the user we stopped.
-        Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
     }
 
 }

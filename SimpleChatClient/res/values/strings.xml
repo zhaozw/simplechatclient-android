@@ -41,10 +41,4 @@
     <string name="successfully_removed">Pomyślnie usunięto</string>
     <string name="successfully_saved">Pomyślnie zapisano</string>
     <string name="edit_text_hint">Wpisz wiadomość</string>
-
-    <string name="local_service_label">NetworkService</string>
-    <string name="local_service_started">Uruchomiono service</string>
-    <string name="local_service_stopped">Zatrzymano service</string>
-    <string name="local_service_connected">Polaczono z servicem</string>
-    <string name="local_service_disconnected">Rozlaczono z servicem</string>
 </resources>

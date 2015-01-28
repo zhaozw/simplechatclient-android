@@ -19,16 +19,6 @@
 
 package com.core;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -37,10 +27,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.simplechatclient.android.NetworkService;
-import com.simplechatclient.android.R;
 
 public class Network {
     private static final String TAG = "Network";
@@ -66,6 +54,7 @@ public class Network {
     public void send(String data)
     {
         Log.i("Network", "send: "+data);
+        
         if (mIsBound && mConnection != null)
             mBoundService.send(data);
     }
@@ -81,7 +70,6 @@ public class Network {
 
             Log.w("service connection", "service connected");
             // Tell the user about this for our demo.
-            Toast.makeText(context, R.string.local_service_connected, Toast.LENGTH_SHORT).show();
 
             startHandler.sendEmptyMessage(0);
         }
@@ -93,7 +81,6 @@ public class Network {
             // see this happen.
             Log.w("service connection", "service disconnected");
             mBoundService = null;
-            Toast.makeText(context, R.string.local_service_disconnected, Toast.LENGTH_SHORT).show();
         }
     };
 
