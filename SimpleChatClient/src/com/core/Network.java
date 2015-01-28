@@ -1,7 +1,7 @@
 /*
  * Simple Chat Client
  *
- *   Copyright (C) 2015 Piotr Łuczko <piotr.luczko@gmail.com>
+ *   Copyright (C) Piotr Łuczko <piotr.luczko@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ public class Network {
     public void send(String data)
     {
         Log.i("Network", "send: "+data);
-        
+
         if (mIsBound && mConnection != null)
             mBoundService.send(data);
     }
