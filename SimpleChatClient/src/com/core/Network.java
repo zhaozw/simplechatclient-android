@@ -110,8 +110,6 @@ public class Network {
         if (mIsBound) {
             mIsBound = false;
 
-            this.send("QUIT");
-
             context.unbindService(mConnection);
         }
         else
@@ -120,6 +118,9 @@ public class Network {
 
     public boolean isConnected()
     {
-        return mIsBound;
+        if (mIsBound)
+            return mBoundService.isConnected();
+        else
+            return false;
     }
 }

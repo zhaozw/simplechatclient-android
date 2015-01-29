@@ -42,13 +42,14 @@ public class NetworkService extends Service {
 
     private static final String TAG = "NetworkService";
 
-    private Context context;
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
 
     private String server = "czat-app.onet.pl";
     private int port = 5015;
+
+    private Thread networkThread;
 
     private final IBinder mBinder = new LocalBinder();
 
@@ -89,6 +90,11 @@ public class NetworkService extends Service {
         return result;
     }
 
+    public boolean isConnected()
+    {
+        return socket.isConnected();
+    }
+
     public void send(String data)
     {
         data = utfToIso(data);
@@ -114,57 +120,65 @@ public class NetworkService extends Service {
 
     public void start(Context context)
     {
-        this.context = context;
+        final Context sharedContext = context;
 
+        Runnable r = new Runnable() {
+            public void run() {
 
-        try
-        {
-            try
-            {
-                InetAddress serverAddr = InetAddress.getByName(server);
-                socket = new Socket(serverAddr, port);
-
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "ISO-8859-2"));
-                out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "ISO-8859-2"));
-
-                Intent intentAuth = new Intent();
-                intentAuth.setAction("com.simplechatclient.networkbroadcast");
-                intentAuth.putExtra("message", "");
-                intentAuth.putExtra("command", "auth");
-                context.sendBroadcast(intentAuth);
-
-                String line;
-                while ((line = in.readLine()) != null)
+                try
                 {
-                    if (line.length() != 0)
+                    try
                     {
-                        line = isoToUtf(line);
-                        Log.i(TAG, "<- "+line);
+                        InetAddress serverAddr = InetAddress.getByName(server);
+                        socket = new Socket(serverAddr, port);
 
-                        Intent intentKernel = new Intent();
-                        intentKernel.setAction("com.simplechatclient.networkbroadcast");
-                        intentKernel.putExtra("message", line);
-                        intentKernel.putExtra("command", "kernel");
-                        context.sendBroadcast(intentKernel);
+                        in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "ISO-8859-2"));
+                        out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "ISO-8859-2"));
+
+                        Intent intentAuth = new Intent();
+                        intentAuth.setAction("com.simplechatclient.networkbroadcast");
+                        intentAuth.putExtra("message", "");
+                        intentAuth.putExtra("command", "auth");
+                        sharedContext.sendBroadcast(intentAuth);
+
+                        String line;
+                        while ((line = in.readLine()) != null)
+                        {
+                            if (line.length() != 0)
+                            {
+                                line = isoToUtf(line);
+                                Log.i(TAG, "<- "+line);
+
+                                Intent intentKernel = new Intent();
+                                intentKernel.setAction("com.simplechatclient.networkbroadcast");
+                                intentKernel.putExtra("message", line);
+                                intentKernel.putExtra("command", "kernel");
+                                sharedContext.sendBroadcast(intentKernel);
+                            }
+                        }
+                    } catch (UnknownHostException e) {
+                        Log.e(TAG, "Unknown host exception:" + e.getMessage());
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        Log.e(TAG, "IOException:" + e.getMessage());
+                        e.printStackTrace();
+                    } finally {
+                        if ((socket != null) && (!socket.isClosed()))
+                            socket.close();
                     }
+                } catch (Exception e) {
+                    Log.e(TAG, "Exception:" + e.getMessage());
+                    e.printStackTrace();
                 }
-            } catch (UnknownHostException e) {
-                Log.e(TAG, "Unknown host exception:" + e.getMessage());
-                e.printStackTrace();
-            } catch (IOException e) {
-                Log.e(TAG, "IOException:" + e.getMessage());
-                e.printStackTrace();
-            } finally {
-                if ((socket != null) && (!socket.isClosed()))
-                    socket.close();
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Exception:" + e.getMessage());
-            e.printStackTrace();
-        }
 
-        Messages.getInstance().showMessageAll("Rozłączono");
-        Log.i(TAG, "Network closed");
+                Log.i(TAG, "Network closed");
+
+                stopSelf();
+            }
+        };
+
+        networkThread = new Thread(r);
+        networkThread.start();
     }
 
     @Override
@@ -177,7 +191,12 @@ public class NetworkService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.w("NetworkService", "Stopped");
-    }
 
+        if (socket.isConnected())
+            this.send("QUIT");
+
+        Log.w("NetworkService", "Stopped");
+
+        networkThread.interrupt();
+    }
 }
