@@ -471,7 +471,7 @@ public class OnetKernel {
         if (key.startsWith(":")) key = key.substring(1);
 
         String auth = OnetUtils.transform(key);
-        String nick = Settings.getInstance().get("nick");
+        String nick = Settings.getInstance().get("uo_nick");
         String UOKey = Settings.getInstance().get("uo_key");
         
         if (Network.getInstance().isConnected())
