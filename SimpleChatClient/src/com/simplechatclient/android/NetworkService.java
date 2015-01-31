@@ -19,11 +19,15 @@
 
 package com.simplechatclient.android;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.core.Messages;
@@ -50,6 +54,10 @@ public class NetworkService extends Service {
     private int port = 5015;
 
     private Thread networkThread;
+
+    private NotificationCompat.Builder mBuilder;
+    private NotificationManager mNotificationManager;
+    private int notificationId = 7898291;
 
     private final IBinder mBinder = new LocalBinder();
 
@@ -121,6 +129,23 @@ public class NetworkService extends Service {
     public void start(Context context)
     {
         final Context sharedContext = context;
+
+        // notification
+        mBuilder = new NotificationCompat.Builder(sharedContext)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle(getText(R.string.notification_connected))
+                .setAutoCancel(false)
+                .setOngoing(true);
+
+        Intent resultIntent = new Intent(sharedContext, TabsActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(sharedContext);
+        stackBuilder.addParentStack(TabsActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(notificationId, mBuilder.build());
 
         Runnable r = new Runnable() {
             public void run() {
@@ -194,6 +219,10 @@ public class NetworkService extends Service {
 
         if (socket.isConnected())
             this.send("QUIT");
+
+        // update notification
+        mBuilder.setContentTitle(getText(R.string.notification_disconnected));
+        mNotificationManager.notify(notificationId, mBuilder.build());
 
         Log.w("NetworkService", "Stopped");
 

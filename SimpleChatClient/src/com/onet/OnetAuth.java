@@ -131,7 +131,11 @@ public class OnetAuth {
                         downloadSecureLogin();
                     else {
                         // showCaptchaDialog();
-                    	// TODO crash null pointer exception
+
+                    	// TODO startActivityForResult
+                    	// TODO http://developer.android.com/reference/android/app/Activity.html
+                        // TODO http://developer.android.com/training/basics/intents/result.html
+
                         String code = "empty";
                         downloadCheckCode(code);
                     }
@@ -288,11 +292,11 @@ public class OnetAuth {
 
             if (err_code.equalsIgnoreCase("true")) {
                 String UOKey = document.getElementsByTagName("uoKey").item(0).getTextContent();
-                String nick = document.getElementsByTagName("zuoUsername").item(0).getTextContent();
+                String UONick = document.getElementsByTagName("zuoUsername").item(0).getTextContent();
 
                 if (Network.getInstance().isConnected())
                 {
-                    Settings.getInstance().set("nick", nick);
+                    Settings.getInstance().set("uo_nick", UONick);
                     Settings.getInstance().set("uo_key", UOKey);
                     
                     Network.getInstance().send(String.format("AUTHKEY"));
