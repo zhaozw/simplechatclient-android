@@ -130,13 +130,11 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
                 .setAutoCancel(false)
                 .setOngoing(true);
 
-        // FIXME klikniecie na powiadomienie - otwiera inny intent
         Intent resultIntent = new Intent(this, TabsActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(TabsActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(resultPendingIntent);
+        resultIntent.setAction(Intent.ACTION_MAIN);
+        resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
+        mBuilder.setContentIntent(pendingIntent);
 
         mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(notificationId, mBuilder.build());
