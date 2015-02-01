@@ -30,8 +30,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import com.core.Messages;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;

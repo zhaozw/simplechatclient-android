@@ -63,8 +63,6 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 
 	ActionBar actionBar;
 
-    private int notificationId = 7898291;
-
 	public TabsActivity()
 	{
 	}
@@ -158,6 +156,7 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 		TabsManager.getInstance().removeAll();
 
         NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        int notificationId = 7898291;
         mNotificationManager.cancel(notificationId);
 	}
 
