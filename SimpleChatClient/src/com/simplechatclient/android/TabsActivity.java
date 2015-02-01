@@ -22,6 +22,7 @@ package com.simplechatclient.android;
 import java.util.Locale;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -60,10 +63,13 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
-
 	ActionBar actionBar;
 
-	public TabsActivity()
+    private NotificationCompat.Builder mBuilder;
+    private NotificationManager mNotificationManager;
+    private int notificationId = 7898291;
+
+    public TabsActivity()
 	{
 	}
 	
@@ -72,7 +78,7 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_activity);
 
-        Log.i("Tabc activity", "onCreate");
+        Log.i("Tabs activity", "onCreate");
 
 		// Set up the action bar.
 		actionBar = getSupportActionBar();
@@ -117,26 +123,46 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
         Settings.getInstance().set("italic", current_profile.getItalic());
         Settings.getInstance().set("color", current_profile.getColor());
 
-        // network
-        Network.getInstance().setActivity(this.getApplicationContext());
+        // notification
+        mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle(getText(R.string.notification_disconnected))
+                .setAutoCancel(false)
+                .setOngoing(true);
 
-        // status
-        TabsManager.getInstance().add(Channels.STATUS);
-		this.add(Channels.STATUS);
+        // FIXME klikniecie na powiadomienie - otwiera inny intent
+        Intent resultIntent = new Intent(this, TabsActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(TabsActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(notificationId, mBuilder.build());
+
+        // network
+        Network.getInstance().setParameters(this.getApplicationContext(), mBuilder, mNotificationManager);
 
         // tabs manager
 		TabsManager.getInstance().setTabsActivity(this);
+
+        // status
+        TabsManager.getInstance().add(Channels.STATUS);
+        this.add(Channels.STATUS);
 
         // TODO tutaj dodac dodawanie wszystkich tabow albo jakis rodzaj zapamietywania instancji
 
 		// is first run
 		if (Settings.getInstance().get("first_run") == "true")
-		{			
+		{
+            Log.i("TabsActivity", "first run");
+
 			// first run false
 			Settings.getInstance().set("first_run", "false");
 
 			Intent profileListIntent = new Intent(this, ProfileActivity.class);
-	    	//profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    	profileListIntent.putExtra("tab", "0"); // main
 	        startActivity(profileListIntent);
 		}
@@ -145,25 +171,25 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("Tabc activity", "onStart");
+        Log.i("Tabs activity", "onStart");
     }
 
     @Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.i("Tabc activity", "onDestroy");
+		Log.i("Tabs activity", "onDestroy");
 		//Network.getInstance().disconnect();
 		TabsManager.getInstance().removeAll();
 
-        NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        int notificationId = 7898291;
         mNotificationManager.cancel(notificationId);
-	}
+
+        Settings.getInstance().clear();
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("Tabc activity", "onResume");
+        Log.i("Tabs activity", "onResume");
     }
 
     public void add(String channel)
@@ -191,6 +217,9 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 			FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
+
+        Log.i("Tabs activity", "onTabSelected "+tab.getPosition());
+
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
@@ -224,6 +253,8 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a PlaceholderFragment (defined as a static inner class
 			// below).
+            Log.i("SectionsPagerTabsAdapter", "get item: "+position);
+
 			return TabsManager.getInstance().get(position);
 		}
 

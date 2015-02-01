@@ -394,7 +394,7 @@ public class OnetKernel {
     	Network.getInstance().send("PROTOCTL ONETNAMESX");
     	
     	// channels list
-    	//Network.getInstance().send("SLIST  R- 0 0 100 null");
+    	Network.getInstance().send("SLIST  R- 0 0 100 null");
     }
 
 	 // NS FAVOURITES

@@ -19,6 +19,7 @@
 
 package com.core;
 
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.simplechatclient.android.NetworkService;
@@ -36,6 +38,8 @@ public class Network {
 
     private Context context;
 
+    private NotificationCompat.Builder mBuilder;
+    private NotificationManager mNotificationManager;
     private NetworkService mBoundService;
     private boolean mIsBound = false;
 
@@ -47,9 +51,11 @@ public class Network {
         super();
     }
 
-    public void setActivity(Context context)
+    public void setParameters(Context context, NotificationCompat.Builder mBuilder, NotificationManager mNotificationManager)
     {
         this.context = context;
+        this.mBuilder = mBuilder;
+        this.mNotificationManager = mNotificationManager;
     }
 
     public void send(String data)
@@ -90,7 +96,7 @@ public class Network {
             super.handleMessage(msg);
 
             if (mIsBound && mBoundService != null)
-                mBoundService.start(context);
+                mBoundService.start(context, mBuilder, mNotificationManager);
         }
     };
 
@@ -125,10 +131,13 @@ public class Network {
             return false;
     }
 
+    // TODO http://stackoverflow.com/a/10350511
+    /*
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null &&
                 cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
+    */
 }

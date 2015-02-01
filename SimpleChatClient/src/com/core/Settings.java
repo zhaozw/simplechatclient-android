@@ -43,4 +43,9 @@ public class Settings {
     {
         return map.get(k);
     }
+
+    public void clear()
+    {
+        map.clear();
+    }
 }
