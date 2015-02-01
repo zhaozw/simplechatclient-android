@@ -69,10 +69,13 @@ public class TabsManager {
 
     public void remove(String channel)
     {
+        Log.i(TAG, "remove "+channel);
+
     	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
     	    TabsChannel tabsChannel = entry.getValue();
     	    if (tabsChannel.getName() == channel)
     	    {
+                Log.i(TAG, "removed "+channel);
     	    	tabsChannel.setFragment(null);
     	    	tabsChannel = null;
     	    	return;
@@ -82,6 +85,8 @@ public class TabsManager {
     
     public void removeAll()
     {
+        Log.i(TAG, "remove all");
+
     	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
     	    TabsChannel tabsChannel = entry.getValue();
     	    tabsChannel.setFragment(null);

@@ -27,10 +27,21 @@
                     android:layout_weight="1"
                     android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:hint="@string/edit_text_hint">
+                    android:hint="@string/edit_text_hint"
+                    android:layout_toLeftOf="@+id/imageButton"
+                    android:layout_toStartOf="@+id/imageButton">
 
                     <requestFocus />
                 </EditText>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageButton"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/ic_action_send_now"/>
 
             </RelativeLayout>
 
