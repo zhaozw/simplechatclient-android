@@ -123,7 +123,7 @@ public class NetworkService extends Service {
 
     @Override
     public void onCreate() {
-        Log.w("NetworkService", "onCreate");
+        Log.i("NetworkService", "onCreate");
     }
 
     public void start(Context context)
@@ -208,7 +208,7 @@ public class NetworkService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.w("NetworkService", "Received start id " + startId + ": " + intent);
+        Log.i("NetworkService", "Received start id " + startId + ": " + intent);
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
         return START_STICKY;
@@ -224,7 +224,7 @@ public class NetworkService extends Service {
         mBuilder.setContentTitle(getText(R.string.notification_disconnected));
         mNotificationManager.notify(notificationId, mBuilder.build());
 
-        Log.w("NetworkService", "Stopped");
+        Log.i("NetworkService", "Stopped");
 
         networkThread.interrupt();
     }

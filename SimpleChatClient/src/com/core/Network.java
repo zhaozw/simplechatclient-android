@@ -69,7 +69,7 @@ public class Network {
             // cast its IBinder to a concrete class and directly access it.
             mBoundService = ((NetworkService.LocalBinder)service).getService();
 
-            Log.w("service connection", "service connected");
+            Log.i("service connection", "service connected");
             // Tell the user about this for our demo.
 
             startHandler.sendEmptyMessage(0);
@@ -80,7 +80,7 @@ public class Network {
             // unexpectedly disconnected -- that is, its process crashed.
             // Because it is running in our same process, we should never
             // see this happen.
-            Log.w("service connection", "service disconnected");
+            Log.i("service connection", "service disconnected");
             mBoundService = null;
         }
     };
