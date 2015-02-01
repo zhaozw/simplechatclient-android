@@ -21,6 +21,8 @@ package com.simplechatclient.android;
 
 import java.util.Locale;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -60,6 +62,8 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 	ViewPager mViewPager;
 
 	ActionBar actionBar;
+
+    private int notificationId = 7898291;
 
 	public TabsActivity()
 	{
@@ -152,6 +156,9 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 		Log.i("Tabc activity", "onDestroy");
 		//Network.getInstance().disconnect();
 		TabsManager.getInstance().removeAll();
+
+        NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(notificationId);
 	}
 
     @Override

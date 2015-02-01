@@ -41,6 +41,6 @@
     <string name="successfully_removed">Pomyślnie usunięto</string>
     <string name="successfully_saved">Pomyślnie zapisano</string>
     <string name="edit_text_hint">Wpisz wiadomość</string>
-    <string name="notification_connected">Połączono</string>
-    <string name="notification_disconnected">Rozłączono</string>
+    <string name="notification_connected">Dostępny</string>
+    <string name="notification_disconnected">Niepodłączony</string>
 </resources>
