@@ -104,6 +104,8 @@ public class OnetKernel {
     	if (message.startsWith(":")) message = message.substring(1);
 
     	Messages.getInstance().showMessageAll(message);
+
+        Network.getInstance().disconnect();
     }
     
     // :cf1f4.onet PONG cf1f4.onet :1340185644095

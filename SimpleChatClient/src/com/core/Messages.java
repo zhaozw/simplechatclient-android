@@ -38,7 +38,7 @@ public class Messages {
 	public static final int NOTICE_ERROR = 102 | 0x070000;
 	public static final int NOTICE_QUESTION = 103 | 0x070000;
 
-	public enum Message {DEFAULT, JOIN, PART, QUIT, KICK, MODE, NOTICE, INFO, ME, ERROR, HIGHLIGHT, MODERNOTICE}
+	public enum MessageType {DEFAULT, JOIN, PART, QUIT, KICK, MODE, NOTICE, INFO, ME, ERROR, HIGHLIGHT, MODERNOTICE}
 	
     public void showMessage(String channel, String data)
     {
