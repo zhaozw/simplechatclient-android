@@ -77,14 +77,14 @@ public class ProfileListFragment extends Fragment {
         Config current_config = new Config(context);
         List<DatabaseProfile> profiles = current_config.getProfiles();
 
-        profiles_list = new ArrayList<String>();
+        profiles_list = new ArrayList<>();
         for (DatabaseProfile profile : profiles) {
             profiles_list.add(profile.getNick());
         }
 
         ListView listview = (ListView)view.findViewById(R.id.listViewProfiles);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, profiles_list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, profiles_list);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(onProfileClick);
     }

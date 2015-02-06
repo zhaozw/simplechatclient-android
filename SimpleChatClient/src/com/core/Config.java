@@ -270,7 +270,7 @@ public class Config {
 
     public List<DatabaseProfile> getProfiles()
     {
-        List<DatabaseProfile> profiles = new ArrayList<DatabaseProfile>();
+        List<DatabaseProfile> profiles = new ArrayList<>();
 
         SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
         Cursor cursor = null;

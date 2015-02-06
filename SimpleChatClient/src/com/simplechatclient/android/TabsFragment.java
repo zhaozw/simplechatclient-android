@@ -123,8 +123,8 @@ public class TabsFragment extends Fragment {
         listview = (ListView)view.findViewById(R.id.listViewChannel);
         editText = (EditText)view.findViewById(R.id.editTextChannel);
 
-        listItems = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listItems);
+        listItems = new ArrayList<>();
+        adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, listItems);
 
         listview.setAdapter(adapter);
 

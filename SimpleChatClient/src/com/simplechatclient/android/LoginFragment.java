@@ -76,7 +76,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         Config current_config = new Config(context);
         List<DatabaseProfile> profiles = current_config.getProfiles();
 
-        profiles_list = new ArrayList<String>();
+        profiles_list = new ArrayList<>();
         for (DatabaseProfile profile : profiles) {
             profiles_list.add(profile.getNick());
         }
@@ -84,7 +84,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         Button login = (Button)view.findViewById(R.id.button_login);
         Spinner spinner = (Spinner)view.findViewById(R.id.spinnerNick);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, profiles_list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, profiles_list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
