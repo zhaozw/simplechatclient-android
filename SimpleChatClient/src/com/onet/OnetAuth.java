@@ -172,10 +172,9 @@ public class OnetAuth {
 
     private void downloadDeploy() {
         String url = "http://czat.onet.pl/_s/deployOnetCzat.js";
-        String content = null;
         String category = "deploy";
 
-        new HttpDownload(url, content, category).start();
+        new HttpDownload(url, null, category).start();
     }
 
     private void parseDeploy(String data)
