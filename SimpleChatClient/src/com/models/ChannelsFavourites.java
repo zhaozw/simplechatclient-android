@@ -24,32 +24,32 @@ import java.util.List;
 
 public class ChannelsFavourites {
 
-	private List<String> channelFavourites = new ArrayList<>();
+    private List<String> channelFavourites = new ArrayList<>();
 
     private static ChannelsFavourites instance = new ChannelsFavourites();
     public static synchronized ChannelsFavourites getInstance() { return instance; }
 
-	public void add(String channel)
-	{
-		channelFavourites.add(channel);
-	}
-	
-	public void remove(String channel)
-	{
-		if (channelFavourites.contains(channel))
-		{
-			channelFavourites.remove(channelFavourites.indexOf(channel));
-		}
-	}
-	
-	public void clear()
-	{
-		if (channelFavourites != null)
-			channelFavourites.clear();
-	}
+    public void add(String channel)
+    {
+        channelFavourites.add(channel);
+    }
 
-	public List<String> get()
-	{
-		return channelFavourites;
-	}
+    public void remove(String channel)
+    {
+        if (channelFavourites.contains(channel))
+        {
+            channelFavourites.remove(channelFavourites.indexOf(channel));
+        }
+    }
+
+    public void clear()
+    {
+        if (channelFavourites != null)
+            channelFavourites.clear();
+    }
+
+    public List<String> get()
+    {
+        return channelFavourites;
+    }
 }

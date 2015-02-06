@@ -22,47 +22,47 @@ package com.simplechatclient.android;
 
 public class TabsChannel
 {
-	private int position;
-	private String name;
-	private String avatar;
-	private boolean displayedOptions;
+    private int position;
+    private String name;
+    private String avatar;
+    private boolean displayedOptions;
     private boolean offline;
-	private TabsFragment fragment;
-	
-	public int getPosition() {
-		return position;
-	}
-	public void setPosition(int position) {
-		this.position = position;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getAvatar() {
-		return avatar;
-	}
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-	public boolean isDisplayedOptions() {
-		return displayedOptions;
-	}
-	public void setDisplayedOptions(boolean displayedOptions) {
-		this.displayedOptions = displayedOptions;
-	}
-	public boolean isOffline() {
-		return offline;
-	}
-	public void setOffline(boolean offline) {
-		this.offline = offline;
-	}
-	public TabsFragment getFragment() {
-		return fragment;
-	}
-	public void setFragment(TabsFragment fragment) {
-		this.fragment = fragment;
-	}
+    private TabsFragment fragment;
+
+    public int getPosition() {
+        return position;
+    }
+    public void setPosition(int position) {
+        this.position = position;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getAvatar() {
+        return avatar;
+    }
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+    public boolean isDisplayedOptions() {
+        return displayedOptions;
+    }
+    public void setDisplayedOptions(boolean displayedOptions) {
+        this.displayedOptions = displayedOptions;
+    }
+    public boolean isOffline() {
+        return offline;
+    }
+    public void setOffline(boolean offline) {
+        this.offline = offline;
+    }
+    public TabsFragment getFragment() {
+        return fragment;
+    }
+    public void setFragment(TabsFragment fragment) {
+        this.fragment = fragment;
+    }
 }

@@ -33,56 +33,56 @@ public class Messages {
     private static Messages instance = new Messages();
     public static synchronized Messages getInstance() {return instance; }
     
-	public static final int NOTICE_INFO = 100 | 0x070000;
-	public static final int NOTICE_WARNING = 101 | 0x070000;
-	public static final int NOTICE_ERROR = 102 | 0x070000;
-	public static final int NOTICE_QUESTION = 103 | 0x070000;
+    public static final int NOTICE_INFO = 100 | 0x070000;
+    public static final int NOTICE_WARNING = 101 | 0x070000;
+    public static final int NOTICE_ERROR = 102 | 0x070000;
+    public static final int NOTICE_QUESTION = 103 | 0x070000;
 
-	public enum MessageType {DEFAULT, JOIN, PART, QUIT, KICK, MODE, NOTICE, INFO, ME, ERROR, HIGHLIGHT, MODERNOTICE}
-	
+    public enum MessageType {DEFAULT, JOIN, PART, QUIT, KICK, MODE, NOTICE, INFO, ME, ERROR, HIGHLIGHT, MODERNOTICE}
+
     public void showMessage(String channel, String data)
     {
         Log.i("Messages show", "channel: " + channel + " data: " + data);
-    	try
-    	{
-    		TabsFragment fragment = TabsManager.getInstance().getFromName(channel);
-    		if (fragment != null)
-    			fragment.addMessage(data);
+        try
+        {
+            TabsFragment fragment = TabsManager.getInstance().getFromName(channel);
+            if (fragment != null)
+                fragment.addMessage(data);
             else
                 Log.w("Messages show", "Missing fragment for channel "+channel+" data: "+data);
-    	}
-    	catch (NullPointerException e) {}
+        }
+        catch (NullPointerException e) {}
     }
     
     public void showMessageAll(String data)
     {
         Log.i("Messages show all", "data: " + data);
-    	HashMap<String, TabsChannel> tabs = TabsManager.getInstance().getAll();
-    	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
-        	try
-        	{
-        		TabsChannel tabsChannel = entry.getValue();
-        		TabsFragment fragment = tabsChannel.getFragment();
-        		if (fragment != null)
-        			fragment.addMessage(data);
+        HashMap<String, TabsChannel> tabs = TabsManager.getInstance().getAll();
+        for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
+            try
+            {
+                TabsChannel tabsChannel = entry.getValue();
+                TabsFragment fragment = tabsChannel.getFragment();
+                if (fragment != null)
+                    fragment.addMessage(data);
                 else
                     Log.w("Messages show all", "Missing fragment for channel "+tabsChannel.getName()+" data: "+data);
-        	}
-        	catch (NullPointerException e) {}
-    	}
+            }
+            catch (NullPointerException e) {}
+        }
     }
 
     public void showMessageActive(String data)
     {
         Log.i("Messages show active", "data: " + data);
-    	try
-    	{
-    		TabsFragment fragment = TabsManager.getInstance().getActive();
-    		if (fragment != null)
-    			fragment.addMessage(data);
+        try
+        {
+            TabsFragment fragment = TabsManager.getInstance().getActive();
+            if (fragment != null)
+                fragment.addMessage(data);
             else
                 Log.w("Messages show active", "Missing fragment for active channel data: "+data);
-    	}
-    	catch (NullPointerException e) {}
+        }
+        catch (NullPointerException e) {}
     }
 }

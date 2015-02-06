@@ -38,147 +38,147 @@ import com.database.DatabaseProfile;
 import com.database.DatabaseSetting;
 
 public class ProfileEditActivity extends ActionBarActivity {
-	
-	private DatabaseProfile profile;
-	private Config current_config;
-	private String nick;
-	private Context context;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.profile_edit_activity);
-		context = getApplicationContext();
-		
-		final ActionBar actionBar = getSupportActionBar();
+    private DatabaseProfile profile;
+    private Config current_config;
+    private String nick;
+    private Context context;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.profile_edit_activity);
+        context = getApplicationContext();
+
+        final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
 
         setHasOptionsMenu(true);
         
-		nick = getIntent().getStringExtra("nick");
+        nick = getIntent().getStringExtra("nick");
 
-		current_config = new Config(this);
-		profile = current_config.getProfile(nick);
-		
-		EditText editTextNick = (EditText)findViewById(R.id.editTextEditNick);
-		EditText editTextPassword = (EditText)findViewById(R.id.editTextEditPassword);
-		
-		editTextNick.setText(profile.getNick());
-		editTextPassword.setText(profile.getPassword());
-		
-		if (!nick.contains("~")) {
-			editTextPassword.setVisibility(View.VISIBLE);
-		} else {
-			editTextPassword.setVisibility(View.INVISIBLE);
-		}
-	}
-	
-	private void setHasOptionsMenu(boolean b) {
-		// TODO Auto-generated method stub
-	}
+        current_config = new Config(this);
+        profile = current_config.getProfile(nick);
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.profile_edit, menu);
-	    return super.onCreateOptionsMenu(menu);
-	}
-	
-	
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.edit_profile_button_remove:
-				button_remove();
-				return true;
-			case R.id.edit_profile_button_save:
-				button_save();
-				return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-		}
-	}
-	
-	private void button_remove()
-	{
-		current_config.deleteProfile(nick);
+        EditText editTextNick = (EditText)findViewById(R.id.editTextEditNick);
+        EditText editTextPassword = (EditText)findViewById(R.id.editTextEditPassword);
 
-		if (current_config.getProfilesCount() == 0)
-		{
-			current_config.createRandomUser();
-		}
+        editTextNick.setText(profile.getNick());
+        editTextPassword.setText(profile.getPassword());
 
-		if (Integer.parseInt(Settings.getInstance().get("current_profile")) == profile.getId())
-		{
-			List<DatabaseProfile> profiles = current_config.getProfiles();
-			DatabaseProfile current_profile = profiles.get(0);
-			
-			DatabaseSetting current_setting = current_config.getSetting();
-			current_setting.setCurrent_profile(current_profile.getId());
+        if (!nick.contains("~")) {
+            editTextPassword.setVisibility(View.VISIBLE);
+        } else {
+            editTextPassword.setVisibility(View.INVISIBLE);
+        }
+    }
 
-			Settings.getInstance().set("current_profile", String.valueOf(current_profile.getId()));
-			
-	        Settings.getInstance().set("nick", current_profile.getNick());
-	        Settings.getInstance().set("password", current_profile.getPassword());
-	        Settings.getInstance().set("font", current_profile.getFont());
-	        Settings.getInstance().set("bold", current_profile.getBold());
-	        Settings.getInstance().set("italic", current_profile.getItalic());
-	        Settings.getInstance().set("color", current_profile.getColor());
-		}
-		
-		Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.successfully_removed), Toast.LENGTH_SHORT);
-		toast.show();
+    private void setHasOptionsMenu(boolean b) {
+        // TODO Auto-generated method stub
+    }
 
-    	Intent profileListIntent = new Intent(context, ProfileActivity.class);
-    	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	profileListIntent.putExtra("tab", "1"); // profile list
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.profile_edit, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit_profile_button_remove:
+                button_remove();
+                return true;
+            case R.id.edit_profile_button_save:
+                button_save();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void button_remove()
+    {
+        current_config.deleteProfile(nick);
+
+        if (current_config.getProfilesCount() == 0)
+        {
+            current_config.createRandomUser();
+        }
+
+        if (Integer.parseInt(Settings.getInstance().get("current_profile")) == profile.getId())
+        {
+            List<DatabaseProfile> profiles = current_config.getProfiles();
+            DatabaseProfile current_profile = profiles.get(0);
+
+            DatabaseSetting current_setting = current_config.getSetting();
+            current_setting.setCurrent_profile(current_profile.getId());
+
+            Settings.getInstance().set("current_profile", String.valueOf(current_profile.getId()));
+
+            Settings.getInstance().set("nick", current_profile.getNick());
+            Settings.getInstance().set("password", current_profile.getPassword());
+            Settings.getInstance().set("font", current_profile.getFont());
+            Settings.getInstance().set("bold", current_profile.getBold());
+            Settings.getInstance().set("italic", current_profile.getItalic());
+            Settings.getInstance().set("color", current_profile.getColor());
+        }
+
+        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.successfully_removed), Toast.LENGTH_SHORT);
+        toast.show();
+
+        Intent profileListIntent = new Intent(context, ProfileActivity.class);
+        profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        profileListIntent.putExtra("tab", "1"); // profile list
         startActivity(profileListIntent);
-	}
+    }
 
-	private void button_save()
-	{
-		EditText editTextNick = (EditText)findViewById(R.id.editTextEditNick);
-		EditText editTextPassword = (EditText)findViewById(R.id.editTextEditPassword);
-		
-		if (editTextPassword.getVisibility() == View.VISIBLE)
-		{
-			String save_nick = editTextNick.getText().toString();
-			String save_password = editTextPassword.getText().toString();
-			
-			if (save_nick.length() > 32)
-				save_nick = save_nick.substring(0, 32);
-			
-			profile.setNick(save_nick);
-			profile.setPassword(save_password);
-		}
-		else
-		{
-			String save_nick = editTextNick.getText().toString();
-			save_nick = save_nick.replace("~","");
-			
-			if (save_nick.length() > 31)
-				save_nick = save_nick.substring(0, 31);
-			
-			save_nick = "~"+save_nick;
-			
-			profile.setNick(save_nick);
-		}
-		
-		current_config.updateProfile(profile);
-		
-		if (Integer.parseInt(Settings.getInstance().get("current_profile")) == profile.getId())
-		{
-			Settings.getInstance().set("nick", profile.getNick());
-			Settings.getInstance().set("password", profile.getPassword());
-		}
+    private void button_save()
+    {
+        EditText editTextNick = (EditText)findViewById(R.id.editTextEditNick);
+        EditText editTextPassword = (EditText)findViewById(R.id.editTextEditPassword);
+
+        if (editTextPassword.getVisibility() == View.VISIBLE)
+        {
+            String save_nick = editTextNick.getText().toString();
+            String save_password = editTextPassword.getText().toString();
+
+            if (save_nick.length() > 32)
+                save_nick = save_nick.substring(0, 32);
+
+            profile.setNick(save_nick);
+            profile.setPassword(save_password);
+        }
+        else
+        {
+            String save_nick = editTextNick.getText().toString();
+            save_nick = save_nick.replace("~","");
+
+            if (save_nick.length() > 31)
+                save_nick = save_nick.substring(0, 31);
+
+            save_nick = "~"+save_nick;
+
+            profile.setNick(save_nick);
+        }
+
+        current_config.updateProfile(profile);
+
+        if (Integer.parseInt(Settings.getInstance().get("current_profile")) == profile.getId())
+        {
+            Settings.getInstance().set("nick", profile.getNick());
+            Settings.getInstance().set("password", profile.getPassword());
+        }
         
-		Toast toast = Toast.makeText(context, getResources().getString(R.string.successfully_saved), Toast.LENGTH_SHORT);
-		toast.show();
+        Toast toast = Toast.makeText(context, getResources().getString(R.string.successfully_saved), Toast.LENGTH_SHORT);
+        toast.show();
 
-    	Intent profileListIntent = new Intent(context, ProfileActivity.class);
-    	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    	profileListIntent.putExtra("tab", "1"); // profile list
+        Intent profileListIntent = new Intent(context, ProfileActivity.class);
+        profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        profileListIntent.putExtra("tab", "1"); // profile list
         startActivity(profileListIntent);
-	}
+    }
 }

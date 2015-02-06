@@ -86,7 +86,7 @@ public class OnetAuth {
         password = Settings.getInstance().get("password");
 
         if (!nick.contains("~"))
-        	registeredNick = true;
+            registeredNick = true;
         
         override = true;
         Settings.getInstance().set("authorizing", "true");
@@ -110,11 +110,11 @@ public class OnetAuth {
         
         public void authkernel()
         {
-        	if (current_category == null)
-        		downloadChat();
-        	else
-        	{
-            	if (current_category.equals("chat"))
+            if (current_category == null)
+                downloadChat();
+            else
+            {
+                if (current_category.equals("chat"))
                     downloadDeploy();
                 else if (current_category.equals("deploy")) {
                     parseDeploy(current_result);
@@ -132,8 +132,8 @@ public class OnetAuth {
                     else {
                         // showCaptchaDialog();
 
-                    	// TODO startActivityForResult
-                    	// TODO http://developer.android.com/reference/android/app/Activity.html
+                        // TODO startActivityForResult
+                        // TODO http://developer.android.com/reference/android/app/Activity.html
                         // TODO http://developer.android.com/training/basics/intents/result.html
 
                         String code = "empty";
@@ -158,7 +158,7 @@ public class OnetAuth {
                     Log.e(TAG, "Undefined category: "+current_category);
                     Settings.getInstance().set("authorizing", "false");
                 }
-        	}
+            }
         }
     }
 
@@ -212,7 +212,7 @@ public class OnetAuth {
     }
 
     @SuppressLint("DefaultLocale")
-	private void downloadCheckCode(String code) {
+    private void downloadCheckCode(String code) {
         String url = AJAX_API;
         String content = String.format("api_function=checkCode&params=a:1:{s:4:\"code\";s:%d:\"%s\";}", code.length(), code);
         String category = "check_code";
@@ -229,7 +229,7 @@ public class OnetAuth {
     }
 
     @SuppressLint("DefaultLocale")
-	private void downloadOverride() {
+    private void downloadOverride() {
         String url = AJAX_API;
         String content = String.format("api_function=userOverride&params=a:1:{s:4:\"nick\";s:%d:\"%s\";}", nick.length(), nick);
         String category = "override";
@@ -238,7 +238,7 @@ public class OnetAuth {
     }
 
     @SuppressLint("DefaultLocale")
-	private void downloadUo() {
+    private void downloadUo() {
         int isRegistered = (registeredNick ? 0 : 1);
 
         String url = AJAX_API;
@@ -269,14 +269,14 @@ public class OnetAuth {
     // <?xml version="1.0" encoding="ISO-8859-2"?><root><error err_code="-2" err_text="U.ytkownik nie zalogowany" ></error></root>
     private void parseUo(String data) {
         try {
-        	Log.i(TAG, "pareUO: "+data);
+            Log.i(TAG, "pareUO: "+data);
 
-        	if (data == null)
-        	{
+            if (data == null)
+            {
                 Messages.getInstance().showMessage(Channels.STATUS, "Błąd autoryzacji [Brak odpowiedzi od serwera]");
-        		return;
-        	}
-        	
+                return;
+            }
+
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.parse(new InputSource(new StringReader(data)));
             document.getDocumentElement().normalize();
@@ -313,55 +313,55 @@ public class OnetAuth {
     }
 
     public class HttpDownload extends Thread {
-    	private String url;
-    	private String content;
-    	private String category;
-    	
-    	public HttpDownload(String _url, String _content, String _category) {
-	       url = _url;
-	       content = _content;
-	       category = _category;
-	    }
+        private String url;
+        private String content;
+        private String category;
 
-	    public void run() {
-	    	Log.i(TAG, "HttpDownload url: "+url);
-	    	Log.i(TAG, "HttpDownload content: "+content);
-	    	
-	    	current_category = category;
-	        current_result = null;
+        public HttpDownload(String _url, String _content, String _category) {
+           url = _url;
+           content = _content;
+           category = _category;
+        }
 
-	        HttpResponse httpResponse;
-	
-	        try {
-	            if (content.isEmpty()) {
-	                HttpGet httpGet = new HttpGet(url);
-	                httpResponse = httpclient.execute(httpGet);
-	            } else {
-	                HttpPost httpPost = new HttpPost(url);
-	                httpPost.setEntity(new StringEntity(content));
-	                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-	                httpResponse = httpclient.execute(httpPost);
-	            }
-	
-	            int status = httpResponse.getStatusLine().getStatusCode();
-	            if (status == 200) {
-	                HttpEntity httpEntity = httpResponse.getEntity();
-	                current_result = EntityUtils.toString(httpEntity);
-	            }
-	        } catch (ClientProtocolException e) {
-	            Log.e(TAG, "Unable to retrieve web page (ClientProtocolException:"+e.getMessage()+"): " + url);
-	            e.getStackTrace();
-	        } catch (UnsupportedEncodingException e) {
-	            Log.e(TAG, "Unable to retrieve web page (UnsupportedEncodingException:"+e.getMessage()+"): " + url);
-	            e.getStackTrace();
-	        } catch (IllegalArgumentException e) {
-	            Log.e(TAG, "Unable to retrieve web page (IllegalArgumentException:"+e.getMessage()+"): " + url);
-	            e.getStackTrace();
-	        } catch (IOException e) {
-	            Log.e(TAG, "Unable to retrieve web page (IOException:"+e.getMessage()+"): " + url);
-	            e.getStackTrace();
-	        } finally {
-	        	Message msg =  new Message();
+        public void run() {
+            Log.i(TAG, "HttpDownload url: "+url);
+            Log.i(TAG, "HttpDownload content: "+content);
+
+            current_category = category;
+            current_result = null;
+
+            HttpResponse httpResponse;
+
+            try {
+                if (content.isEmpty()) {
+                    HttpGet httpGet = new HttpGet(url);
+                    httpResponse = httpclient.execute(httpGet);
+                } else {
+                    HttpPost httpPost = new HttpPost(url);
+                    httpPost.setEntity(new StringEntity(content));
+                    httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+                    httpResponse = httpclient.execute(httpPost);
+                }
+
+                int status = httpResponse.getStatusLine().getStatusCode();
+                if (status == 200) {
+                    HttpEntity httpEntity = httpResponse.getEntity();
+                    current_result = EntityUtils.toString(httpEntity);
+                }
+            } catch (ClientProtocolException e) {
+                Log.e(TAG, "Unable to retrieve web page (ClientProtocolException:"+e.getMessage()+"): " + url);
+                e.getStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                Log.e(TAG, "Unable to retrieve web page (UnsupportedEncodingException:"+e.getMessage()+"): " + url);
+                e.getStackTrace();
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Unable to retrieve web page (IllegalArgumentException:"+e.getMessage()+"): " + url);
+                e.getStackTrace();
+            } catch (IOException e) {
+                Log.e(TAG, "Unable to retrieve web page (IOException:"+e.getMessage()+"): " + url);
+                e.getStackTrace();
+            } finally {
+                Message msg =  new Message();
                 Bundle bundle = new Bundle();
 
                 bundle.putString("current_category", current_category);
@@ -369,7 +369,7 @@ public class OnetAuth {
                 msg.setData(bundle);
 
                 authHandler.sendMessage(msg);
-	        }
-	    }
+            }
+        }
     }
 }

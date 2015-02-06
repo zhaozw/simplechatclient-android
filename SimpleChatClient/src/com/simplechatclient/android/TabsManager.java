@@ -31,84 +31,79 @@ public class TabsManager {
     public static synchronized TabsManager getInstance() {return instance; }
 
     private static final String TAG = "TabsManager";
-    private HashMap<String, TabsChannel> tabs;
+    private HashMap<String, TabsChannel> tabs = new HashMap<>();
     private TabsActivity tabsActivity;
 
-    public TabsManager()
-    {
-    	tabs = new HashMap<String, TabsChannel>();
+    public TabsActivity getTabsActivity() {
+        return tabsActivity;
     }
-    
-	public TabsActivity getTabsActivity() {
-		return tabsActivity;
-	}
 
-	public void setTabsActivity(TabsActivity tabsActivity) {
-		this.tabsActivity = tabsActivity;
-	}
+    public void setTabsActivity(TabsActivity tabsActivity) {
+        this.tabsActivity = tabsActivity;
+    }
 
-	public void add(String channel)
+    public void add(String channel)
     {
-		Log.i(TAG, "add: "+channel);
-		
-    	TabsChannel NewTabChannel = new TabsChannel();
-    	NewTabChannel.setAvatar(null);
-    	NewTabChannel.setDisplayedOptions(false);
-    	NewTabChannel.setName(channel);
-    	NewTabChannel.setFragment(TabsFragment.newInstance().setName(channel));
-    	NewTabChannel.setOffline(false);
-    	NewTabChannel.setPosition(tabs.size());
-    	
-    	tabs.put(channel, NewTabChannel);
-    	
-    	if (channel != Channels.STATUS)
-    		this.tabsActivity.add(channel);
+        Log.i(TAG, "add: "+channel);
 
-    	Log.i(TAG, "added: "+channel +" size: "+tabs.size());
+        TabsChannel NewTabChannel = new TabsChannel();
+        NewTabChannel.setAvatar(null);
+        NewTabChannel.setDisplayedOptions(false);
+        NewTabChannel.setName(channel);
+        NewTabChannel.setFragment(TabsFragment.newInstance().setName(channel));
+        NewTabChannel.setOffline(false);
+        NewTabChannel.setPosition(tabs.size());
+
+        tabs.put(channel, NewTabChannel);
+
+        if (channel != Channels.STATUS)
+            this.tabsActivity.add(channel);
+
+        Log.i(TAG, "added: "+channel +" size: "+tabs.size());
     }
 
     public void remove(String channel)
     {
         Log.i(TAG, "remove "+channel);
 
-    	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
-    	    TabsChannel tabsChannel = entry.getValue();
-    	    if (tabsChannel.getName() == channel)
-    	    {
+        for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
+            TabsChannel tabsChannel = entry.getValue();
+            if (tabsChannel.getName() == channel)
+            {
                 Log.i(TAG, "removed "+channel);
-    	    	tabsChannel.setFragment(null);
-    	    	tabsChannel = null;
-    	    	return;
-    	    }
-    	}
+                tabsChannel.setFragment(null);
+                tabsChannel = null;
+                return;
+            }
+        }
     }
     
     public void removeAll()
     {
         Log.i(TAG, "remove all");
 
-    	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
-    	    TabsChannel tabsChannel = entry.getValue();
-    	    tabsChannel.setFragment(null);
-    	    tabsChannel = null;
-    	}
-    	
-    	tabs.clear();
+        for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
+            TabsChannel tabsChannel = entry.getValue();
+            tabsChannel.setFragment(null);
+            tabsChannel = null;
+        }
+
+        tabs.clear();
     }
     
     public int count()
     {
-    	return tabs.size();
+        return tabs.size();
     }
 
     public String getName(int position)
     {
-    	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
-    	    TabsChannel tabsChannel = entry.getValue();
-    		if (tabsChannel.getPosition() == position)
-    			return tabsChannel.getName();
-    	}
-    	return null;
+        for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
+            TabsChannel tabsChannel = entry.getValue();
+            if (tabsChannel.getPosition() == position)
+                return tabsChannel.getName();
+        }
+        return null;
     }
     
     public TabsFragment get(int position)
@@ -120,37 +115,37 @@ public class TabsManager {
         }
         */
 
-    	for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
-    	    TabsChannel tabsChannel = entry.getValue();
-    		if (tabsChannel.getPosition() == position)
-    		{
-    			Log.i(TAG, "TabsManager get "+position+" zwrocono "+tabsChannel.getName());
-    			return tabsChannel.getFragment();
-    		}
-    	}
-    	Log.w(TAG, "TabsManager get "+position+" zwrocono null");
-    	return null;
+        for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
+            TabsChannel tabsChannel = entry.getValue();
+            if (tabsChannel.getPosition() == position)
+            {
+                Log.i(TAG, "TabsManager get "+position+" zwrocono "+tabsChannel.getName());
+                return tabsChannel.getFragment();
+            }
+        }
+        Log.w(TAG, "TabsManager get "+position+" zwrocono null");
+        return null;
     }
     
     public HashMap<String, TabsChannel> getAll()
     {
-    	return tabs;
+        return tabs;
     }
     
     public TabsFragment getFromName(String channel)
     {
-    	TabsChannel tabsChannel = tabs.get(channel);
-    	if (tabsChannel != null)
-    	{
-    		return tabsChannel.getFragment();
-    	}
-    	else
-    		return null;
+        TabsChannel tabsChannel = tabs.get(channel);
+        if (tabsChannel != null)
+        {
+            return tabsChannel.getFragment();
+        }
+        else
+            return null;
     }
     
     public TabsFragment getActive()
     {
-    	int position = this.tabsActivity.getCurrentItem();
-    	return this.get(position);
+        int position = this.tabsActivity.getCurrentItem();
+        return this.get(position);
     }
 }

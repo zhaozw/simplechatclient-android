@@ -49,141 +49,141 @@ import com.models.Channels;
  */
 public class TabsFragment extends Fragment {
 
-	private static final String TAG = "TabsFragment";
-	
-	private Context context;
-	private View view;
-	
-	private ArrayList<String> listItems;
-	private ArrayAdapter<String> adapter;
-	private ListView listview;
-	private EditText editText;
-	private String name;
-	
-	public static TabsFragment newInstance() {
-		TabsFragment fragment = new TabsFragment();
-		return fragment;
-	}
-	
-	public TabsFragment() {
-	}
-	
-	public TabsFragment setName(String name) {
-		this.name = name;
-		return this;
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
-	}
+    private static final String TAG = "TabsFragment";
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		
-		listItems = null;
-	}
+    private Context context;
+    private View view;
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-	}
+    private ArrayList<String> listItems;
+    private ArrayAdapter<String> adapter;
+    private ListView listview;
+    private EditText editText;
+    private String name;
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-	        case R.id.action_logout:
-				Network.getInstance().disconnect();
-				
-				Intent profileListIntent = new Intent(context, ProfileActivity.class);
-	        	profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	        	profileListIntent.putExtra("tab", "0"); // profile list
-	            startActivity(profileListIntent);
-	            
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-		}
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.tabs_fragment, container, false);
-		context = container.getContext();
+    public static TabsFragment newInstance() {
+        TabsFragment fragment = new TabsFragment();
+        return fragment;
+    }
 
-		myStart();
+    public TabsFragment() {
+    }
 
-		return view;
-	}
+    public TabsFragment setName(String name) {
+        this.name = name;
+        return this;
+    }
 
-	public void myStart() {
-		
-		listview = (ListView)view.findViewById(R.id.listViewChannel);
-		editText = (EditText)view.findViewById(R.id.editTextChannel);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
-		listItems = new ArrayList<String>();
-		adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listItems);
-		
-		listview.setAdapter(adapter);
-		
-		scrollToBottom();
-		
-		editText.setOnEditorActionListener(mWriteListener);
-	}
-	
-	private TextView.OnEditorActionListener mWriteListener = new  TextView.OnEditorActionListener() { 
-	    @Override
-	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-	        boolean handled = false;
-	        if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
-	            
-	        	String data = editText.getText().toString();
-	        	Log.i(TAG, "sending: "+data);
-	        	if (!name.equalsIgnoreCase(Channels.STATUS))
-	        	{
-	        		String networkData = String.format("PRIVMSG %s :%s", name, data);
-	        		Network.getInstance().send(networkData);
-	        		
-	        		String display = String.format("<%s> %s", Settings.getInstance().get("nick"), data);
-	        		Messages.getInstance().showMessage(name, display);
-	        	}
-	        	else
-	        	{
-	        		Network.getInstance().send(data);
-	        	}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
-	        	// clear
-	        	editText.setText("");
-	        	
-	            handled = true;
-	        }
-	        return handled;
-	    }
-	};
-	
-	public void addMessage(String data)
-	{
-		if (adapter == null) return;
-		
-		if (listItems.size() > 100)
-			listItems.remove(0);
-		
-		listItems.add(data);
-		adapter.notifyDataSetChanged();
-		
-		scrollToBottom();
-	}
-	
-	private void scrollToBottom() {
-		listview.post(new Runnable() {
-	        @Override
-	        public void run() {
-	            // Select the last row so it will scroll into view...
-	        	listview.setSelection(adapter.getCount() - 1);
-	        }
-	    });
-	}
+        listItems = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                Network.getInstance().disconnect();
+
+                Intent profileListIntent = new Intent(context, ProfileActivity.class);
+                profileListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                profileListIntent.putExtra("tab", "0"); // profile list
+                startActivity(profileListIntent);
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.tabs_fragment, container, false);
+        context = container.getContext();
+
+        myStart();
+
+        return view;
+    }
+
+    public void myStart() {
+
+        listview = (ListView)view.findViewById(R.id.listViewChannel);
+        editText = (EditText)view.findViewById(R.id.editTextChannel);
+
+        listItems = new ArrayList<String>();
+        adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listItems);
+
+        listview.setAdapter(adapter);
+
+        scrollToBottom();
+
+        editText.setOnEditorActionListener(mWriteListener);
+    }
+
+    private TextView.OnEditorActionListener mWriteListener = new  TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            boolean handled = false;
+            if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
+
+                String data = editText.getText().toString();
+                Log.i(TAG, "sending: "+data);
+                if (!name.equalsIgnoreCase(Channels.STATUS))
+                {
+                    String networkData = String.format("PRIVMSG %s :%s", name, data);
+                    Network.getInstance().send(networkData);
+
+                    String display = String.format("<%s> %s", Settings.getInstance().get("nick"), data);
+                    Messages.getInstance().showMessage(name, display);
+                }
+                else
+                {
+                    Network.getInstance().send(data);
+                }
+
+                // clear
+                editText.setText("");
+
+                handled = true;
+            }
+            return handled;
+        }
+    };
+
+    public void addMessage(String data)
+    {
+        if (adapter == null) return;
+
+        if (listItems.size() > 100)
+            listItems.remove(0);
+
+        listItems.add(data);
+        adapter.notifyDataSetChanged();
+
+        scrollToBottom();
+    }
+
+    private void scrollToBottom() {
+        listview.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                listview.setSelection(adapter.getCount() - 1);
+            }
+        });
+    }
 
 }

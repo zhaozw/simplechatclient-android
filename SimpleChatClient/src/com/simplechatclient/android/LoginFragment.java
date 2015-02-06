@@ -44,108 +44,108 @@ import com.database.DatabaseSetting;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
-	private Context context;
-	private View view;
-	private ArrayList<String> profiles_list;
-	
-	public static LoginFragment newInstance() {
-		LoginFragment fragment = new LoginFragment();
-		return fragment;
-	}
+    private Context context;
+    private View view;
+    private ArrayList<String> profiles_list;
 
-	public LoginFragment() {
-	}
+    public static LoginFragment newInstance() {
+        LoginFragment fragment = new LoginFragment();
+        return fragment;
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
+    public LoginFragment() {
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.login_fragment, container, false);
-		context = container.getContext();
-		
-		myStart();
-		
-		return view;
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
-	public void myStart() {
-		
-		Config current_config = new Config(context);
-		List<DatabaseProfile> profiles = current_config.getProfiles();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.login_fragment, container, false);
+        context = container.getContext();
 
-		profiles_list = new ArrayList<String>();
-		for (DatabaseProfile profile : profiles) {
-			profiles_list.add(profile.getNick());
-	    }
+        myStart();
 
-		Button login = (Button)view.findViewById(R.id.button_login);
-		Spinner spinner = (Spinner)view.findViewById(R.id.spinnerNick);
-		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, profiles_list);		
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(adapter);
-		
-		String nick = Settings.getInstance().get("nick");
-		int default_position = profiles_list.indexOf(nick);
-		if (default_position != -1)
-			spinner.setSelection(default_position); 
-		
-		spinner.setOnItemSelectedListener(spinnerListener);
-		login.setOnClickListener(this);
-	}
+        return view;
+    }
 
-	@Override
-	public void onClick(View v) {
-		if (v.getId() == R.id.button_login)
-			button_login();
-	}
+    public void myStart() {
 
-	private void button_login()
-	{
+        Config current_config = new Config(context);
+        List<DatabaseProfile> profiles = current_config.getProfiles();
+
+        profiles_list = new ArrayList<String>();
+        for (DatabaseProfile profile : profiles) {
+            profiles_list.add(profile.getNick());
+        }
+
+        Button login = (Button)view.findViewById(R.id.button_login);
+        Spinner spinner = (Spinner)view.findViewById(R.id.spinnerNick);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, profiles_list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        String nick = Settings.getInstance().get("nick");
+        int default_position = profiles_list.indexOf(nick);
+        if (default_position != -1)
+            spinner.setSelection(default_position);
+
+        spinner.setOnItemSelectedListener(spinnerListener);
+        login.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.button_login)
+            button_login();
+    }
+
+    private void button_login()
+    {
         Log.i("LoginFragment", "button login click");
 
-		Intent intent = new Intent(context, TabsActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent = new Intent(context, TabsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
         // network start
         Network.getInstance().connect();
     }
 
-	private OnItemSelectedListener spinnerListener = new OnItemSelectedListener() {
+    private OnItemSelectedListener spinnerListener = new OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        	String selected_nick = profiles_list.get(position);
-        	String nick = Settings.getInstance().get("nick");
+            String selected_nick = profiles_list.get(position);
+            String nick = Settings.getInstance().get("nick");
 
-        	if (selected_nick != nick)
-        	{
-        		Config current_config = new Config(context);
-        		DatabaseProfile profile = current_config.getProfile(selected_nick);
-        		DatabaseSetting setting = current_config.getSetting();
-        		int selected_nick_id =  profile.getId();
-        		
-        		Settings.getInstance().set("nick", selected_nick);
-        		Settings.getInstance().set("current_profile", Integer.toString(selected_nick_id));
-        		
+            if (selected_nick != nick)
+            {
+                Config current_config = new Config(context);
+                DatabaseProfile profile = current_config.getProfile(selected_nick);
+                DatabaseSetting setting = current_config.getSetting();
+                int selected_nick_id =  profile.getId();
+
+                Settings.getInstance().set("nick", selected_nick);
+                Settings.getInstance().set("current_profile", Integer.toString(selected_nick_id));
+
                 Settings.getInstance().set("nick", profile.getNick());
                 Settings.getInstance().set("password", profile.getPassword());
                 Settings.getInstance().set("font", profile.getFont());
                 Settings.getInstance().set("bold", profile.getBold());
                 Settings.getInstance().set("italic", profile.getItalic());
                 Settings.getInstance().set("color", profile.getColor());
-        		
-        		setting.setCurrent_profile(selected_nick_id);
-        		current_config.updateSettings(setting);
-        	}
+
+                setting.setCurrent_profile(selected_nick_id);
+                current_config.updateSettings(setting);
+            }
         }
 
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-		}
-	};
-	
-	
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    };
+
+
 }

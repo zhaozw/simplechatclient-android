@@ -42,88 +42,88 @@ import com.database.DatabaseProfile;
 
 public class ProfileListFragment extends Fragment {
 
-	private Context context;
-	private View view;
-	private ArrayList<String> profiles_list;
-	
-	public static ProfileListFragment newInstance() {
-		ProfileListFragment fragment = new ProfileListFragment();
-		return fragment;
-	}
+    private Context context;
+    private View view;
+    private ArrayList<String> profiles_list;
 
-	public ProfileListFragment() {
-	}
+    public static ProfileListFragment newInstance() {
+        ProfileListFragment fragment = new ProfileListFragment();
+        return fragment;
+    }
 
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
-	}
+    public ProfileListFragment() {
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.profile_list_fragment, container, false);
-		context = container.getContext();
-		
-		myStart();
 
-		return view;
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
-	public void myStart() {
-		
-		// profiles list
-		Config current_config = new Config(context);
-		List<DatabaseProfile> profiles = current_config.getProfiles();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.profile_list_fragment, container, false);
+        context = container.getContext();
 
-		profiles_list = new ArrayList<String>();
-		for (DatabaseProfile profile : profiles) {
-			profiles_list.add(profile.getNick());
-	    }
+        myStart();
 
-		ListView listview = (ListView)view.findViewById(R.id.listViewProfiles);
-		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, profiles_list);
-		listview.setAdapter(adapter);		
-		listview.setOnItemClickListener(onProfileClick);
-	}
+        return view;
+    }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.profile_list, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId())
-		{
-			case R.id.profile_list_button_add:
-				profile_add_button();
-				break;
-		}
+    public void myStart() {
 
-		return super.onOptionsItemSelected(item);
-	}
+        // profiles list
+        Config current_config = new Config(context);
+        List<DatabaseProfile> profiles = current_config.getProfiles();
 
-	private void profile_add_button()
-	{
-    	Intent addProfileIntent = new Intent(context, ProfileAddActivity.class);
-    	addProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        profiles_list = new ArrayList<String>();
+        for (DatabaseProfile profile : profiles) {
+            profiles_list.add(profile.getNick());
+        }
+
+        ListView listview = (ListView)view.findViewById(R.id.listViewProfiles);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, profiles_list);
+        listview.setAdapter(adapter);
+        listview.setOnItemClickListener(onProfileClick);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.profile_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.profile_list_button_add:
+                profile_add_button();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void profile_add_button()
+    {
+        Intent addProfileIntent = new Intent(context, ProfileAddActivity.class);
+        addProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(addProfileIntent);
-	}
-	
-	private OnItemClickListener onProfileClick = new OnItemClickListener(){
+    }
+
+    private OnItemClickListener onProfileClick = new OnItemClickListener(){
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        	String nick = profiles_list.get(position).toString();
-        	
-        	Intent editProfileIntent = new Intent(context, ProfileEditActivity.class);
-        	editProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        	editProfileIntent.putExtra("nick", nick);
+            String nick = profiles_list.get(position).toString();
+
+            Intent editProfileIntent = new Intent(context, ProfileEditActivity.class);
+            editProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            editProfileIntent.putExtra("nick", nick);
             startActivity(editProfileIntent);
         }
-	};
-	
-	
+    };
+
+
 }

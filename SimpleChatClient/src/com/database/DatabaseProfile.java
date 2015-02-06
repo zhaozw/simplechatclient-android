@@ -20,54 +20,54 @@
 package com.database;
 
 public class DatabaseProfile {
-	private int id;
-	private String nick;
-	private String password;
-	private String font;
-	private String bold;
-	private String italic;
-	private String color;
-	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getNick() {
-		return nick;
-	}
-	public void setNick(String nick) {
-		this.nick = nick;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getFont() {
-		return font;
-	}
-	public void setFont(String font) {
-		this.font = font;
-	}
-	public String getBold() {
-		return bold;
-	}
-	public void setBold(String bold) {
-		this.bold = bold;
-	}
-	public String getItalic() {
-		return italic;
-	}
-	public void setItalic(String italic) {
-		this.italic = italic;
-	}
-	public String getColor() {
-		return color;
-	}
-	public void setColor(String color) {
-		this.color = color;
-	}
+    private int id;
+    private String nick;
+    private String password;
+    private String font;
+    private String bold;
+    private String italic;
+    private String color;
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getNick() {
+        return nick;
+    }
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public String getFont() {
+        return font;
+    }
+    public void setFont(String font) {
+        this.font = font;
+    }
+    public String getBold() {
+        return bold;
+    }
+    public void setBold(String bold) {
+        this.bold = bold;
+    }
+    public String getItalic() {
+        return italic;
+    }
+    public void setItalic(String italic) {
+        this.italic = italic;
+    }
+    public String getColor() {
+        return color;
+    }
+    public void setColor(String color) {
+        this.color = color;
+    }
 }

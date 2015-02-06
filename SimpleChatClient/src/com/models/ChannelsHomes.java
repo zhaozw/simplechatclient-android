@@ -29,26 +29,26 @@ public class ChannelsHomes {
     private static ChannelsHomes instance = new ChannelsHomes();
     public static synchronized ChannelsHomes getInstance() { return instance; }
 
-	public void add(String channel)
-	{
-		channelHomes.add(channel);
-	}
-	
-	public void remove(String channel)
-	{
-		if (channelHomes.contains(channel))
-		{
-			channelHomes.remove(channelHomes.indexOf(channel));
-		}
-	}
-	
-	public void clear()
-	{
-		channelHomes.clear();
-	}
-	
-	public List<String> get()
-	{
-		return channelHomes;
-	}
+    public void add(String channel)
+    {
+        channelHomes.add(channel);
+    }
+
+    public void remove(String channel)
+    {
+        if (channelHomes.contains(channel))
+        {
+            channelHomes.remove(channelHomes.indexOf(channel));
+        }
+    }
+
+    public void clear()
+    {
+        channelHomes.clear();
+    }
+
+    public List<String> get()
+    {
+        return channelHomes;
+    }
 }
