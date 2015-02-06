@@ -20,11 +20,15 @@
 package com.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChannelsHomes {
 
-	private ArrayList<String> channelHomes;
-	
+    private List<String> channelHomes = new ArrayList<>();
+
+    private static ChannelsHomes instance = new ChannelsHomes();
+    public static synchronized ChannelsHomes getInstance() { return instance; }
+
 	public void add(String channel)
 	{
 		channelHomes.add(channel);
@@ -43,7 +47,7 @@ public class ChannelsHomes {
 		channelHomes.clear();
 	}
 	
-	public ArrayList<String> get()
+	public List<String> get()
 	{
 		return channelHomes;
 	}

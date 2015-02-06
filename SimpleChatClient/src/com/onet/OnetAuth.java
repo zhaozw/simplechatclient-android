@@ -186,34 +186,30 @@ public class OnetAuth {
     
     private void downloadKropka1() {
         String url = "http://kropka.onet.pl/_s/kropka/1?DV=czat/applet";
-        String content = null;
         String category = "kropka_1";
         
-        new HttpDownload(url, content, category).start();
+        new HttpDownload(url, null, category).start();
     }
 
     private void downloadKropka1Full() {
         String url = "http://kropka.onet.pl/_s/kropka/1?DV=czat/applet/FULL";
-        String content = null;
         String category = "kropka_1_full";
         
-        new HttpDownload(url, content, category).start();
+        new HttpDownload(url, null, category).start();
     }
 
     private void downloadKropka5Full() {
         String url = "http://kropka.onet.pl/_s/kropka/5?DV=czat/applet/FULL";
-        String content = null;
         String category = "kropka_5_full";
         
-        new HttpDownload(url, content, category).start();
+        new HttpDownload(url, null, category).start();
     }
 
     private void downloadSk() {
         String url = "http://czat.onet.pl/sk.gif";
-        String content = null;
         String category = "sk";
         
-        new HttpDownload(url, content, category).start();
+        new HttpDownload(url, null, category).start();
     }
 
     @SuppressLint("DefaultLocale")
@@ -338,7 +334,7 @@ public class OnetAuth {
 	        HttpResponse httpResponse;
 	
 	        try {
-	            if (content == null) {
+	            if (content.isEmpty()) {
 	                HttpGet httpGet = new HttpGet(url);
 	                httpResponse = httpclient.execute(httpGet);
 	            } else {

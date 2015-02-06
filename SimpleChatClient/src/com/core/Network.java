@@ -24,7 +24,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -68,24 +67,15 @@ public class Network {
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
-            // This is called when the connection with the service has been
-            // established, giving us the service object we can use to
-            // interact with the service.  Because we have bound to a explicit
-            // service that we know is running in our own process, we can
-            // cast its IBinder to a concrete class and directly access it.
+
             mBoundService = ((NetworkService.LocalBinder)service).getService();
 
             Log.i("service connection", "service connected");
-            // Tell the user about this for our demo.
 
             startHandler.sendEmptyMessage(0);
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            // This is called when the connection with the service has been
-            // unexpectedly disconnected -- that is, its process crashed.
-            // Because it is running in our same process, we should never
-            // see this happen.
             Log.i("service connection", "service disconnected");
             mBoundService = null;
         }
@@ -125,10 +115,7 @@ public class Network {
 
     public boolean isConnected()
     {
-        if (mIsBound)
-            return mBoundService.isConnected();
-        else
-            return false;
+        return mIsBound && mBoundService.isConnected();
     }
 
     // TODO http://stackoverflow.com/a/10350511

@@ -24,15 +24,14 @@ import java.util.Map;
 
 public class Settings {
     private static Settings instance = new Settings();
-    private Map<String, String> map;
-
-    private Settings() {
-        map = new HashMap<String, String>();
-        map.put("first_run", "true");
-    }
-
     public static synchronized Settings getInstance() {
         return instance;
+    }
+
+    private Map<String, String> map = new HashMap<>();
+
+    private Settings() {
+        map.put("first_run", "true");
     }
 
     public void set(String k, String v) {

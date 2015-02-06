@@ -19,7 +19,7 @@
 
 package com.onet;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import android.util.Log;
 
@@ -28,6 +28,7 @@ import com.core.Messages;
 import com.core.Network;
 import com.core.Settings;
 import com.models.ChannelsFavourites;
+import com.models.Nick;
 import com.simplechatclient.android.TabsManager;
 
 public class OnetKernel {
@@ -123,6 +124,14 @@ public class OnetKernel {
     	
     	String channel = data[2];
 
+        String modes = "";
+        if (!data[3].isEmpty())
+        {
+            String suffix = data[3];
+            if (suffix.startsWith(":")) suffix = suffix.substring(1);
+            modes = suffix.substring(0, suffix.indexOf(","));
+        }
+
     	if (nick.equalsIgnoreCase(Settings.getInstance().get("nick")))
     	{
 	    	// add
@@ -138,6 +147,9 @@ public class OnetKernel {
         // show message
         String display = String.format("* %s wchodzi do pokoju %s", nick, channel);
         Messages.getInstance().showMessage(channel, display);
+
+        // nick add
+        Nick.getInstance().add(nick, channel, modes);
     }
 
     // :scc_test!51976824@3DE379.B7103A.6CF799.6902F4 PART #scc
@@ -163,6 +175,8 @@ public class OnetKernel {
             display = String.format("* %s wychodzi z pokoju %s [%s]", nick, channel, reason);
 
         Messages.getInstance().showMessage(channel, display);
+
+        Nick.getInstance().remove(nick, channel);
     }
 
     // :Stark!38566204@A5F2F1.68FE5E.DE32AF.62ECB9 QUIT :Client exited
@@ -185,7 +199,7 @@ public class OnetKernel {
         else
             display = String.format("* %s wychodzi z czata [%s]", nick, reason);
 
-        Messages.getInstance().showMessageAll(display);
+        Nick.getInstance().quit(nick, display);
     }
 
     // :scc_test!51976824@3DE379.B7103A.6CF799.6902F4 KICK #scc Moment_w_atmosferze :sio
@@ -213,6 +227,8 @@ public class OnetKernel {
             display = String.format("* %s zostaje wyrzucony z %s przez %s. Powód: %s", nick, channel, who, reason);
 
         Messages.getInstance().showMessage(channel, display);
+
+        Nick.getInstance().remove(nick, channel);
     }
 
 	 // :Merovingian!26269559@2294E8.94913F.2EAEC9.11F26D PRIVMSG @#scc :hello
@@ -391,7 +407,8 @@ public class OnetKernel {
     {
     	Settings.getInstance().set("ignore_favourites", "false");
     	ChannelsFavourites.getInstance().clear();
-    	
+        Nick.getInstance().clear();
+
     	// protocol
     	Network.getInstance().send("PROTOCTL ONETNAMESX");
     	
@@ -420,8 +437,8 @@ public class OnetKernel {
     	{
     		Settings.getInstance().set("ignore_favourites", "true");
     		
-    		 ArrayList<String> channels = ChannelsFavourites.getInstance().get();
-    		 
+    		 List<String> channels = ChannelsFavourites.getInstance().get();
+
     		 String massJoin = "";
     		 for (String channel : channels)
     		 {

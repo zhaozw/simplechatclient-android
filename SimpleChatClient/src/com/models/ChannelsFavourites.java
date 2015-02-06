@@ -20,18 +20,15 @@
 package com.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChannelsFavourites {
 
-	private ArrayList<String> channelFavourites = new ArrayList<String>();
+	private List<String> channelFavourites = new ArrayList<>();
 
     private static ChannelsFavourites instance = new ChannelsFavourites();
     public static synchronized ChannelsFavourites getInstance() { return instance; }
 
-    public ChannelsFavourites()
-    {
-    }
-	
 	public void add(String channel)
 	{
 		channelFavourites.add(channel);
@@ -51,7 +48,7 @@ public class ChannelsFavourites {
 			channelFavourites.clear();
 	}
 
-	public ArrayList<String> get()
+	public List<String> get()
 	{
 		return channelFavourites;
 	}

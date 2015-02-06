@@ -44,20 +44,18 @@ public class NetworkReceiver extends BroadcastReceiver {
 
             Log.i(TAG, "NetworkReceiver onReceive: "+command+" "+data);
 
-            if (command.equalsIgnoreCase("kernel")) {
-                // kernel
-                OnetKernel.getInstance().parse(data);
-            } else if (command.equalsIgnoreCase("auth")) {
-                // auth
-                Messages.getInstance().showMessageAll("Połączono");
-
-                // auth
-                try {
+            try {
+                if (command.equalsIgnoreCase("kernel")) {
+                    // kernel
+                    OnetKernel.getInstance().parse(data);
+                } else if (command.equalsIgnoreCase("auth")) {
+                    // auth
+                    Messages.getInstance().showMessageAll("Połączono");
                     OnetAuth.getInstance().authorize();
-                } catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                    e.printStackTrace();
                 }
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+                e.printStackTrace();
             }
         }
     }
