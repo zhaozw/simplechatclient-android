@@ -180,7 +180,7 @@ public class OnetAuth {
     private void parseDeploy(String data)
     {
         version = parseVersion(data);
-        version = String.format("1.1(%s - R)", version);        
+        version = String.format("1.1(%s - R)", version);
     }
     
     private void downloadKropka1() {
@@ -333,7 +333,7 @@ public class OnetAuth {
             HttpResponse httpResponse;
 
             try {
-                if (content.isEmpty()) {
+                if ((content == null) || (content.isEmpty())) {
                     HttpGet httpGet = new HttpGet(url);
                     httpResponse = httpclient.execute(httpGet);
                 } else {

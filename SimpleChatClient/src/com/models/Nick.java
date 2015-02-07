@@ -19,8 +19,12 @@
 
 package com.models;
 
+import com.core.Messages;
+import com.core.Settings;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -107,7 +111,29 @@ public class Nick {
 
     public void remove(String nick, String channel)
     {
-        // TODO
+        if (mNicks.containsKey(nick))
+        {
+            List<String> channels = mNicks.get(nick).getChannels();
+            channels.remove(channel);
+            mNicks.get(nick).setChannels(channels);
+
+            Map<String, String> channel_modes = mNicks.get(nick).getChannel_modes();
+            channel_modes.remove(channel);
+            mNicks.get(nick).setChannel_modes(channel_modes);
+
+            Map<String, Integer> channel_max_modes = mNicks.get(nick).getChannel_max_modes();
+            channel_max_modes.remove(channel);
+            mNicks.get(nick).setChannel_max_modes(channel_max_modes);
+
+            if (mNicks.get(nick).getChannels().size() == 0)
+            {
+                mNicks.remove(nick);
+            }
+
+            // remove all nicks from channel if self part
+            if (nick == Settings.getInstance().get("nick"))
+                removeFromChannel(channel);
+        }
     }
 
     public void clear()
@@ -117,15 +143,90 @@ public class Nick {
 
     public void rename(String nick, String new_nick, String display)
     {
-        // TODO
+        if (mNicks.containsKey(nick))
+        {
+            OnetNick onetnick = mNicks.get(nick);
+            mNicks.remove(nick);
+            mNicks.put(new_nick, onetnick);
+
+            List<String> channels = onetnick.getChannels();
+            for (String channel : channels) {
+                Messages.getInstance().showMessage(channel, display);
+            }
+        }
     }
 
     private void removeFromChannel(String channel)
     {
-        // TODO
+        List<String> list = getFromChannel(channel);
+
+        for (String nick : list)
+        {
+            if (mNicks.containsKey(nick))
+            {
+                List<String> channels = mNicks.get(nick).getChannels();
+                channels.remove(channel);
+                mNicks.get(nick).setChannels(channels);
+
+                Map<String, String> channel_modes = mNicks.get(nick).getChannel_modes();
+                channel_modes.remove(channel);
+                mNicks.get(nick).setChannel_modes(channel_modes);
+
+                Map<String, Integer> channel_max_modes = mNicks.get(nick).getChannel_max_modes();
+                channel_max_modes.remove(channel);
+                mNicks.get(nick).setChannel_max_modes(channel_max_modes);
+
+                if (mNicks.get(nick).getChannels().size() == 0) {
+                    mNicks.remove(nick);
+                }
+            }
+        }
     }
 
     public void quit(String nick, String display)
+    {
+        if (mNicks.containsKey(nick))
+        {
+            List<String> channels = mNicks.get(nick).getChannels();
+
+            for (String channel : channels) {
+                Messages.getInstance().showMessage(channel, display);
+            }
+
+            mNicks.remove(nick);
+
+            if (nick == Settings.getInstance().get("nick"))
+            {
+                for (String channel : channels) {
+                    removeFromChannel(channel);
+                }
+            }
+        }
+    }
+
+    public List<String> getFromChannel(String channel)
+    {
+        List<String> list = new ArrayList<>();
+
+        for (Map.Entry<String, OnetNick> entry : mNicks.entrySet()) {
+            String nick = entry.getKey();
+            OnetNick onetnick = entry.getValue();
+
+            if (onetnick.getChannels().contains(channel))
+                list.add(nick);
+        }
+
+        java.util.Collections.sort(list);
+
+        return list;
+    }
+
+    public void changeFlag(String nick, String channel, String flag)
+    {
+        // TODO
+    }
+
+    public void changeFlag(String nick, String flag)
     {
         // TODO
     }
