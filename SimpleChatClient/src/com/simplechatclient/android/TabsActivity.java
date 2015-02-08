@@ -37,6 +37,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.core.Config;
 import com.core.Network;
@@ -105,6 +106,9 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
 
         // important ! - prevent destroy tabs fragments
         mViewPager.setOffscreenPageLimit(25);
+
+        // hide keyboard by default
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // read profile
         // settings
