@@ -105,16 +105,9 @@ public class TabsManager {
         }
         return null;
     }
-    
+
     public TabsFragment get(int position)
     {
-        /*
-        if (tabs.size() == 0)
-        {
-            this.add(Channels.STATUS);
-        }
-        */
-
         for(Entry<String, TabsChannel> entry : tabs.entrySet()) {
             TabsChannel tabsChannel = entry.getValue();
             if (tabsChannel.getPosition() == position)

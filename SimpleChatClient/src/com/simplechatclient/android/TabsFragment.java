@@ -70,6 +70,9 @@ public class TabsFragment extends Fragment {
 
     public TabsFragment setName(String name) {
         this.name = name;
+
+        Log.i("TabsFragment", "setname "+this.name);
+
         return this;
     }
 
@@ -82,6 +85,8 @@ public class TabsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        Log.i("TabsFragment", "onDestroy "+this.name);
 
         listItems = null;
     }
@@ -113,6 +118,8 @@ public class TabsFragment extends Fragment {
         view = inflater.inflate(R.layout.tabs_fragment, container, false);
         context = container.getContext();
 
+        Log.i("TabsFragment", "onCreateView");
+
         myStart();
 
         return view;
@@ -131,6 +138,13 @@ public class TabsFragment extends Fragment {
         scrollToBottom();
 
         editText.setOnEditorActionListener(mWriteListener);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        Log.i("TabsFragment", "onDestroyView");
     }
 
     private TextView.OnEditorActionListener mWriteListener = new  TextView.OnEditorActionListener() {

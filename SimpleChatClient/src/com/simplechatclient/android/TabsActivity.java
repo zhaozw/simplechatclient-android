@@ -105,6 +105,9 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
                     }
                 });
 
+        // important ! - prevent destroy tabs fragments
+        mViewPager.setOffscreenPageLimit(25);
+
         // read profile
         // settings
         Config current_config = new Config(getApplicationContext());
@@ -223,11 +226,15 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public void onTabUnselected(ActionBar.Tab tab,
             FragmentTransaction fragmentTransaction) {
+
+        Log.i("Tabs activity", "onTabUnselected");
     }
 
     @Override
     public void onTabReselected(ActionBar.Tab tab,
             FragmentTransaction fragmentTransaction) {
+
+        Log.i("Tabs activity", "onTabReselected");
     }
 
     public int getCurrentItem()
