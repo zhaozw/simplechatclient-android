@@ -112,11 +112,11 @@ public class TabsManager {
             TabsChannel tabsChannel = entry.getValue();
             if (tabsChannel.getPosition() == position)
             {
-                Log.i(TAG, "TabsManager get "+position+" zwrocono "+tabsChannel.getName());
+                Log.i(TAG, "TabsManager get "+position+" returned "+tabsChannel.getName());
                 return tabsChannel.getFragment();
             }
         }
-        Log.w(TAG, "TabsManager get "+position+" zwrocono null");
+        Log.w(TAG, "TabsManager get "+position+" returned null");
         return null;
     }
     

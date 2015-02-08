@@ -116,7 +116,7 @@ public class ProfileListFragment extends Fragment {
 
     private OnItemClickListener onProfileClick = new OnItemClickListener(){
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            String nick = profiles_list.get(position).toString();
+            String nick = profiles_list.get(position);
 
             Intent editProfileIntent = new Intent(context, ProfileEditActivity.class);
             editProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -47,8 +47,6 @@ import com.models.Channels;
 
 public class TabsActivity extends ActionBarActivity implements ActionBar.TabListener {
 
-    //private static final String TAG = "TabsActivity";
-
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a {@link FragmentPagerAdapter}
@@ -150,8 +148,6 @@ public class TabsActivity extends ActionBarActivity implements ActionBar.TabList
         // status
         TabsManager.getInstance().add(Channels.STATUS);
         this.add(Channels.STATUS);
-
-        // TODO tutaj dodac dodawanie wszystkich tabow albo jakis rodzaj zapamietywania instancji
 
         // is first run
         if (Settings.getInstance().get("first_run") == "true")

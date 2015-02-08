@@ -42,4 +42,5 @@
     <string name="edit_text_hint">Wpisz wiadomość</string>
     <string name="notification_connected">Dostępny</string>
     <string name="notification_disconnected">Niepodłączony</string>
+    <string name="network_connected">Połączono</string>
 </resources>

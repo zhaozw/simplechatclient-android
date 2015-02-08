@@ -50,7 +50,7 @@ public class NetworkReceiver extends BroadcastReceiver {
                     OnetKernel.getInstance().parse(data);
                 } else if (command.equalsIgnoreCase("auth")) {
                     // auth
-                    Messages.getInstance().showMessageAll("Połączono");
+                    Messages.getInstance().showMessageAll(context.getString(R.string.network_connected));
                     OnetAuth.getInstance().authorize();
                 }
             } catch (Exception e) {

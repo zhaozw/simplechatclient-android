@@ -33,7 +33,6 @@ import android.util.Log;
 import com.simplechatclient.android.NetworkService;
 
 public class Network {
-    private static final String TAG = "Network";
 
     private Context context;
 
@@ -99,7 +98,7 @@ public class Network {
             context.bindService(new Intent(context, NetworkService.class), mConnection, Context.BIND_AUTO_CREATE);
         }
         else
-            Log.w(TAG, "Network Connect - error already connected");
+            Log.w("Network", "Network Connect - error already connected");
     }
     
     public void disconnect()
@@ -110,7 +109,7 @@ public class Network {
             context.unbindService(mConnection);
         }
         else
-            Log.w(TAG, "Network disconnect - error already disconnected");
+            Log.w("Network", "Network disconnect - error already disconnected");
     }
 
     public boolean isConnected()
